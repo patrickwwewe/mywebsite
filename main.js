@@ -385,7 +385,7 @@ function enterPortal(){
     camera.position.lerpVectors(startPos, targetPos, t);
     camera.lookAt(0,0,0);
     if(t >= 0.78 && flashEl.style.opacity == '0'){
-      flashEl.style.transition = 'opacity 220ms ease'; 
+      flashEl.style.transition = 'opacity 120ms ease'; // Verkürzt von 220ms auf 120ms
       flashEl.style.opacity = '1';
     }
     if(t < 1) requestAnimationFrame(frame);
