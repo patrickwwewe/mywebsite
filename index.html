@@ -3,6 +3,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" /> <!-- Responsive design für Smartphones-->
+    <title>3D Portfolio Portal</title>
     <!-- Import map to resolve bare module specifiers (e.g. 'three') to CDN URLs -->
     <script type="importmap">
     {
@@ -11,7 +12,11 @@
       }
     }
     </script>
-    <style> /* CSS Style*/
+
+    <!----------------------->
+    <!--------CS Style------->
+    <!----------------------->
+    <style> 
       :root{ /*Globale Farbvarianten*/
         --bg:#03050a; /* Hintergrund*/
         --neon: #00f0ff;
@@ -32,23 +37,103 @@
       /* Bottom hint (klick Tipp) */
   .hint{position:fixed;left:50%;transform:translateX(-50%);bottom:18px;color:rgba(255,255,255,0.9);font-size:14px;padding:8px 12px;border-radius:20px;background:transparent;z-index:40}
 
-      /* Slide-up menu */
-  /* Slide-up menu */
-  .menu{position:fixed;left:50%;transform:translateX(-50%) translateY(110%);bottom:0;width:92%;max-width:720px;background:linear-gradient(180deg, rgba(255,255,255,0.03), rgba(0,0,0,0.06));backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);border-radius:14px 14px 6px 6px;padding:16px;margin:0 10px;box-shadow:0 -6px 40px rgba(0,0,0,0.6);border:1px solid rgba(255,255,255,0.04);z-index:60;transition:transform 420ms cubic-bezier(.2,.9,.3,1)}
-  .menu.show{transform:translateX(-50%) translateY(-12px)}
-      .menu h3{margin:0;color:#eaf;letter-spacing:0.6px}
-      .presets{display:flex;gap:8px;margin-top:12px}
-      .preset{flex:1;padding:10px;border-radius:10px;text-align:center;cursor:pointer;border:1px solid rgba(255,255,255,0.04);background:linear-gradient(180deg, rgba(255,255,255,0.01), rgba(0,0,0,0.03))}
-      .controls{display:flex;gap:12px;margin-top:12px;align-items:center}
-      .btn{padding:8px 12px;border-radius:8px;cursor:pointer;border:1px solid rgba(255,255,255,0.06);background:transparent;color:#eff}
-      .btn.primary{background:linear-gradient(90deg,var(--neon),var(--neon-2));box-shadow:0 6px 30px rgba(123,44,255,0.08);color:#081018}
-
       /* Neon accents for focus */
       .neon-outline{box-shadow:0 0 18px var(--neon),0 0 40px rgba(155,0,255,0.08) inset}
 
       /* small overlay for flash transition */
   /* small overlay for flash transition */
   #flash{position:fixed;inset:0;background:white;opacity:0;pointer-events:none;z-index:200;transition:opacity 280ms ease}
+      /* Radiales Menü - versteckt bis Portal aktiviert */
+      .radial-menu {
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%) scale(0);
+        z-index: 100;
+        opacity: 0;
+        transition: all 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        pointer-events: none;
+      }
+      
+      .radial-menu.active {
+        transform: translate(-50%, -50%) scale(1);
+        opacity: 1;
+        pointer-events: all;
+      }
+      
+      /* Zentraler Hub */
+      .radial-center {
+        width: 120px;
+        height: 120px;
+        border-radius: 50%;
+        background: linear-gradient(135deg, var(--neon), var(--neon-2));
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        box-shadow: 0 0 40px rgba(0, 240, 255, 0.4);
+        position: relative;
+        cursor: pointer;
+        transition: transform 0.3s ease;
+      }
+      
+      .radial-center:hover {
+        transform: scale(1.1);
+      }
+      
+      .radial-center-text {
+        color: white;
+        font-weight: 600;
+        font-size: 14px;
+        text-align: center;
+        text-shadow: 0 2px 4px rgba(0,0,0,0.5);
+      }
+      
+      /* Radial Menu Items */
+      .radial-item {
+        position: absolute;
+        width: 80px;
+        height: 80px;
+        border-radius: 50%;
+        background: linear-gradient(135deg, rgba(255,255,255,0.1), rgba(255,255,255,0.05));
+        backdrop-filter: blur(10px);
+        border: 1px solid rgba(255,255,255,0.2);
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        color: var(--text-primary);
+        text-decoration: none;
+        transform-origin: center;
+      }
+      
+      .radial-item:hover {
+        transform: scale(1.2);
+        background: linear-gradient(135deg, rgba(255,255,255,0.2), rgba(255,255,255,0.1));
+        box-shadow: 0 10px 30px rgba(0, 240, 255, 0.3);
+      }
+      
+      .radial-item-icon {
+        font-size: 24px;
+        margin-bottom: 4px;
+      }
+      
+      .radial-item-text {
+        font-size: 10px;
+        font-weight: 500;
+        text-align: center;
+        line-height: 1.1;
+        color: white;
+      }
+      
+      /* Positioning der Menu Items im Kreis (6 Items) */
+      .radial-item:nth-child(1) { top: -100px; left: 20px; }
+      .radial-item:nth-child(2) { top: -70px; right: -70px; }
+      .radial-item:nth-child(3) { top: 20px; right: -100px; }
+      .radial-item:nth-child(4) { bottom: -70px; right: -70px; }
+      .radial-item:nth-child(5) { bottom: -70px; left: -70px; }
+      .radial-item:nth-child(6) { top: 20px; left: -100px; }
 
       /* mobile tweaks */
       @media (max-width:480px){.hud{right:10px;top:10px}.hud input[type=range]{width:120px}}
@@ -67,23 +152,51 @@
       </div>
     </div>
 
+
+
     <div class="hint">Klicke ins Portal, um das Menü zu öffnen</div>
 
-    <div id="menu" class="menu" aria-hidden="true">
-      <h3>Hidden Menu</h3>
-      <div class="presets">
-        <div class="preset" data-col1="#00f0ff" data-col2="#9b00ff">Cyan → Purple</div>
-        <div class="preset" data-col1="#ff00c8" data-col2="#ffd166">Magenta → Gold</div>
-        <div class="preset" data-col1="#00ffcc" data-col2="#0077ff">Aqua → Blue</div>
-      </div>
-      <div class="controls">
-        <button id="enterBtn" class="btn primary">Enter Portal</button>
-        <button id="closeBtn" class="btn">Schließen</button>
-        <div style="flex:1"></div>
-        <small style="color:rgba(255,255,255,0.6)">Live: Neon + Bloom</small>
-      </div>
-    </div>
 
+
+    <!-- Radiales Menü (versteckt bis Portal aktiviert) -->
+  <div class="radial-menu" id="radialMenu">
+    <!-- Menu Items im Kreis angeordnet -->
+    <a href="#about" class="radial-item" data-section="about">
+      <div class="radial-item-icon">👨‍💻</div>
+      <div class="radial-item-text">Über<br>Mich</div>
+    </a>
+    
+    <a href="#projects" class="radial-item" data-section="projects">
+      <div class="radial-item-icon">💼</div>
+      <div class="radial-item-text">Projekte</div>
+    </a>
+    
+    <a href="#skills" class="radial-item" data-section="skills">
+      <div class="radial-item-icon">🛠️</div>
+      <div class="radial-item-text">Skills</div>
+    </a>
+    
+    <a href="#contact" class="radial-item" data-section="contact">
+      <div class="radial-item-icon">📧</div>
+      <div class="radial-item-text">Kontakt</div>
+    </a>
+    
+    <a href="#portfolio" class="radial-item" data-section="portfolio">
+      <div class="radial-item-icon">🎨</div>
+      <div class="radial-item-text">Portfolio</div>
+    </a>
+    
+    <a href="https://github.com/patrickwwewe" target="_blank" class="radial-item">
+      <div class="radial-item-icon">🐱</div>
+      <div class="radial-item-text">GitHub</div>
+    </a>
+    
+    <!-- Zentraler Hub -->
+    <div class="radial-center" id="radialCenter">
+      <div class="radial-center-text">Portfolio<br>Hub</div>
+    </div>
+  </div>
+   
     <div id="flash"></div>
 
     <!-- Loading overlay -->

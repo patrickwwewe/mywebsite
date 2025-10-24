@@ -5,10 +5,18 @@ import { EffectComposer } from 'https://unpkg.com/three@0.152.0/examples/jsm/pos
 import { RenderPass } from 'https://unpkg.com/three@0.152.0/examples/jsm/postprocessing/RenderPass.js';
 import { UnrealBloomPass } from 'https://unpkg.com/three@0.152.0/examples/jsm/postprocessing/UnrealBloomPass.js';
 
+//VAriabeln erstellen
 const canvas = document.getElementById('c');
 const loadingEl = document.getElementById('loading');
 const loadingBar = document.getElementById('loading-bar');
 const loadingText = document.getElementById('loading-text');
+//variabeln für das Menü bzw nach das Raufklicken des Portals
+const radialMenu = document.getElementById('radialMenu');
+const radialCenter = document.getElementById('radialCenter');
+
+//portal Status
+let portalActivated = false;
+let isAnimating = false;
 
 function setLoading(pct, text){
   if(pct!=null){ loadingBar.style.width = Math.max(0, Math.min(100, pct)) + '%'; }
@@ -44,7 +52,26 @@ const bloomPass = new UnrealBloomPass(new THREE.Vector2(innerWidth, innerHeight)
 bloomPass.threshold = 0.1;
 composer.addPass(bloomPass);
 setLoading(36, 'Post-Processing geladen');
+//---------------------------//
+//------PortalFarben---------//
+//---------------------------//
+// Farb-Presets (alle aufbewahren für später, aber nur Gold aktiv)
+const PRESETS = {
+  magentaGold: { col1: '#ff00c8', col2: '#ffd166', label: 'Magenta → Gold' },
+  // Andere Presets auskommentiert aber gespeichert für später:
+  // cyanPurple:  { col1: '#00f0ff', col2: '#9b00ff', label: 'Cyan → Purple' },
+  // aquaBlue:    { col1: '#00ffcc', col2: '#0077ff', label: 'Aqua → Blue' }
+};
 
+// Nur aktive Presets (momentan nur Gold)
+const ACTIVE_PRESETS = {
+  magentaGold: PRESETS.magentaGold
+};
+
+//Preset-Ebene (App-Logik): PRESETS ist nur deine eigene Datenstruktur. Die Keys wie magentaGold, cyanPurple, aquaBlue sind frei wählbare Bezeichner für Farb-Presets. Jedes Preset hat Werte, z. B. col1 und col2.
+//Shader-Ebene (GPU-Interface): portalUniforms muss exakt die Namen benutzen, die im GLSL-Shader definiert sind, nämlich colorA und colorB. Diese Namen sind ans Shader-Programm gebunden und können nicht beliebig heißen, sonst kompiliert/arbeitet der Shader nicht wie erwartet.
+// Erzwinge Magenta → Gold (Standard-Preset)
+const SELECTED_PRESET = PRESETS.magentaGold;
 // Portal shader material
  //Ein Shader ist ein kleines Programm, das auf der Grafikkarte (GPU) läuft
 const portalUniforms = { //hier wird ein Objekt erstellt das alle Shader-Variabeln ernthält
@@ -52,8 +79,8 @@ const portalUniforms = { //hier wird ein Objekt erstellt das alle Shader-Variabe
   resolution: { value: new THREE.Vector2(innerWidth, innerHeight) }, //um den Shader die Seitenbreite und Höhe weiterzugeben
  //Hie eventuell einfügen dass das Portal dann immer die gleiche vorm hat egal vom Sietenverhältniss her?
  //uv.x *= resolution.x / resolution.y;
-  colorA: { value: new THREE.Color('#00f0ff') }, //Farbe zum auswählen
-  colorB: { value: new THREE.Color('#9b00ff') }, //Farbe zum auswählen
+  colorA: { value: new THREE.Color(SELECTED_PRESET.col1) }, //Farbe zum auswählen
+  colorB: { value: new THREE.Color(SELECTED_PRESET.col2) }, //Farbe zum auswählen
   glow: { value: 1.0 }, //wie stark es glühen soll
   speed: { value: 1.0 }
 };
@@ -176,14 +203,11 @@ const ray = new THREE.Raycaster(); //HTML Elemente Finden
 const mouse = new THREE.Vector2(); //HTML Elemente Finden
 
 let menuOpen = false;
-const menuEl = document.getElementById('menu');
+
 const flashEl = document.getElementById('flash');
 
-function setMenu(open){
-  menuOpen = open;
-  if(open){ menuEl.classList.add('show'); menuEl.setAttribute('aria-hidden','false'); }
-  else { menuEl.classList.remove('show'); menuEl.setAttribute('aria-hidden','true'); }
-}
+
+
 
 // Controls: Hook UI controls
 //Verbindet HTML Elemente mit Shader Werten und dem Bloom Effekt
@@ -196,38 +220,163 @@ glowCtrl.addEventListener('input', e=>{ portalUniforms.glow.value = parseFloat(e
 speedCtrl.addEventListener('input', e=>{ portalUniforms.speed.value = parseFloat(e.target.value); });
 bloomCtrl.addEventListener('input', e=>{ bloomPass.strength = parseFloat(e.target.value); });
 
-// Presets
-document.querySelectorAll('.preset').forEach(p=>{
-  p.addEventListener('click', ()=>{
-    const c1 = p.dataset.col1;
-    const c2 = p.dataset.col2;
-    portalUniforms.colorA.value.set(c1);
-    portalUniforms.colorB.value.set(c2);
-    document.documentElement.style.setProperty('--neon', c1);
-    document.documentElement.style.setProperty('--neon-2', c2);
+
+
+
+//---------------------------//
+//---Portal Animation-------//
+//---------------------------// 
+function activatePortal(){
+  if (isAnimating || portalActivated) return; // Wenn bereits animiert oder aktiviert, nichts tun
+  isAnimating = true; // Animation läuft
+  portalActivated = true; // Portal ist jetzt aktiviert
+
+  //Verstecke Hint-Text
+  const portalHint = document.querySelector('.hint');
+  if (portalHint) {
+    portalHint.style.opacity = '0';
+  }
+
+  // Starte Flug-Animation durch das Portal
+  enterPortal();
+
+  //-----------------------------//
+  //Animation Portal Aktivierung//
+  //----------------------------//
+
+  const startColors={
+    a: portalUniforms.colorA.value.clone(), //erstelle eine unabhängige Kopie der Farbe
+    b: portalUniforms.colorB.value.clone()
+  };
+
+  const targetColors = {
+    a: new THREE.Color('#00f0ff'), // Cyan
+    b: new THREE.Color('#9b00ff')  // Purple
+  };
+
+  // Animation der Portal-Aktivierung (parallel zur Flug-Animation)
+  const activationDuration = 2000;
+  const startTime = performance.now();
+
+  function animateActivation() {
+    const elapsed = performance.now() - startTime;
+    const progress = Math.min(elapsed / activationDuration, 1);
+    
+    // Smooth easing
+    const eased = 1 - Math.pow(1 - progress, 3);
+    
+    // Farbübergang
+    portalUniforms.colorA.value.lerpColors(startColors.a, targetColors.a, eased);
+    portalUniforms.colorB.value.lerpColors(startColors.b, targetColors.b, eased);
+    
+    // Bloom verstärken
+    bloomPass.strength = 2.9 + eased * 1.0;
+    
+    if (progress < 1) {
+      requestAnimationFrame(animateActivation);
+    } else {
+      // Animation beendet - zeige radiales Menü nach der Flug-Animation
+      setTimeout(() => {
+        showRadialMenu();
+        isAnimating = false;
+      }, 400); // Verkürzt von 800ms auf 400ms für schnellere Reaktion
+    }
+  }
+
+  animateActivation();
+}
+
+// Radiales Menü Funktionen
+function showRadialMenu() {
+  if (radialMenu) {
+    radialMenu.classList.add('active');
+  }
+}
+
+function hideRadialMenu() {
+  if (radialMenu) {
+    radialMenu.classList.remove('active');
+  }
+}
+
+// Portal-Klick Handler
+window.addEventListener('pointerdown', (ev) => {
+  if (isAnimating) return;
+  
+  mouse.x = (ev.clientX / window.innerWidth) * 2 - 1;
+  mouse.y = -(ev.clientY / window.innerHeight) * 2 + 1;
+  
+  ray.setFromCamera(mouse, camera);
+  const intersects = ray.intersectObject(portalMesh);
+  
+  if (intersects.length > 0 && !portalActivated) {
+    activatePortal();
+  }
+});
+
+// Radiales Menü Navigation
+document.querySelectorAll('.radial-item').forEach(item => {
+  item.addEventListener('click', (e) => {
+    const section = item.dataset.section;
+    if (section) {
+      e.preventDefault();
+      console.log(`Navigation zu: ${section}`);
+    }
   });
 });
 
-// Menu buttons
-document.getElementById('closeBtn').addEventListener('click', ()=> setMenu(false));
-document.getElementById('enterBtn').addEventListener('click', enterPortal);
+// Zentraler Hub Klick (Menü schließen)
+if (radialCenter) {
+  radialCenter.addEventListener('click', () => {
+    hideRadialMenu();
+  });
+}
 
-// click on portal to toggle menu
-window.addEventListener('pointerdown', (ev)=>{
-  mouse.x = (ev.clientX / innerWidth) * 2 - 1;
-  mouse.y = -(ev.clientY / innerHeight) * 2 + 1;
+// Klick auf Portal
+window.addEventListener('pointerdown', (ev) => {
+  if (isAnimating) return;
+  
+  mouse.x = (ev.clientX / window.innerWidth) * 2 - 1;
+  mouse.y = -(ev.clientY / window.innerHeight) * 2 + 1;
+  
   ray.setFromCamera(mouse, camera);
-  const hits = ray.intersectObject(portalMesh, false);
-  if(hits.length){ setMenu(!menuOpen); }
+  const intersects = ray.intersectObject(portalMesh);
+  
+  if (intersects.length > 0 && !portalActivated) {
+    activatePortal();
+  }
 });
 
+// Radiales Menü Navigation
+document.querySelectorAll('.radial-item').forEach(item => {
+  item.addEventListener('click', (e) => {
+    const section = item.dataset.section;
+    if (section) {
+      e.preventDefault();
+      console.log(`Navigation zu: ${section}`);
+      // Hier würdest du später zu den Sektionen navigieren
+    }
+  });
+});
+
+// Zentraler Hub Klick (Menü schließen)
+if (radialCenter) {
+  radialCenter.addEventListener('click', () => {
+    hideRadialMenu();
+  });
+}
+
+
 // Enter portal animation: camera fly + flash
-let entering = false;
+//bewegt Kamera von der momentanen Position (startPos) zu einer Zielposition (targetPos) 
+let entering = false; //somit kann sie nicht mehrfach gleichzeitig starten 
 function enterPortal(){
-  if(entering) return; entering = true; setMenu(false);
+  if(entering) return; 
+  entering = true;
+  
   const startPos = camera.position.clone();
   const targetPos = new THREE.Vector3(0, 0, -6);
-  const duration = 900; // ms
+  const duration = 900; // stoppt automatisch nach 900 ms
   const start = performance.now();
 
   // flash in middle
@@ -236,12 +385,18 @@ function enterPortal(){
     camera.position.lerpVectors(startPos, targetPos, t);
     camera.lookAt(0,0,0);
     if(t >= 0.78 && flashEl.style.opacity == '0'){
-      flashEl.style.transition = 'opacity 220ms ease'; flashEl.style.opacity = '1';
+      flashEl.style.transition = 'opacity 220ms ease'; 
+      flashEl.style.opacity = '1';
     }
     if(t < 1) requestAnimationFrame(frame);
     else {
-      // after finished, fade flash out and reset camera
-      setTimeout(()=>{ flashEl.style.opacity = '0'; camera.position.copy(startPos); entering = false; }, 180);
+      // after finished, fade flash out and reset camera much faster
+      setTimeout(()=>{ 
+        flashEl.style.opacity = '0'; 
+        camera.position.copy(startPos); 
+        entering = false; 
+        // Nach der Flug-Animation ist das Portal bereit für das Menü
+      }, 50); // Verkürzt von 180ms auf 50ms
     }
   }
   requestAnimationFrame(frame);
