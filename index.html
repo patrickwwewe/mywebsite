@@ -1,0 +1,103 @@
+<!doctype html>
+<html lang="de">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Portal — Neon Sci‑Fi</title>
+    <!-- Import map to resolve bare module specifiers (e.g. 'three') to CDN URLs -->
+    <script type="importmap">
+    {
+      "imports": {
+        "three": "https://unpkg.com/three@0.152.0/build/three.module.js"
+      }
+    }
+    </script>
+    <style>
+      :root{
+        --bg:#03050a;
+        --neon: #00f0ff;
+        --neon-2: #9b00ff;
+        --accent: rgba(255,255,255,0.06);
+        --glass: rgba(255,255,255,0.04);
+      }
+      html,body{height:100%;margin:0;background:var(--bg);font-family:Inter, system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial}
+      canvas{display:block;width:100%;height:100%;}
+
+      /* HUD top-right */
+  /* HUD top-right */
+  .hud{position:fixed;right:20px;top:20px;color:#dfe;backdrop-filter: blur(6px);-webkit-backdrop-filter: blur(6px);z-index:50}
+  .hud .panel{background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(0,0,0,0.02));padding:12px;border-radius:10px;border:1px solid rgba(255,255,255,0.04);box-shadow:0 6px 30px rgba(0,0,0,0.6)}
+  .hud label{display:block;font-size:12px;color:rgba(255,255,255,0.7);margin-bottom:6px}
+  .hud input[type=range]{width:160px;accent-color:var(--neon)}
+
+      /* Bottom hint */
+  .hint{position:fixed;left:50%;transform:translateX(-50%);bottom:18px;color:rgba(255,255,255,0.9);font-size:14px;padding:8px 12px;border-radius:20px;background:transparent;z-index:40}
+
+      /* Slide-up menu */
+  /* Slide-up menu */
+  .menu{position:fixed;left:50%;transform:translateX(-50%) translateY(110%);bottom:0;width:92%;max-width:720px;background:linear-gradient(180deg, rgba(255,255,255,0.03), rgba(0,0,0,0.06));backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);border-radius:14px 14px 6px 6px;padding:16px;margin:0 10px;box-shadow:0 -6px 40px rgba(0,0,0,0.6);border:1px solid rgba(255,255,255,0.04);z-index:60;transition:transform 420ms cubic-bezier(.2,.9,.3,1)}
+  .menu.show{transform:translateX(-50%) translateY(-12px)}
+      .menu h3{margin:0;color:#eaf;letter-spacing:0.6px}
+      .presets{display:flex;gap:8px;margin-top:12px}
+      .preset{flex:1;padding:10px;border-radius:10px;text-align:center;cursor:pointer;border:1px solid rgba(255,255,255,0.04);background:linear-gradient(180deg, rgba(255,255,255,0.01), rgba(0,0,0,0.03))}
+      .controls{display:flex;gap:12px;margin-top:12px;align-items:center}
+      .btn{padding:8px 12px;border-radius:8px;cursor:pointer;border:1px solid rgba(255,255,255,0.06);background:transparent;color:#eff}
+      .btn.primary{background:linear-gradient(90deg,var(--neon),var(--neon-2));box-shadow:0 6px 30px rgba(123,44,255,0.08);color:#081018}
+
+      /* Neon accents for focus */
+      .neon-outline{box-shadow:0 0 18px var(--neon),0 0 40px rgba(155,0,255,0.08) inset}
+
+      /* small overlay for flash transition */
+  /* small overlay for flash transition */
+  #flash{position:fixed;inset:0;background:white;opacity:0;pointer-events:none;z-index:200;transition:opacity 280ms ease}
+
+      /* mobile tweaks */
+      @media (max-width:480px){.hud{right:10px;top:10px}.hud input[type=range]{width:120px}}
+    </style>
+  </head>
+  <body>
+    <canvas id="c"></canvas>
+
+    <!-- HUD is hidden on load; settings are applied programmatically so users cannot change them -->
+    <div class="hud" aria-hidden="true" style="display:none">
+      <div class="panel">
+        <!-- Hidden controls keep ids for script compatibility but are not visible -->
+        <input id="ctrl-glow" type="hidden" value="0.3">
+        <input id="ctrl-speed" type="hidden" value="1.6">
+        <input id="ctrl-bloom" type="hidden" value="2.9">
+      </div>
+    </div>
+
+    <div class="hint">Klicke ins Portal, um das Menü zu öffnen</div>
+
+    <div id="menu" class="menu" aria-hidden="true">
+      <h3>Hidden Menu</h3>
+      <div class="presets">
+        <div class="preset" data-col1="#00f0ff" data-col2="#9b00ff">Cyan → Purple</div>
+        <div class="preset" data-col1="#ff00c8" data-col2="#ffd166">Magenta → Gold</div>
+        <div class="preset" data-col1="#00ffcc" data-col2="#0077ff">Aqua → Blue</div>
+      </div>
+      <div class="controls">
+        <button id="enterBtn" class="btn primary">Enter Portal</button>
+        <button id="closeBtn" class="btn">Schließen</button>
+        <div style="flex:1"></div>
+        <small style="color:rgba(255,255,255,0.6)">Live: Neon + Bloom</small>
+      </div>
+    </div>
+
+    <div id="flash"></div>
+
+    <!-- Loading overlay -->
+    <div id="loading" style="position:fixed;inset:0;display:flex;align-items:center;justify-content:center;z-index:999;background:linear-gradient(180deg, rgba(0,0,0,0.95), rgba(0,0,0,0.9));transition:opacity 300ms ease">
+      <div style="width:420px;max-width:90%;padding:18px;border-radius:12px;background:rgba(255,255,255,0.02);border:1px solid rgba(255,255,255,0.04);text-align:center;color:#dfe">
+        <div style="font-size:14px;margin-bottom:12px">Lade Szene…</div>
+        <div style="height:10px;background:rgba(255,255,255,0.06);border-radius:6px;overflow:hidden;">
+          <div id="loading-bar" style="height:100%;width:0%;background:linear-gradient(90deg,var(--neon),var(--neon-2));box-shadow:0 6px 30px rgba(0,240,255,0.08)"></div>
+        </div>
+        <div id="loading-text" style="font-size:12px;margin-top:10px;opacity:0.85">Initialisiere Renderer</div>
+      </div>
+    </div>
+
+    <script type="module" src="./main.js"></script>
+  </body>
+</html>
