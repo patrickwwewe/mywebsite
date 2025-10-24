@@ -38,7 +38,7 @@ p.position.set(0, 5, 8);
 scene.add(p);
 
 // Post-processing composer + bloom
-const composer = new EffectComposer(renderer);
+const composer = new EffectComposer(renderer); //post processing kette starten (rendern in Zwischentexturen)
 composer.addPass(new RenderPass(scene, camera));
 const bloomPass = new UnrealBloomPass(new THREE.Vector2(innerWidth, innerHeight), 1.2, 1, 0.2);
 bloomPass.threshold = 0.1;
@@ -46,18 +46,23 @@ composer.addPass(bloomPass);
 setLoading(36, 'Post-Processing geladen');
 
 // Portal shader material
-const portalUniforms = {
+ //Ein Shader ist ein kleines Programm, das auf der Grafikkarte (GPU) läuft
+const portalUniforms = { //hier wird ein Objekt erstellt das alle Shader-Variabeln ernthält
   time: { value: 0 },
-  resolution: { value: new THREE.Vector2(innerWidth, innerHeight) },
-  colorA: { value: new THREE.Color('#00f0ff') },
-  colorB: { value: new THREE.Color('#9b00ff') },
-  glow: { value: 1.0 },
+  resolution: { value: new THREE.Vector2(innerWidth, innerHeight) }, //um den Shader die Seitenbreite und Höhe weiterzugeben
+ //Hie eventuell einfügen dass das Portal dann immer die gleiche vorm hat egal vom Sietenverhältniss her?
+ //uv.x *= resolution.x / resolution.y;
+  colorA: { value: new THREE.Color('#00f0ff') }, //Farbe zum auswählen
+  colorB: { value: new THREE.Color('#9b00ff') }, //Farbe zum auswählen
+  glow: { value: 1.0 }, //wie stark es glühen soll
   speed: { value: 1.0 }
 };
 
-const portalMaterial = new THREE.ShaderMaterial({
-  uniforms: portalUniforms,
-  vertexShader: `
+const portalMaterial = new THREE.ShaderMaterial({ //hier wird ein neues Material erstellt das ein eigenen Shader benutzt
+  uniforms: portalUniforms, //uniform sinn die variabeln die ich davor deviniert habe (time, colorA, ColorB, etc)
+  vertexShader: `//Der Vertex Shader läuft einmal pro Eckpunkt des Modells.
+                //Er rechnet aus, wo auf dem Bildschirm dieser Punkt landen soll.
+
     varying vec2 vUv;
     void main(){
       vUv = uv;
@@ -114,15 +119,17 @@ const portalMaterial = new THREE.ShaderMaterial({
 });
 setLoading(64, 'Shader kompiliere');
 
-// Portal mesh
+// Portal mesh --> hier wird es tatsächlich sichtbar eingebaut
 const portalGeo = new THREE.PlaneGeometry(4, 4, 1, 1);
 const portalMesh = new THREE.Mesh(portalGeo, portalMaterial);
-portalMesh.rotation.x = 0;
+portalMesh.rotation.x = 0; //fläche steht flach und zeigt nach vorne
 scene.add(portalMesh);
-setLoading(78, 'Portal erstellt');
+setLoading(78, 'Portal erstellt'); //Ladebalken auf 78% stellen
 
 // Rotating torus frames
-const torusGroup = new THREE.Group();
+//in Torus (Plural: Tori) ist ein geometrischer Körper in Form eines Reifens oder Donuts 🍩.
+//Three.js hat dafür eine eingebaute Form: THREE.TorusGeometry().
+const torusGroup = new THREE.Group(); //eine Group ist ein unsichtbarere Container im 3D Braum, man kann mehrere Objekte hineinlegen und sie dann zusammen bewegen, drehen oder skalieren.
 for(let i=0;i<3;i++){
   const r = 1.6 + i*0.35;
   const geo = new THREE.TorusGeometry(r, 0.03 + i*0.01, 16, 120);
@@ -147,17 +154,17 @@ for(let i=0;i<6;i++){
 }
 
 // particles
-const particleCount = 600;
-const positions = new Float32Array(particleCount * 3);
-for(let i=0;i<particleCount;i++){
-  const r = 2.6 + Math.random()*10.0;
-  const theta = Math.random()*Math.PI*2;
-  const phi = (Math.random()-0.5)*Math.PI;
+const particleCount = 600; //einmal 600 Partikel bitte
+const positions = new Float32Array(particleCount * 3); //Positions- Array vorbereiten; jeder Partikel hat drei werte--> x,y,z; 600 Punkte × 3 Werte = 1800 Zahlen, alle in einem schnellen Float32Array (für die GPU optimiert).
+for(let i=0;i<particleCount;i++){ //position zufällig erzeugen
+  const r = 2.6 + Math.random()*10.0; //abstand vom Zentrum von 2.6 bis 12.6
+  const theta = Math.random()*Math.PI*2; //winkel um die y achse (kompletter kreis)
+  const phi = (Math.random()-0.5)*Math.PI; //vertikaler winkel 
   positions[i*3] = Math.cos(theta)*Math.cos(phi)*r;
   positions[i*3+1] = Math.sin(phi)*r*0.4;
   positions[i*3+2] = Math.sin(theta)*Math.cos(phi)*r;
 }
-const pGeo = new THREE.BufferGeometry();
+const pGeo = new THREE.BufferGeometry(); //THREE.BufferGeometry ist eine effiziente Geometrie, die mit Rohdaten arbeitet. „Ich habe eine Liste mit 600 Punkten, jeder hat 3 Koordinaten. Mach daraus eine Geometrie.“
 pGeo.setAttribute('position', new THREE.BufferAttribute(positions,3));
 const pMat = new THREE.PointsMaterial({color:0xaaffff, size:0.03, transparent:true, opacity:0.9});
 const points = new THREE.Points(pGeo, pMat);
@@ -165,8 +172,8 @@ scene.add(points);
 setLoading(88, 'Partikel bereit');
 
 // Raycaster for clicks
-const ray = new THREE.Raycaster();
-const mouse = new THREE.Vector2();
+const ray = new THREE.Raycaster(); //HTML Elemente Finden 
+const mouse = new THREE.Vector2(); //HTML Elemente Finden
 
 let menuOpen = false;
 const menuEl = document.getElementById('menu');
@@ -179,10 +186,12 @@ function setMenu(open){
 }
 
 // Controls: Hook UI controls
+//Verbindet HTML Elemente mit Shader Werten und dem Bloom Effekt
+//html Elemnte holen 
 const glowCtrl = document.getElementById('ctrl-glow');
 const speedCtrl = document.getElementById('ctrl-speed');
 const bloomCtrl = document.getElementById('ctrl-bloom');
-
+//Glow Regler
 glowCtrl.addEventListener('input', e=>{ portalUniforms.glow.value = parseFloat(e.target.value); });
 speedCtrl.addEventListener('input', e=>{ portalUniforms.speed.value = parseFloat(e.target.value); });
 bloomCtrl.addEventListener('input', e=>{ bloomPass.strength = parseFloat(e.target.value); });
