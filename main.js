@@ -71,8 +71,7 @@ import {
 
 // Interaktionen
 import { 
-  initializePortalInteraction, 
-  initializeMenuEvents 
+  initializePortalInteraction
 } from './js/modules/interactions.js';
 
 // Loading-System
@@ -87,6 +86,17 @@ import {
 import { 
   updateCameraMovement 
 } from './js/modules/camera.js';
+
+// Erst mal nur Basis-Module laden (die anderen später)
+// Audio-System wird dynamisch geladen
+// Screen-Shake wird dynamisch geladen  
+// Particle-System wird dynamisch geladen
+// Chromatic Aberration wird dynamisch geladen
+
+// Hover-Effekte
+import {
+  updateHoverEffects
+} from './js/modules/interactions.js';
 
 // ====================================================================
 //                        GLOBALE VARIABLEN
@@ -154,27 +164,65 @@ async function initialize() {
     // ================================================================
     // SCHRITT 6: HYPERSPACE-TUNNEL ERSTELLEN
     // ================================================================
-    setLoadingProgress(92, 'Hyperspace-Tunnel lädt...');
+    setLoadingProgress(88, 'Hyperspace-Tunnel lädt...');
     tunnelGroup = createTunnel(scene);
     console.log('🌪️ Star Wars Tunnel bereit!');
     
     // ================================================================
-    // SCHRITT 6: INTERAKTIONEN EINRICHTEN
+    // SCHRITT 7: ERWEITERTE EFFEKTE (DYNAMISCH LADEN)
     // ================================================================
-    initializePortalInteraction(portalMesh, camera, portalUniforms, bloomPass);
-    initializeMenuEvents();
+    setLoadingProgress(90, 'Erweiterte Effekte werden geladen...');
+    
+    // Lade Effekt-Module dynamisch
+    try {
+      const audioModule = await import('./js/modules/audio.js');
+      audioModule.initializeAudio();
+      console.log('🔊 Audio-System geladen!');
+      
+      // Audio-Aktivierung bei erstem Klick
+      window.audioModule = audioModule;
+    } catch (error) {
+      console.log('⚠️ Audio-System übersprungen:', error.message);
+    }
+    
+    try {
+      const shakeModule = await import('./js/modules/shake.js');
+      shakeModule.initializeShakeSystem(camera, renderer);
+      window.shakeModule = shakeModule;
+      console.log('📳 Shake-System geladen!');
+    } catch (error) {
+      console.log('⚠️ Shake-System übersprungen:', error.message);
+    }
+    
+    try {
+      const particleModule = await import('./js/modules/particles.js');
+      particleModule.initializeParticleExplosions(scene);
+      particleModule.createPortalEnergyParticles(portalMesh.position);
+      window.particleModule = particleModule;
+      console.log('💥 Partikel-System geladen!');
+    } catch (error) {
+      console.log('⚠️ Partikel-System übersprungen:', error.message);
+    }
+    
+    console.log('✨ Basis-Effekte erfolgreich geladen!');
     
     // ================================================================
-    // SCHRITT 7: EVENT-LISTENER
+    // SCHRITT 11: INTERAKTIONEN EINRICHTEN
+    // ================================================================
+    initializePortalInteraction(portalMesh, camera, portalUniforms, bloomPass, scene); // Szene übergeben!
+    // Menü-Events entfernt - nur Portal-Interaktion!
+    
+    // ================================================================
+    // SCHRITT 12: EVENT-LISTENER
     // ================================================================
     setupResizeHandler(camera, renderer, composer, portalUniforms);
     
     // ================================================================
-    // SCHRITT 8: FINALE KONFIGURATION
+    // SCHRITT 13: FINALE KONFIGURATION
     // ================================================================
     configureFinalSettings();
     
-    setLoadingProgress(100, 'Fertig — Szene bereit');
+    setLoadingProgress(100, 'ALLES BEREIT — ULTIMATIVE SCI-FI-EXPERIENCE!');
     
     // ================================================================
     // SCHRITT 9: RENDER-SCHLEIFE STARTEN
@@ -204,7 +252,7 @@ function configureFinalSettings() {
   // Portal-Einstellungen (locked für konsistentes Design)
   portalUniforms.glow.value = 0.3;     // Subtiler Glow
   portalUniforms.speed.value = 1.6;    // Mittlere Geschwindigkeit
-  bloomPass.strength = 2.9;            // Starker Bloom-Effekt
+  bloomPass.strength = 0.8;            // VIEL weniger Bloom! (2.9 → 0.8)
   
   // UI-Kontrollen synchronisieren (auch wenn versteckt)
   const glowCtrl = document.getElementById('ctrl-glow');
@@ -250,6 +298,28 @@ function animate() {
   updateTunnel(0.016); // ~60fps Delta-Time
   
   // ================================================================
+  // ERWEITERTE EFFEKT-SYSTEME UPDATEN (FALLS GELADEN)
+  // ================================================================
+  
+  try {
+    // Screen-Shake updaten (falls verfügbar)
+    if (window.shakeModule) {
+      window.shakeModule.updateShake(0.016);
+    }
+    
+    // Particle-Explosionen updaten (falls verfügbar)  
+    if (window.particleModule) {
+      window.particleModule.updateParticleExplosions(0.016);
+    }
+    
+    // Hover-Effekte updaten
+    updateHoverEffects();
+    
+  } catch (error) {
+    // Ignoriere Effekt-Fehler, damit Basis-Portal weiterläuft
+  }
+  
+  // ================================================================
   // RENDERN
   // ================================================================
   composer.render();
@@ -264,19 +334,42 @@ function animate() {
 }
 
 // ====================================================================
+//                    AUDIO-AKTIVIERUNG BEI ERSTEM KLICK
+// ====================================================================
+
+// Audio bei erstem User-Click aktivieren (Browser-Requirement)
+document.addEventListener('click', () => {
+  try {
+    if (window.audioModule) {
+      window.audioModule.enableAudio();
+      console.log('🔊 Audio durch User-Klick aktiviert!');
+    }
+  } catch (e) {
+    console.log('⚠️ Audio-Aktivierung übersprungen:', e.message);
+  }
+}, { once: true }); // Nur beim ersten Klick
+
+// ====================================================================
 //                          STARTUP
 // ====================================================================
 
 // Entwickler-Info in Konsole
 console.log(`
-🌀 3D Portfolio Portal
-━━━━━━━━━━━━━━━━━━━━━━━
-✨ Interaktives WebGL-Portal
-🎯 Klicke ins Portal für Navigation
-🔧 Powered by Three.js
+🚀 ULTIMATIVE SCI-FI PORTAL EXPERIENCE 🚀
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+✨ Interaktives WebGL-Portal mit ALLEN Effekten!
+🔊 Hyperspace-Audio & Sound-Effects
+📳 Screen-Shake & Camera-Vibration  
+💥 Particle-Explosionen & Energy-Bursts
+🌈 Chromatic Aberration Post-Processing
+✨ Hover-Effekte & Portal-Pulsing
+🌪️ Star Wars-Style Hyperspace-Tunnel
+⚡ Flash-Effekte & Micro-Transitions
 
-💡 Tipp: Verwende einen lokalen HTTP-Server
-   für optimale Performance!
+🎯 Klicke ins Portal für EPISCHEN Hyperspace-Flug!
+🔧 Powered by Three.js + Web Audio API
+
+💡 Tipp: Verwende lokalen HTTP-Server für Audio!
 `);
 
 // Initialisierung starten

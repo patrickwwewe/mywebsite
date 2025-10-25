@@ -88,34 +88,41 @@ export function createTunnel(scene) {
 function createTunnelTube() {
   console.log('💫 Erstelle leuchtende Tunnel-Röhre...');
   
-  // Zylinder-Geometrie für den Tunnel
-  const tubeGeometry = new THREE.CylinderGeometry(
-    8,    // Radius oben
-    8,    // Radius unten  
-    50,   // Höhe (Länge des Tunnels)
-    32,   // Radial-Segmente
-    1,    // Höhen-Segmente
-    true  // Open ended (beide Enden offen)
-  );
+  // KEINE RÖHRE MEHR! Stattdessen: Hyperspace-Streifen wie Star Wars!
   
-  // Glow-Material für Tron-Effekt
-  const tubeMaterial = new THREE.MeshBasicMaterial({
-    color: 0x00aaff,        // Cyan-Blau
-    transparent: true,
-    opacity: 0.3,           // Durchscheinend
-    side: THREE.BackSide,   // Von innen sichtbar
-    blending: THREE.AdditiveBlending  // Glow-Effekt
-  });
+  // Erstelle viele leuchtende Linien statt einer Röhre
+  const lineCount = 60;  // Anzahl Hyperspace-Streifen
+  const tunnelRadius = 6;
   
-  tunnelTube = new THREE.Mesh(tubeGeometry, tubeMaterial);
+  for (let i = 0; i < lineCount; i++) {
+    // Zufällige Position um den Kreis
+    const angle = (i / lineCount) * Math.PI * 2;
+    const radiusVariation = tunnelRadius + (Math.random() - 0.5) * 2;
+    
+    const x = Math.cos(angle) * radiusVariation;
+    const y = Math.sin(angle) * radiusVariation;
+    
+    // Linie-Geometrie (EXTRA lange Hyperspace-Streifen)
+    const lineGeometry = new THREE.BufferGeometry().setFromPoints([
+      new THREE.Vector3(x, y, 15),  // Vorne (weiter weg)
+      new THREE.Vector3(x, y, -70)  // Hinten (VIEL länger!)
+    ]);
+    
+    // Glühendes Line-Material
+    const lineMaterial = new THREE.LineBasicMaterial({
+      color: Math.random() < 0.3 ? 0xffffff : (Math.random() < 0.6 ? 0x00aaff : 0x0088ff),
+      transparent: true,
+      opacity: 0.4 + Math.random() * 0.4, // Verschiedene Helligkeiten
+      linewidth: 2
+    });
+    
+    const line = new THREE.Line(lineGeometry, lineMaterial);
+    tunnelGroup.add(line);
+  }
   
-  // Tunnel richtig ausrichten - KEIN rotate! Zylinder liegt schon richtig (vertikal = Z-Achse)
-  // tunnelTube.rotation.z = Math.PI / 2; // ← Das war das Problem!
-  tunnelTube.rotation.x = Math.PI / 2; // Zylinder zeigt in Z-Richtung (Kamera-Flugrichtung)
-  tunnelTube.position.z = -10; // Näher zum Portal, damit Kamera durchfliegt
+  console.log('⚡ Hyperspace-Streifen erstellt (wie Star Wars!)');
   
-  tunnelGroup.add(tunnelTube);
-  console.log('🔵 Tunnel-Röhre erstellt');
+  // Alte Röhre wurde durch Hyperspace-Streifen ersetzt!
 }
 
 // ====================================================================
@@ -128,62 +135,67 @@ function createTunnelTube() {
 function createParticleStreams() {
   console.log('✨ Erstelle Hyperspace-Partikel...');
   
-  const particleCount = 2000; // Viele Partikel für dichten Effekt
+  const particleCount = 3000; // NOCH MEHR Partikel!
   const positions = new Float32Array(particleCount * 3);
   const velocities = new Float32Array(particleCount * 3);
   const colors = new Float32Array(particleCount * 3);
+  const sizes = new Float32Array(particleCount); // Größen-Array
   
-  // Partikel in Spiralen um den Tunnel verteilen
+  // Partikel wie STERNE in Hyperspace
   for (let i = 0; i < particleCount; i++) {
     const i3 = i * 3;
     
-    // Spiral-Position um Kamera-Flugbahn (Z-Achse)
-    const angle = (i / particleCount) * Math.PI * 12; // Mehrere Spiralen
-    const radius = 2 + Math.random() * 4; // Radius kleiner (Kamera fliegt durch!)
-    const z = 5 - Math.random() * 30; // Von Z=5 bis Z=-25 (Kamera-Route!)
+    // Zufällige Position im großen Radius (wie Sterne)
+    const angle = Math.random() * Math.PI * 2;
+    const radius = 8 + Math.random() * 15; // Größerer Radius für Sterne-Effekt  
+    const z = 15 - Math.random() * 80; // VIEL LÄNGERER Tunnel! (von 15 bis -65)
     
     positions[i3] = Math.cos(angle) * radius;     // X
     positions[i3 + 1] = Math.sin(angle) * radius; // Y  
-    positions[i3 + 2] = z;                        // Z - entlang Kamera-Route!
+    positions[i3 + 2] = z;                        // Z
     
-    // Geschwindigkeit für Bewegung durch Tunnel
+    // Geschwindigkeit für HYPERSPACE-Effekt
     velocities[i3] = 0;
     velocities[i3 + 1] = 0;
-    velocities[i3 + 2] = 0.5 + Math.random() * 0.5; // Z-Geschwindigkeit
+    velocities[i3 + 2] = 1 + Math.random() * 2; // Schneller!
     
-    // Hyperspace-Farben (Blau-Weiß-Cyan)
+    // Stern-Größe (manche groß, manche klein)
+    sizes[i] = Math.random() < 0.1 ? 4 + Math.random() * 3 : 1 + Math.random() * 2;
+    
+    // REALISTISCHE Hyperspace-Farben
     const colorChoice = Math.random();
-    if (colorChoice < 0.4) {
-      // Cyan
-      colors[i3] = 0;
+    if (colorChoice < 0.6) {
+      // Helles Weiß/Blau (wie echte Sterne)
+      colors[i3] = 0.8 + Math.random() * 0.2;     // R
+      colors[i3 + 1] = 0.9 + Math.random() * 0.1; // G  
+      colors[i3 + 2] = 1;                         // B
+    } else if (colorChoice < 0.8) {
+      // Cyan-Streifen
+      colors[i3] = 0.3;
       colors[i3 + 1] = 0.8;
       colors[i3 + 2] = 1;
-    } else if (colorChoice < 0.7) {
-      // Weiß
-      colors[i3] = 1;
-      colors[i3 + 1] = 1;
-      colors[i3 + 2] = 1;
     } else {
-      // Blau
-      colors[i3] = 0.2;
-      colors[i3 + 1] = 0.4;
-      colors[i3 + 2] = 1;
+      // Goldene Sterne (wie Star Wars)
+      colors[i3] = 1;
+      colors[i3 + 1] = 0.8;
+      colors[i3 + 2] = 0.3;
     }
   }
   
-  // Partikel-Geometrie
+  // Partikel-Geometrie mit Größen
   const particleGeometry = new THREE.BufferGeometry();
   particleGeometry.setAttribute('position', new THREE.BufferAttribute(positions, 3));
   particleGeometry.setAttribute('color', new THREE.BufferAttribute(colors, 3));
+  particleGeometry.setAttribute('size', new THREE.BufferAttribute(sizes, 1));
   
-  // Partikel-Material
+  // REALISTISCHES Stern-Material
   const particleMaterial = new THREE.PointsMaterial({
-    size: 0.8,
+    size: 2.5,              // Größer für Stern-Effekt  
     transparent: true,
-    opacity: 0.8,
+    opacity: 0.9,           // Heller
     vertexColors: true,
     blending: THREE.AdditiveBlending,
-    sizeAttenuation: false
+    sizeAttenuation: true   // Sterne werden kleiner mit Entfernung
   });
   
   tunnelParticles = new THREE.Points(particleGeometry, particleMaterial);
@@ -204,31 +216,37 @@ function createEnergyRings() {
   console.log('⚡ Erstelle Energie-Ringe...');
   
   energyRings = [];
-  const ringCount = 20; // Anzahl Ringe
+  const ringCount = 30; // MEHR Ringe für dichten Effekt
   
   for (let i = 0; i < ringCount; i++) {
-    // Ring-Geometrie
-    const ringGeometry = new THREE.RingGeometry(6, 7, 32);
+    // Dünnere, elegantere Ringe
+    const innerRadius = 8 + Math.random() * 2;  
+    const outerRadius = innerRadius + 0.3; // Sehr dünne Ringe
+    const ringGeometry = new THREE.RingGeometry(innerRadius, outerRadius, 64); // Mehr Segmente = smoother
     
-    // Energie-Material
+    // Subtile Energie-Farben
+    const colors = [0x00aaff, 0x0088ff, 0xffffff, 0x4466ff];
     const ringMaterial = new THREE.MeshBasicMaterial({
-      color: 0x00ffaa,
+      color: colors[Math.floor(Math.random() * colors.length)],
       transparent: true,
-      opacity: 0.4,
+      opacity: 0.15 + Math.random() * 0.2, // Sehr subtil
       side: THREE.DoubleSide,
       blending: THREE.AdditiveBlending
     });
     
     const ring = new THREE.Mesh(ringGeometry, ringMaterial);
     
-    // Ringe entlang Kamera-Flugbahn verteilen (von 0 bis -20)
-    ring.position.z = 5 - (i / ringCount) * 25; // Von Z=5 bis Z=-20 
-    // ring.rotation.y = Math.PI / 2; // ← Weg damit! Ringe bleiben flach (XY-Ebene)
+    // Ringe über VIEL längere Distanz verteilen  
+    ring.position.z = 15 - (i / ringCount) * 80; // VIEL längerer Tunnel! (von 15 bis -65)
     
-    // Pulsier-Animation vorbereiten
+    // Leichte Rotation für Dynamik
+    ring.rotation.z = Math.random() * Math.PI * 2;
+    
+    // Animation-Daten
     ring.userData = {
       originalScale: 1,
-      pulsePhase: (i / ringCount) * Math.PI * 2
+      pulsePhase: (i / ringCount) * Math.PI * 4, // Schnellerer Puls
+      rotSpeed: (Math.random() - 0.5) * 0.02     // Langsame Rotation
     };
     
     energyRings.push(ring);
@@ -243,17 +261,48 @@ function createEnergyRings() {
 // ====================================================================
 
 /**
- * Aktiviert den Tunnel für Portal-Durchflug
+ * Aktiviert den Tunnel für Portal-Durchflug und versteckt normale Szene
  * @param {boolean} active - Tunnel aktiv/inaktiv
  * @param {number} speed - Animations-Geschwindigkeit (default: 1.0)
+ * @param {THREE.Scene} scene - Die Hauptszene (optional)
  */
-export function activateTunnel(active, speed = 1.0) {
+export function activateTunnel(active, speed = 1.0, scene = null) {
   tunnelActive = active;
   animationSpeed = speed;
   
   if (tunnelGroup) {
     tunnelGroup.visible = active;
-    console.log(active ? '🌪️ Hyperspace-Tunnel AKTIVIERT!' : '🌙 Hyperspace-Tunnel deaktiviert');
+    
+    // RADIKALER ANSATZ: Alles außer Tunnel verstecken!
+    if (scene) {
+      scene.children.forEach(child => {
+        console.log(`🔍 Objekt: "${child.name}" (Type: ${child.type})`);
+        
+        if (active) {
+          // TUNNEL MODUS: Nur Tunnel-Gruppe sichtbar
+          if (child.name === 'HyperspaceTunnel') {
+            child.visible = true;
+            console.log(`✅ TUNNEL SICHTBAR: ${child.name}`);
+          } else if (child.type.includes('Light')) {
+            child.visible = true; // Licht behalten
+            console.log(`💡 Licht behalten: ${child.type}`);
+          } else {
+            child.visible = false; // ALLES andere weg!
+            console.log(`❌ VERSTECKT: ${child.name || 'Unnamed'}`);
+          }
+        } else {
+          // NORMALER MODUS: Tunnel weg, alles andere zurück
+          if (child.name === 'HyperspaceTunnel') {
+            child.visible = false;
+          } else {
+            child.visible = true;
+            console.log(`✅ ZURÜCK: ${child.name || 'Unnamed'}`);
+          }
+        }
+      });
+    }
+    
+    console.log(active ? '🌪️ Hyperspace-Tunnel AKTIVIERT! Normale Szene ausgeblendet!' : '🌙 Hyperspace-Tunnel deaktiviert - Normale Szene wieder da!');
   }
 }
 
@@ -289,13 +338,11 @@ export function updateTunnel(deltaTime) {
   // 1. PARTIKEL-ANIMATION (Hyperspace-Bewegung)
   updateParticleStreams(deltaTime);
   
-  // 2. ENERGIE-RINGE (Pulsieren)
+  // 2. ENERGIE-RINGE (Pulsieren + Rotieren)
   updateEnergyRings(deltaTime);
   
-  // 3. TUNNEL-RÖHRE (Leichtes Drehen)
-  if (tunnelTube) {
-    tunnelTube.rotation.x += deltaTime * 0.2 * animationSpeed;
-  }
+  // 3. HYPERSPACE-LINIEN (Flimmern) 
+  updateHyperspaceLines(deltaTime);
 }
 
 /**
@@ -308,12 +355,12 @@ function updateParticleStreams(deltaTime) {
   const velocities = tunnelParticles.userData.velocities;
   
   for (let i = 0; i < positions.length; i += 3) {
-    // Partikel bewegen sich IN RICHTUNG KAMERA (entgegen Z-Achse)
-    positions[i + 2] -= velocities[i + 2] * deltaTime * 15 * animationSpeed;
+    // Partikel bewegen sich VIEL SCHNELLER IN RICHTUNG KAMERA
+    positions[i + 2] -= velocities[i + 2] * deltaTime * 35 * animationSpeed; // Viel schneller! (15 → 35)
     
     // Reset Partikel wenn sie zu weit vorne sind 
-    if (positions[i + 2] > 5) {
-      positions[i + 2] = -25; // Reset nach hinten
+    if (positions[i + 2] > 15) {
+      positions[i + 2] = -65; // Reset nach hinten (weiter weg)
       
       // Neue Spiral-Position (kleinerer Radius!)
       const angle = Math.random() * Math.PI * 2;
@@ -333,19 +380,39 @@ function updateEnergyRings(deltaTime) {
   const time = performance.now() * 0.001;
   
   energyRings.forEach(ring => {
-    // Pulsier-Effekt
-    const pulseScale = 1 + Math.sin(time * 3 + ring.userData.pulsePhase) * 0.1;
+    // Subtiler Pulsier-Effekt
+    const pulseScale = 1 + Math.sin(time * 2 + ring.userData.pulsePhase) * 0.05;
     ring.scale.set(pulseScale, pulseScale, 1);
     
-    // Opacity-Animation
-    ring.material.opacity = 0.2 + Math.sin(time * 2 + ring.userData.pulsePhase) * 0.2;
+    // Sanfte Opacity-Animation
+    const baseOpacity = 0.1;
+    ring.material.opacity = baseOpacity + Math.sin(time * 1.5 + ring.userData.pulsePhase) * 0.15;
     
-    // Ringe bewegen sich AUF KAMERA ZU (entgegen Z-Achse)
-    ring.position.z += deltaTime * 8 * animationSpeed;
+    // Langsame Rotation für Dynamik
+    ring.rotation.z += ring.userData.rotSpeed * deltaTime * 60;
+    
+    // Ringe bewegen sich SCHNELLER AUF KAMERA ZU
+    ring.position.z += deltaTime * 25 * animationSpeed; // Viel schneller! (12 → 25)
     
     // Reset wenn Ring zu weit vorne
-    if (ring.position.z > 10) {
-      ring.position.z = -25; // Reset nach hinten
+    if (ring.position.z > 15) {
+      ring.position.z = -65; // Reset nach hinten (weiter weg wegen längerem Tunnel)
+    }
+  });
+}
+
+/**
+ * Animiert die Hyperspace-Linien (Flimmern)
+ */
+function updateHyperspaceLines(deltaTime) {
+  const time = performance.now() * 0.001;
+  
+  // Finde alle Line-Objekte in der Tunnel-Gruppe
+  tunnelGroup.children.forEach(child => {
+    if (child.type === 'Line') {
+      // Sanftes Flimmern der Linien
+      const flicker = 0.3 + Math.sin(time * 8 + Math.random() * 10) * 0.2;
+      child.material.opacity = Math.max(0.2, Math.min(0.8, flicker));
     }
   });
 }

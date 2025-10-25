@@ -44,6 +44,8 @@ import * as THREE from 'three';
 import { changePortalColors } from './portal.js';
 import { activateTunnel } from './tunnel.js';
 
+// Erweiterte Effekte werden dynamisch geladen (falls verfügbar)
+
 // ====================================================================
 //                        INTERAKTIONS-SETUP
 // ====================================================================
@@ -52,10 +54,18 @@ import { activateTunnel } from './tunnel.js';
 let portalActivated = false;     // Wurde das Portal bereits aktiviert?
 let isAnimating = false;         // Läuft gerade eine Animation?
 let entering = false;            // Läuft gerade die Flug-Animation?
+let mainScene = null;            // Referenz zur Hauptszene
 
 // Raycasting für Maus-Interaktionen
 const raycaster = new THREE.Raycaster();
 const mouse = new THREE.Vector2();
+
+// Hover-State für Portal
+let isHovering = false;
+let hoverAnimationId = null;
+let hoverStartTime = 0;
+let portal = null;
+let camera = null;
 
 /**
  * Initialisiert Portal-Interaktionen und Event-Listener
@@ -63,9 +73,40 @@ const mouse = new THREE.Vector2();
  * @param {THREE.PerspectiveCamera} camera - Die Szenen-Kamera
  * @param {Object} portalUniforms - Portal-Shader Uniforms
  * @param {Object} bloomPass - Bloom Post-Processing Pass
+ * @param {THREE.Scene} scene - Die Hauptszene
  */
-export function initializePortalInteraction(portalMesh, camera, portalUniforms, bloomPass) {
+export function initializePortalInteraction(portalMesh, cameraRef, portalUniforms, bloomPass, scene) {
   console.log('🖱️ Initialisiere Portal-Interaktionen...');
+  
+  // Referenzen speichern
+  portal = portalMesh;
+  camera = cameraRef;
+  mainScene = scene;
+  
+  // Event Listener für Maus-Movement (Hover-Effekte)
+  window.addEventListener('pointermove', (event) => {
+    if (isAnimating) return;
+    
+    // Maus-Position updaten
+    mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
+    mouse.y = -(event.clientY / window.innerHeight) * 2 + 1;
+    
+    // Raycasting für Hover-Detection
+    raycaster.setFromCamera(mouse, cameraRef);
+    const intersects = raycaster.intersectObject(portalMesh);
+    
+    if (intersects.length > 0) {
+      // Über Portal hovern
+      if (!isHovering) {
+        startHoverEffect();
+      }
+    } else {
+      // Nicht über Portal
+      if (isHovering) {
+        stopHoverEffect();
+      }
+    }
+  });
   
   // Event Listener für Maus/Touch-Klicks
   window.addEventListener('pointerdown', (event) => {
@@ -99,10 +140,38 @@ export function initializePortalInteraction(portalMesh, camera, portalUniforms, 
 export function activatePortal(camera, portalUniforms, bloomPass) {
   if (isAnimating || portalActivated) return;
   
-  console.log('🌀 Aktiviere Portal...');
+  console.log('🚀 AKTIVIERE ULTIMATIVES SCI-FI PORTAL MIT ALLEN EFFEKTEN!');
   
   isAnimating = true;
   portalActivated = true;
+
+  // ================================================================
+  // 🔊 ERWEITERTE EFFEKTE (FALLS VERFÜGBAR)
+  // ================================================================
+  
+  // Audio-Effekte
+  try {
+    if (window.audioModule) {
+      window.audioModule.playPortalActivationSound();
+      console.log('🔊 Portal-Audio aktiviert!');
+    }
+  } catch (e) { console.log('⚠️ Audio übersprungen'); }
+  
+  // Screen-Shake
+  try {
+    if (window.shakeModule) {
+      window.shakeModule.startPortalActivationShake();
+      console.log('📳 Portal-Shake aktiviert!');
+    }
+  } catch (e) { console.log('⚠️ Shake übersprungen'); }
+  
+  // Particle-Explosion
+  try {
+    if (window.particleModule) {
+      window.particleModule.createPortalActivationBurst(portal ? portal.position : new THREE.Vector3(0, 0, 0));
+      console.log('💥 Portal-Explosion aktiviert!');
+    }
+  } catch (e) { console.log('⚠️ Partikel übersprungen'); }
 
   // ================================================================
   // UI-UPDATES - Hint ausblenden
@@ -152,11 +221,9 @@ export function activatePortal(camera, portalUniforms, bloomPass) {
     if (progress < 1) {
       requestAnimationFrame(animateActivation);
     } else {
-      // Animation beendet - zeige Menü nach Flash-Effekt
-      setTimeout(() => {
-        showRadialMenu();
-        isAnimating = false;
-      }, 1000); // Längere Wartezeit damit Flash-Effekt komplett abgeschlossen ist
+      // Animation beendet - KEIN Menü mehr! Nur Portal-Animation
+      console.log('🎯 Portal-Farb-Animation abgeschlossen');
+      isAnimating = false;
     }
   }
 
@@ -175,15 +242,43 @@ function enterPortal(camera) {
   if (entering) return;
   entering = true;
   
-  console.log('🚀 Starte Flug durch Portal...');
+  console.log('🚀 Starte ULTIMATIVEN HYPERSPACE-FLUG!');
   
-  // ⚡ HYPERSPACE-TUNNEL AKTIVIEREN!
-  activateTunnel(true, 1.5); // Aktiviert mit 1.5x Geschwindigkeit
-  console.log('🌪️ Hyperspace-Tunnel AKTIV!');
+  // ================================================================
+  // � HYPERSPACE-EFFEKTE (FALLS VERFÜGBAR)
+  // ================================================================
   
-  const startPos = camera.position.clone();          // Startposition merken
-  const targetPos = new THREE.Vector3(0, 0, -20);    // Ziel: VIEL tiefer durch Portal (war -6, jetzt -20)
-  const duration = 7000;                             // Animation dauert 7 SEKUNDEN! (war 900ms)
+  // Hyperspace-Audio
+  try {
+    if (window.audioModule) {
+      window.audioModule.startHyperspaceSound();
+      console.log('🔊 Hyperspace-Audio gestartet!');
+    }
+  } catch (e) { console.log('⚠️ Hyperspace-Audio übersprungen'); }
+  
+  // Hyperspace-Shake
+  try {
+    if (window.shakeModule) {
+      window.shakeModule.startHyperspaceEntryShake();
+      console.log('📳 Hyperspace-Shake gestartet!');
+    }
+  } catch (e) { console.log('⚠️ Hyperspace-Shake übersprungen'); }
+  
+  // Hyperspace-Explosion
+  try {
+    if (window.particleModule) {
+      window.particleModule.createHyperspaceEntryExplosion(new THREE.Vector3(0, 0, 0));
+      console.log('💥 Hyperspace-Explosion gestartet!');
+    }
+  } catch (e) { console.log('⚠️ Hyperspace-Explosion übersprungen'); }
+  
+  // ⚡ HYPERSPACE-TUNNEL AKTIVIEREN! (ULTRA-SCHNELL!)
+  activateTunnel(true, 3.5, mainScene); // Aktiviert mit 3.5x Geschwindigkeit! (2.5 → 3.5)
+  console.log('🌪️ ULTRA-SCHNELLER Hyperspace-Tunnel AKTIV!');
+  
+  const startPos = camera.position.clone();          // Startposition merken  
+  const targetPos = new THREE.Vector3(0, 0, -50);    // Ziel: VIEL WEITER in die Ferne! (bleibt bei -50)
+  const duration = 2500;                             // Animation dauert 2.5 SEKUNDEN! (noch schneller: 4s → 2.5s)
   const startTime = performance.now();
   
   // Flash-Element für dramatischen Effekt
@@ -198,10 +293,10 @@ function enterPortal(camera) {
     camera.position.lerpVectors(startPos, targetPos, progress);
     camera.lookAt(0, 0, 0); // Immer zum Portal schauen
     
-    //TUNNEL-EFFEKT für den ganzen Flug! Von 10% bis 85% (5.25 Sekunden!)
-    if (progress >= 0.1 && progress < 0.85) {
-      //TunnelProgress wird berechnet - VIEL LÄNGER!
-      const tunnelProgress = (progress - 0.1) / 0.75; //0.1 (10%) bis 0.85 (85%) = 75% der Animation!
+    //TUNNEL-EFFEKT ULTRA-SCHNELL! Von 5% bis 85% (2 Sekunden!)
+    if (progress >= 0.05 && progress < 0.85) {
+      //TunnelProgress wird berechnet - ULTRA-SCHNELL!
+      const tunnelProgress = (progress - 0.05) / 0.8; //0.05 (5%) bis 0.85 (85%) = 80% der 2.5s Animation!
       //Tunnel-VISION
       const baseFOV = 75; //Normal =75° sichtwinkel (breit)
       const tunnelFOV = baseFOV - (tunnelProgress * 30); //wird enger!
@@ -217,33 +312,73 @@ function enterPortal(camera) {
     
     }
 
-    // FLASH-EFFEKT bei 85% der Animation (nach dem langen Tunnel!)
+    // MICRO-BLITZ bei 85% der Animation! ⚡ (früher weil schneller)
     if (progress >= 0.85 && flashEl && (flashEl.style.opacity === '0' || flashEl.style.opacity === '')) {
-      console.log('⚡ Flash wird aktiviert bei Progress:', progress);
-      console.log('⚡ Aktuelle Flash-Opacity:', flashEl.style.opacity);
-      flashEl.style.transition = 'opacity 120ms ease';
+      console.log('⚡ ULTIMATIVER MICRO-BLITZ MIT ALLEN EFFEKTEN!');
+      
+      // ================================================================
+      // ⚡ FLASH-EFFEKTE (FALLS VERFÜGBAR)
+      // ================================================================
+      
+      // Flash-Audio
+      try {
+        if (window.audioModule) {
+          window.audioModule.playFlashZapSound();
+          console.log('🔊 Flash-Audio gespielt!');
+        }
+      } catch (e) { console.log('⚠️ Flash-Audio übersprungen'); }
+      
+      // Flash-Shake
+      try {
+        if (window.shakeModule) {
+          window.shakeModule.startFlashImpactShake();
+          console.log('📳 Flash-Shake gestartet!');
+        }
+      } catch (e) { console.log('⚠️ Flash-Shake übersprungen'); }
+      
+      // Flash-Explosion
+      try {
+        if (window.particleModule) {
+          window.particleModule.createFlashSparkExplosion(new THREE.Vector3(0, 0, 0));
+          console.log('💥 Flash-Explosion gespielt!');
+        }
+      } catch (e) { console.log('⚠️ Flash-Explosion übersprungen'); }
+      
+      // Visueller Flash
+      flashEl.style.transition = 'opacity 2ms ease'; // INSTANT!
       flashEl.style.opacity = '1';  // Flash wird sichtbar
-      console.log('⚡ Flash-Opacity nach Änderung:', flashEl.style.opacity);
+      console.log('⚡ ZACK! ALLE EFFEKTE GLEICHZEITIG!');
     }
     
     // Animation fortsetzen oder beenden
     if (progress < 1) {
       requestAnimationFrame(animateFrame);
     } else {
-      // Animation beendet - Flash ausblenden und Kamera zurücksetzen
+      // Animation beendet - STUFENWEISER ÜBERGANG für cinematischen Effekt!
+      
+      // MINI-BLITZ! ⚡ (Kaum sichtbar!)
       setTimeout(() => {
         if (flashEl) {
-          console.log('🌙 Flash wird ausgeblendet');
-          flashEl.style.opacity = '0';  // Flash ausblenden
+          console.log('⚡ MINI-BLITZ weg!');
+          flashEl.style.transition = 'opacity 5ms ease'; // EXTREM schnell!
+          flashEl.style.opacity = '0';
         }
+      }, 1); // Blitz nur 1ms!
+      
+      // Portal mit Aufgeh-Animation zurückbringen!
+      setTimeout(() => {
+        // ⚡ Tunnel weg, Portal mit Animation zurück!
+        activateTunnel(false, 1.0, mainScene);
+        console.log('🌟 Portal geht auf mit Animation!');
         
-        // ⚡ HYPERSPACE-TUNNEL DEAKTIVIEREN!
-        activateTunnel(false);
-        console.log('🌙 Hyperspace-Tunnel deaktiviert');
+        // Kamera zurück zur Startposition
+        camera.position.copy(startPos);
         
-        camera.position.copy(startPos);  // Kamera zu Startposition zurück
+        // PORTAL-AUFGEH-ANIMATION! 
+        animatePortalReturn();
+        
         entering = false;
-      }, 50); // Verkürzt von 180ms auf 50ms - schnelles Ausblenden
+      }, 4); // Portal kommt SOFORT nach micro-Blitz!
     }
   }
   
@@ -251,62 +386,72 @@ function enterPortal(camera) {
 }
 
 // ====================================================================
-//                      MENÜ VERWALTUNG
+//                    PORTAL-AUFGEH-ANIMATION
 // ====================================================================
 
 /**
- * Zeigt das radiale Menü nach Portal-Aktivierung
+ * Animiert das Portal beim Zurückkehren aus dem Tunnel
  */
-function showRadialMenu() {
-  console.log('📋 Zeige radiales Menü...');
+function animatePortalReturn() {
+  console.log('🌟 Starte Portal-Aufgeh-Animation...');
   
-  const radialMenu = document.getElementById('radialMenu');
-  if (radialMenu) {
-    radialMenu.classList.add('active');
+  // Finde das Portal-Mesh in der Szene
+  const portalMesh = mainScene.children.find(child => 
+    child.type === 'Mesh' && child.geometry && child.geometry.type === 'PlaneGeometry'
+  );
+  
+  if (!portalMesh) {
+    console.log('❌ Portal-Mesh nicht gefunden');
+    return;
   }
+  
+  // Portal startet unsichtbar und klein
+  portalMesh.scale.set(0.1, 0.1, 1);
+  portalMesh.material.opacity = 0;
+  
+  // Längere, cinematischere Animation
+  const duration = 1200; // 1200ms = 1.2 Sekunden (viel länger!)
+  const startTime = performance.now();
+  
+  function animateReturn(time) {
+    const elapsed = time - startTime;
+    const progress = Math.min(1, elapsed / duration);
+    
+    // Smooth Easing (Bounce-Effekt)
+    const eased = 1 - Math.pow(1 - progress, 3);
+    
+    // Portal wird größer und sichtbarer
+    const scale = 0.1 + (eased * 0.9); // Von 0.1 zu 1.0
+    portalMesh.scale.set(scale, scale, 1);
+    portalMesh.material.opacity = eased; // Von 0 zu 1
+    
+    // Leichte Rotation für dramatischen Effekt
+    portalMesh.rotation.z = (1 - eased) * Math.PI * 0.2;
+    
+    if (progress < 1) {
+      requestAnimationFrame(animateReturn);
+    } else {
+      // Animation beendet
+      portalMesh.scale.set(1, 1, 1);
+      portalMesh.material.opacity = 1;
+      portalMesh.rotation.z = 0;
+      console.log('✅ Portal-Animation abgeschlossen!');
+    }
+  }
+  
+  requestAnimationFrame(animateReturn);
 }
 
-/**
- * Versteckt das radiale Menü
- */
-export function hideRadialMenu() {
-  console.log('❌ Verstecke radiales Menü...');
-  
-  const radialMenu = document.getElementById('radialMenu');
-  if (radialMenu) {
-    radialMenu.classList.remove('active');
-  }
-}
-
 // ====================================================================
-//                      MENÜ EVENT-LISTENER
+//                      PORTAL ZURÜCKSETZEN
 // ====================================================================
 
 /**
- * Initialisiert Event-Listener für das radiale Menü
+ * Portal ist zurück - keine weiteren Aktionen nötig (Menü entfernt!)
  */
-export function initializeMenuEvents() {
-  console.log('🎯 Initialisiere Menü-Events...');
-  
-  // Navigation zu verschiedenen Sektionen
-  document.querySelectorAll('.radial-item').forEach(item => {
-    item.addEventListener('click', (event) => {
-      const section = item.dataset.section;
-      if (section) {
-        event.preventDefault();
-        console.log(`🧭 Navigation zu Sektion: ${section}`);
-        // Hier später Seiten-Navigation implementieren
-      }
-    });
-  });
-  
-  // Zentraler Hub - Menü schließen
-  const radialCenter = document.getElementById('radialCenter');
-  if (radialCenter) {
-    radialCenter.addEventListener('click', () => {
-      hideRadialMenu();
-    });
-  }
+function resetPortalState() {
+  console.log('🎯 Portal-Status zurückgesetzt - bereit für nächste Aktivierung');
+  // Portal kann wieder geklickt werden - kein Menü mehr!
 }
 
 // ====================================================================
@@ -327,4 +472,86 @@ export function isPortalActivated() {
  */
 export function isPortalAnimating() {
   return isAnimating;
+}
+
+// ====================================================================
+//                        HOVER-EFFEKTE
+// ====================================================================
+
+/**
+ * Startet Hover-Effekt beim Portal
+ */
+function startHoverEffect() {
+  isHovering = true;
+  hoverStartTime = Date.now();
+  
+  // Cursor ändern
+  document.body.style.cursor = 'pointer';
+  
+  // Portal-Pulsing Animation
+  startHoverAnimation();
+  
+  console.log('✨ Portal-Hover gestartet');
+}
+
+/**
+ * Stoppt Hover-Effekt
+ */
+function stopHoverEffect() {
+  isHovering = false;
+  
+  // Cursor zurücksetzen
+  document.body.style.cursor = 'default';
+  
+  // Animation stoppen
+  if (hoverAnimationId) {
+    cancelAnimationFrame(hoverAnimationId);
+    hoverAnimationId = null;
+  }
+  
+  // Portal zurücksetzen
+  if (portal) {
+    portal.scale.set(1, 1, 1);
+    if (portal.material && portal.material.uniforms && portal.material.uniforms.glowIntensity) {
+      portal.material.uniforms.glowIntensity.value = 1.0;
+    }
+  }
+  
+  console.log('🌙 Portal-Hover gestoppt');
+}
+
+/**
+ * Hover-Animation Loop
+ */
+function startHoverAnimation() {
+  if (!isHovering) return;
+  
+  const elapsedTime = (Date.now() - hoverStartTime) * 0.001;
+  
+  // Sanftes Pulsing des Portals
+  if (portal && portal.material && portal.material.uniforms) {
+    const pulseIntensity = 1.2 + Math.sin(elapsedTime * 3) * 0.3;
+    
+    // Portal-Helligkeit pulsieren lassen
+    if (portal.material.uniforms.glowIntensity) {
+      portal.material.uniforms.glowIntensity.value = pulseIntensity;
+    }
+    
+    // Leichte Größen-Variation
+    const scaleVariation = 1.0 + Math.sin(elapsedTime * 2) * 0.05;
+    portal.scale.set(scaleVariation, scaleVariation, 1);
+  }
+  
+  // Kontinuierliche Animation
+  hoverAnimationId = requestAnimationFrame(() => startHoverAnimation());
+}
+
+/**
+ * Exportierte Update-Funktion für Hover-Effekte
+ */
+export function updateHoverEffects() {
+  // Falls nötig für zusätzliche Hover-Updates
+  if (isHovering && portal) {
+    // Zusätzliche Hover-Logik hier
+  }
 }

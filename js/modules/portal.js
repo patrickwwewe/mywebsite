@@ -141,14 +141,14 @@ export function createPortalMaterial() {
         rings = smoothstep(0.0, 0.9, rings);
 
         // ========================================================
-        // ZENTRALER SCHIMMER - weicher Glanz in der Mitte
+        // ZENTRALER SCHIMMER - weicher Glanz in der Mitte (REDUZIERT!)
         // ========================================================
-        float center = 1.0 - smoothstep(0.0, 0.8, dist);
+        float center = 1.0 - smoothstep(0.0, 0.6, dist); // Kleinerer Center (0.8 → 0.6)
 
         // ========================================================
-        // FARBMISCHUNG - kombiniert beide Portal-Farben
+        // FARBMISCHUNG - kombiniert beide Portal-Farben (WENIGER HELL!)
         // ========================================================
-        vec3 col = mix(colorA, colorB, pow(rings + 0.2 * center, 1.2));
+        vec3 col = mix(colorA, colorB, pow(rings + 0.1 * center, 1.0)); // Weniger Center-Einfluss (0.2 → 0.1) und Power (1.2 → 1.0)
 
         // ========================================================
         // RIM GLOW - leuchtender Rand um das Portal
@@ -156,10 +156,10 @@ export function createPortalMaterial() {
         float rim = smoothstep(0.5, 0.48, dist) * glow;
 
         // ========================================================
-        // FLICKER NOISE - subtiles Flackern für Lebendigkeit
+        // FLICKER NOISE - subtiles Flackern für Lebendigkeit (REDUZIERT!)
         // ========================================================
-        float n = (hash(uv * 10.0 + floor(time * 10.0)) - 0.5) * 0.12;
-        col += rim * 1.6 * vec3(1.0) + n;
+        float n = (hash(uv * 10.0 + floor(time * 10.0)) - 0.5) * 0.06; // Weniger Flackern (0.12 → 0.06)
+        col += rim * 0.8 * vec3(1.0) + n; // Weniger Helligkeit (1.6 → 0.8)
 
         // ========================================================
         // ALPHA FALLOFF - weicher Übergang zu transparent am Rand
@@ -192,8 +192,8 @@ export function createPortalGeometry(scene, portalMaterial) {
   console.log('🔷 Erstelle Portal-Geometrie...');
   
   // Plane Geometry - flache Rechteck-Fläche für das Portal
-  // Parameter: Breite (4), Höhe (4), Segmente (1x1 = einfach)
-  const portalGeo = new THREE.PlaneGeometry(4, 4, 1, 1);
+  // Parameter: Breite (2.5), Höhe (2.5), Segmente (1x1 = einfach) - KLEINER für weniger Weiß!
+  const portalGeo = new THREE.PlaneGeometry(2.5, 2.5, 1, 1);
   
   // Mesh erstellen - verbindet Geometrie mit Material
   const portalMesh = new THREE.Mesh(portalGeo, portalMaterial);

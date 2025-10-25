@@ -109,14 +109,14 @@ export function setupPostProcessing(renderer, scene, camera) {
   // Render Pass - rendert die normale Szene
   composer.addPass(new RenderPass(scene, camera));
   
-  // Bloom Pass - erzeugt Glow-Effekte um helle Objekte
+  // Bloom Pass - erzeugt Glow-Effekte um helle Objekte (REDUZIERT!)
   const bloomPass = new UnrealBloomPass(
     new THREE.Vector2(innerWidth, innerHeight), // Auflösung
-    1.2,    // Bloom-Stärke
-    1,      // Radius 
-    0.2     // Schwellenwert (ab welcher Helligkeit Bloom startet)
+    0.8,    // Bloom-Stärke (reduziert: 1.2 → 0.8)
+    0.8,    // Radius (reduziert: 1 → 0.8)
+    0.3     // Schwellenwert (erhöht: 0.2 → 0.3, weniger Bloom)
   );
-  bloomPass.threshold = 0.1; // Niedrigerer Schwellenwert = mehr Bloom
+  bloomPass.threshold = 0.2; // Höherer Schwellenwert = weniger Bloom (0.1 → 0.2)
   composer.addPass(bloomPass);
 
   return { composer, bloomPass };
