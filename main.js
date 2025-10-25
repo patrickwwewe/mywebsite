@@ -61,6 +61,14 @@ import {
   updateDecorations 
 } from './js/modules/decorations.js';
 
+// Hyperspace-Tunnel (Star Wars Style!)
+import {
+  createTunnel,
+  activateTunnel,
+  updateTunnel,
+  changeTunnelColors
+} from './js/modules/tunnel.js';
+
 // Interaktionen
 import { 
   initializePortalInteraction, 
@@ -87,6 +95,7 @@ import {
 let scene, camera, renderer, composer, bloomPass;
 let portalMesh, portalUniforms;
 let torusGroup, particles;
+let tunnelGroup; // Star Wars Hyperspace-Tunnel
 let startTime;
 
 // ====================================================================
@@ -141,6 +150,13 @@ async function initialize() {
     torusGroup = createTorusRings(scene);
     createBackgroundColumns(scene);
     particles = createParticleSystem(scene);
+    
+    // ================================================================
+    // SCHRITT 6: HYPERSPACE-TUNNEL ERSTELLEN
+    // ================================================================
+    setLoadingProgress(92, 'Hyperspace-Tunnel lädt...');
+    tunnelGroup = createTunnel(scene);
+    console.log('🌪️ Star Wars Tunnel bereit!');
     
     // ================================================================
     // SCHRITT 6: INTERAKTIONEN EINRICHTEN
@@ -227,6 +243,11 @@ function animate() {
   // KAMERA BEWEGUNGEN
   // ================================================================
   updateCameraMovement(camera, currentTime);
+  
+  // ================================================================
+  // HYPERSPACE-TUNNEL ANIMATION
+  // ================================================================
+  updateTunnel(0.016); // ~60fps Delta-Time
   
   // ================================================================
   // RENDERN

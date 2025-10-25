@@ -42,6 +42,7 @@
 
 import * as THREE from 'three';
 import { changePortalColors } from './portal.js';
+import { activateTunnel } from './tunnel.js';
 
 // ====================================================================
 //                        INTERAKTIONS-SETUP
@@ -176,6 +177,10 @@ function enterPortal(camera) {
   
   console.log('🚀 Starte Flug durch Portal...');
   
+  // ⚡ HYPERSPACE-TUNNEL AKTIVIEREN!
+  activateTunnel(true, 1.5); // Aktiviert mit 1.5x Geschwindigkeit
+  console.log('🌪️ Hyperspace-Tunnel AKTIV!');
+  
   const startPos = camera.position.clone();          // Startposition merken
   const targetPos = new THREE.Vector3(0, 0, -20);    // Ziel: VIEL tiefer durch Portal (war -6, jetzt -20)
   const duration = 7000;                             // Animation dauert 7 SEKUNDEN! (war 900ms)
@@ -231,6 +236,11 @@ function enterPortal(camera) {
           console.log('🌙 Flash wird ausgeblendet');
           flashEl.style.opacity = '0';  // Flash ausblenden
         }
+        
+        // ⚡ HYPERSPACE-TUNNEL DEAKTIVIEREN!
+        activateTunnel(false);
+        console.log('🌙 Hyperspace-Tunnel deaktiviert');
+        
         camera.position.copy(startPos);  // Kamera zu Startposition zurück
         entering = false;
       }, 50); // Verkürzt von 180ms auf 50ms - schnelles Ausblenden
