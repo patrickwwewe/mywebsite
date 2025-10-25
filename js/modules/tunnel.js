@@ -109,9 +109,10 @@ function createTunnelTube() {
   
   tunnelTube = new THREE.Mesh(tubeGeometry, tubeMaterial);
   
-  // Tunnel rotieren (liegt horizontal statt vertikal)
-  tunnelTube.rotation.z = Math.PI / 2;
-  tunnelTube.position.z = -25; // Zentrum bei Portal
+  // Tunnel richtig ausrichten - KEIN rotate! Zylinder liegt schon richtig (vertikal = Z-Achse)
+  // tunnelTube.rotation.z = Math.PI / 2; // ← Das war das Problem!
+  tunnelTube.rotation.x = Math.PI / 2; // Zylinder zeigt in Z-Richtung (Kamera-Flugrichtung)
+  tunnelTube.position.z = -10; // Näher zum Portal, damit Kamera durchfliegt
   
   tunnelGroup.add(tunnelTube);
   console.log('🔵 Tunnel-Röhre erstellt');
@@ -136,14 +137,14 @@ function createParticleStreams() {
   for (let i = 0; i < particleCount; i++) {
     const i3 = i * 3;
     
-    // Spiral-Position um Tunnel-Achse
+    // Spiral-Position um Kamera-Flugbahn (Z-Achse)
     const angle = (i / particleCount) * Math.PI * 12; // Mehrere Spiralen
-    const radius = 3 + Math.random() * 5; // Radius variieren
-    const z = (Math.random() - 0.5) * 100; // Längs des Tunnels verteilen
+    const radius = 2 + Math.random() * 4; // Radius kleiner (Kamera fliegt durch!)
+    const z = 5 - Math.random() * 30; // Von Z=5 bis Z=-25 (Kamera-Route!)
     
     positions[i3] = Math.cos(angle) * radius;     // X
     positions[i3 + 1] = Math.sin(angle) * radius; // Y  
-    positions[i3 + 2] = z;                        // Z
+    positions[i3 + 2] = z;                        // Z - entlang Kamera-Route!
     
     // Geschwindigkeit für Bewegung durch Tunnel
     velocities[i3] = 0;
@@ -220,9 +221,9 @@ function createEnergyRings() {
     
     const ring = new THREE.Mesh(ringGeometry, ringMaterial);
     
-    // Ringe entlang Tunnel verteilen
-    ring.position.z = -50 + (i / ringCount) * 100;
-    ring.rotation.y = Math.PI / 2; // Senkrecht zur Tunnel-Achse
+    // Ringe entlang Kamera-Flugbahn verteilen (von 0 bis -20)
+    ring.position.z = 5 - (i / ringCount) * 25; // Von Z=5 bis Z=-20 
+    // ring.rotation.y = Math.PI / 2; // ← Weg damit! Ringe bleiben flach (XY-Ebene)
     
     // Pulsier-Animation vorbereiten
     ring.userData = {
@@ -307,16 +308,16 @@ function updateParticleStreams(deltaTime) {
   const velocities = tunnelParticles.userData.velocities;
   
   for (let i = 0; i < positions.length; i += 3) {
-    // Partikel bewegen sich durch Tunnel
-    positions[i + 2] += velocities[i + 2] * deltaTime * 10 * animationSpeed;
+    // Partikel bewegen sich IN RICHTUNG KAMERA (entgegen Z-Achse)
+    positions[i + 2] -= velocities[i + 2] * deltaTime * 15 * animationSpeed;
     
-    // Reset Partikel wenn sie zu weit hinten sind
-    if (positions[i + 2] > 50) {
-      positions[i + 2] = -50;
+    // Reset Partikel wenn sie zu weit vorne sind 
+    if (positions[i + 2] > 5) {
+      positions[i + 2] = -25; // Reset nach hinten
       
-      // Neue Spiral-Position
+      // Neue Spiral-Position (kleinerer Radius!)
       const angle = Math.random() * Math.PI * 2;
-      const radius = 3 + Math.random() * 5;
+      const radius = 2 + Math.random() * 4; // Kleiner = Kamera fliegt durch!
       positions[i] = Math.cos(angle) * radius;
       positions[i + 1] = Math.sin(angle) * radius;
     }
@@ -339,12 +340,12 @@ function updateEnergyRings(deltaTime) {
     // Opacity-Animation
     ring.material.opacity = 0.2 + Math.sin(time * 2 + ring.userData.pulsePhase) * 0.2;
     
-    // Ringe bewegen sich durch Tunnel
-    ring.position.z += deltaTime * 5 * animationSpeed;
+    // Ringe bewegen sich AUF KAMERA ZU (entgegen Z-Achse)
+    ring.position.z += deltaTime * 8 * animationSpeed;
     
-    // Reset wenn Ring zu weit hinten
-    if (ring.position.z > 50) {
-      ring.position.z = -50;
+    // Reset wenn Ring zu weit vorne
+    if (ring.position.z > 10) {
+      ring.position.z = -25; // Reset nach hinten
     }
   });
 }
