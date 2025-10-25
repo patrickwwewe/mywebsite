@@ -76,7 +76,7 @@ export function createPortalMaterial() {
     resolution: { value: new THREE.Vector2(innerWidth, innerHeight) }, // Bildschirmauflösung
     colorA: { value: new THREE.Color(SELECTED_PRESET.col1) },          // Erste Portal-Farbe
     colorB: { value: new THREE.Color(SELECTED_PRESET.col2) },          // Zweite Portal-Farbe
-    glow: { value: 1.0 },                 // Glow-Intensität
+    glow: { value: 0.4 },                 // Reduzierte Glow-Intensität (1.0 → 0.4)
     speed: { value: 1.0 }                 // Animations-Geschwindigkeit
   };
 

@@ -249,10 +249,10 @@ async function initialize() {
 function configureFinalSettings() {
   console.log('⚙️ Konfiguriere finale Einstellungen...');
   
-  // Portal-Einstellungen (locked für konsistentes Design)
-  portalUniforms.glow.value = 0.3;     // Subtiler Glow
+  // Portal-Einstellungen (optimiert für sichtbare Details)
+  portalUniforms.glow.value = 0.2;     // Sehr subtiler Glow (0.3 → 0.2)
   portalUniforms.speed.value = 1.6;    // Mittlere Geschwindigkeit
-  bloomPass.strength = 0.8;            // VIEL weniger Bloom! (2.9 → 0.8)
+  bloomPass.strength = 0.6;            // Sanfter Bloom (0.8 → 0.6)
   
   // UI-Kontrollen synchronisieren (auch wenn versteckt)
   const glowCtrl = document.getElementById('ctrl-glow');

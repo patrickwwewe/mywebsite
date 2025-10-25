@@ -147,14 +147,14 @@ export function createParticleSystem(scene) {
   // Zufällige Positionen in 3D-Raum generieren
   for (let i = 0; i < particleCount; i++) {
     // Sphärische Koordinaten für gleichmäßige Verteilung
-    const radius = 2.6 + Math.random() * 10.0;     // Entfernung vom Zentrum
+    const radius = 8.0 + Math.random() * 15.0;     // VIEL weiter weg! (2.6→8.0, 10.0→15.0)
     const theta = Math.random() * Math.PI * 2;      // Winkel horizontal (0-360°)
     const phi = (Math.random() - 0.5) * Math.PI;    // Winkel vertikal (-90° bis 90°)
     
     // Sphärische → Kartesische Koordinaten umwandeln
     positions[i * 3] = Math.cos(theta) * Math.cos(phi) * radius;        // X
     positions[i * 3 + 1] = Math.sin(phi) * radius * 0.4;               // Y (flacher)
-    positions[i * 3 + 2] = Math.sin(theta) * Math.cos(phi) * radius;    // Z
+    positions[i * 3 + 2] = Math.sin(theta) * Math.cos(phi) * radius - 3; // Z: WEITER HINTEN! (-3)
   }
   
   // Buffer Geometry - effiziente Geometrie für viele Punkte
@@ -164,13 +164,18 @@ export function createParticleSystem(scene) {
   // Point Material - für einzelne Punkte/Partikel
   const particleMaterial = new THREE.PointsMaterial({
     color: 0xaaffff,          // Hellblau
-    size: 0.03,               // Kleine Partikel
+    size: 0.008,              // VIEL kleiner! Wie Sterne! (0.03 → 0.008)
     transparent: true,
-    opacity: 0.9              // Leicht transparent
+    opacity: 0.6              // Weniger sichtbar (0.9 → 0.6)
   });
   
   // Points Objekt erstellen
   const particles = new THREE.Points(particleGeometry, particleMaterial);
+  
+  // WICHTIG: Partikel im Hintergrund rendern!
+  particles.renderOrder = -1000;  // Sehr niedrige Priorität = im Hintergrund
+  particles.position.z = -2;      // Zusätzlich nach hinten verschieben
+  
   scene.add(particles);
   
   return particles;
