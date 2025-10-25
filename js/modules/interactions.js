@@ -200,10 +200,14 @@ function enterPortal(camera) {
       //Tunnel-VISION
       const baseFOV = 75; //Normal =75° sichtwinkel (breit)
       const tunnelFOV = baseFOV - (tunnelProgress * 30); //wird enger!
+      camera.fov = tunnelFOV; //Kamera FOV setzen - DAS WAR'S!
+      camera.updateProjectionMatrix(); //Matrix updaten - AUCH WICHTIG!
       
       //Kamera Shake
-      const shakeIntensity = tunnelProgress * 0.02; //Stärke berrechnen, also zum beispiel 78% ladeviorgang *0.02=1
-      camera.position.x += (Math.random() - 0.5) * shakeIntensity;  //zufällige Kamera bewergung in alle richtungen in der x Achse
+      const shakeIntensity = tunnelProgress * 0.02; //Stärke berrechnen
+      camera.position.x += (Math.random() - 0.5) * shakeIntensity;  //zufällige Kamera bewegung x-Achse
+      camera.position.y += (Math.random() - 0.5) * shakeIntensity;  //zufällige Kamera bewegung y-Achse  
+      camera.position.z += (Math.random() - 0.5) * shakeIntensity;  //zufällige Kamera bewegung z-Achse
       
     
     }
