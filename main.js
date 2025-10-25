@@ -197,9 +197,9 @@ async function initialize() {
     try {
       const particleModule = await import('./js/modules/particles.js');
       particleModule.initializeParticleExplosions(scene);
-      particleModule.createPortalEnergyParticles(portalMesh.position);
+      // KEINE Portal-Energy-Particles! Die stören das Portal!
       window.particleModule = particleModule;
-      console.log('💥 Partikel-System geladen!');
+      console.log('💥 Partikel-System geladen (ohne Portal-Energy)!');
     } catch (error) {
       console.log('⚠️ Partikel-System übersprungen:', error.message);
     }
@@ -249,10 +249,10 @@ async function initialize() {
 function configureFinalSettings() {
   console.log('⚙️ Konfiguriere finale Einstellungen...');
   
-  // Portal-Einstellungen (optimiert für sichtbare Details)
-  portalUniforms.glow.value = 0.2;     // Sehr subtiler Glow (0.3 → 0.2)
+  // Portal-Einstellungen (ORIGINAL GLOW ZURÜCK!)
+  portalUniforms.glow.value = 0.3;     // Original Glow
   portalUniforms.speed.value = 1.6;    // Mittlere Geschwindigkeit
-  bloomPass.strength = 0.6;            // Sanfter Bloom (0.8 → 0.6)
+  bloomPass.strength = 2.9;            // ORIGINAL STARKER BLOOM ZURÜCK!
   
   // UI-Kontrollen synchronisieren (auch wenn versteckt)
   const glowCtrl = document.getElementById('ctrl-glow');

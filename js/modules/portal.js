@@ -76,7 +76,7 @@ export function createPortalMaterial() {
     resolution: { value: new THREE.Vector2(innerWidth, innerHeight) }, // Bildschirmauflösung
     colorA: { value: new THREE.Color(SELECTED_PRESET.col1) },          // Erste Portal-Farbe
     colorB: { value: new THREE.Color(SELECTED_PRESET.col2) },          // Zweite Portal-Farbe
-    glow: { value: 0.4 },                 // Reduzierte Glow-Intensität (1.0 → 0.4)
+    glow: { value: 1.0 },                 // ORIGINAL GLOW ZURÜCK! (0.4 → 1.0)
     speed: { value: 1.0 }                 // Animations-Geschwindigkeit
   };
 
@@ -198,6 +198,10 @@ export function createPortalGeometry(scene, portalMaterial) {
   // Mesh erstellen - verbindet Geometrie mit Material
   const portalMesh = new THREE.Mesh(portalGeo, portalMaterial);
   portalMesh.rotation.x = 0; // Fläche steht aufrecht und zeigt nach vorne
+  
+  // WICHTIG: Portal IMMER im Vordergrund rendern!
+  portalMesh.renderOrder = 1000;  // Hohe Priorität = im Vordergrund
+  portalMesh.position.z = 0.1;    // Leicht nach vorne
   
   scene.add(portalMesh);
   return portalMesh;

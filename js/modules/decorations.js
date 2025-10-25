@@ -76,6 +76,10 @@ export function createTorusRings(scene) {
     torusGroup.add(mesh);
   }
   
+  // Torus-Ringe sollen hinter dem Portal sein, aber sichtbar
+  torusGroup.renderOrder = 100;   // Sichtbar, aber weniger als Portal (1000)
+  torusGroup.position.z = -0.05;  // Nur minimal nach hinten
+  
   scene.add(torusGroup);
   return torusGroup;
 }
@@ -122,6 +126,9 @@ export function createBackgroundColumns(scene) {
     // Höhe leicht variieren (abwechselnd)
     mesh.scale.y = 0.9 + (i % 2) * 0.3;
     
+    // Säulen hinter Portal rendern
+    mesh.renderOrder = -200;
+    
     scene.add(mesh);
   }
 }
@@ -147,14 +154,14 @@ export function createParticleSystem(scene) {
   // Zufällige Positionen in 3D-Raum generieren
   for (let i = 0; i < particleCount; i++) {
     // Sphärische Koordinaten für gleichmäßige Verteilung
-    const radius = 8.0 + Math.random() * 15.0;     // VIEL weiter weg! (2.6→8.0, 10.0→15.0)
+    const radius = 15.0 + Math.random() * 25.0;    // SEHR WEIT WEG! (8.0→15.0, 15.0→25.0)
     const theta = Math.random() * Math.PI * 2;      // Winkel horizontal (0-360°)
     const phi = (Math.random() - 0.5) * Math.PI;    // Winkel vertikal (-90° bis 90°)
     
     // Sphärische → Kartesische Koordinaten umwandeln
     positions[i * 3] = Math.cos(theta) * Math.cos(phi) * radius;        // X
     positions[i * 3 + 1] = Math.sin(phi) * radius * 0.4;               // Y (flacher)
-    positions[i * 3 + 2] = Math.sin(theta) * Math.cos(phi) * radius - 3; // Z: WEITER HINTEN! (-3)
+    positions[i * 3 + 2] = Math.sin(theta) * Math.cos(phi) * radius - 10; // Z: VIEL WEITER HINTEN! (-10)
   }
   
   // Buffer Geometry - effiziente Geometrie für viele Punkte
@@ -164,9 +171,9 @@ export function createParticleSystem(scene) {
   // Point Material - für einzelne Punkte/Partikel
   const particleMaterial = new THREE.PointsMaterial({
     color: 0xaaffff,          // Hellblau
-    size: 0.008,              // VIEL kleiner! Wie Sterne! (0.03 → 0.008)
+    size: 0.012,              // GRÖßER aber nicht zu groß! (0.002 → 0.012)
     transparent: true,
-    opacity: 0.6              // Weniger sichtbar (0.9 → 0.6)
+    opacity: 0.7              // Sichtbarer (0.3 → 0.7)
   });
   
   // Points Objekt erstellen
