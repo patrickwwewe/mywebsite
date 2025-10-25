@@ -177,8 +177,8 @@ function enterPortal(camera) {
   console.log('🚀 Starte Flug durch Portal...');
   
   const startPos = camera.position.clone();          // Startposition merken
-  const targetPos = new THREE.Vector3(0, 0, -6);     // Ziel: Durch Portal hindurch
-  const duration = 900;                              // Animation dauert 900ms
+  const targetPos = new THREE.Vector3(0, 0, -20);    // Ziel: VIEL tiefer durch Portal (war -6, jetzt -20)
+  const duration = 7000;                             // Animation dauert 7 SEKUNDEN! (war 900ms)
   const startTime = performance.now();
   
   // Flash-Element für dramatischen Effekt
@@ -193,10 +193,10 @@ function enterPortal(camera) {
     camera.position.lerpVectors(startPos, targetPos, progress);
     camera.lookAt(0, 0, 0); // Immer zum Portal schauen
     
-    //TUNEL-EFFEKT zwischen 60& und 78% der Animation
-    if (progress >=0.6 && progress <0.78) {
-      //TunnelProgress wird berrechnet
-      const  tunnelProgress = (progress - 0.6) / 0.18; //0.6 (60%) -0.6 =0--> also startet bei null bis 0.18
+    //TUNNEL-EFFEKT für den ganzen Flug! Von 10% bis 85% (5.25 Sekunden!)
+    if (progress >= 0.1 && progress < 0.85) {
+      //TunnelProgress wird berechnet - VIEL LÄNGER!
+      const tunnelProgress = (progress - 0.1) / 0.75; //0.1 (10%) bis 0.85 (85%) = 75% der Animation!
       //Tunnel-VISION
       const baseFOV = 75; //Normal =75° sichtwinkel (breit)
       const tunnelFOV = baseFOV - (tunnelProgress * 30); //wird enger!
@@ -212,8 +212,8 @@ function enterPortal(camera) {
     
     }
 
-    // FLASH-EFFEKT bei 78% der Animation 
-    if (progress >= 0.78 && flashEl && (flashEl.style.opacity === '0' || flashEl.style.opacity === '')) {
+    // FLASH-EFFEKT bei 85% der Animation (nach dem langen Tunnel!)
+    if (progress >= 0.85 && flashEl && (flashEl.style.opacity === '0' || flashEl.style.opacity === '')) {
       console.log('⚡ Flash wird aktiviert bei Progress:', progress);
       console.log('⚡ Aktuelle Flash-Opacity:', flashEl.style.opacity);
       flashEl.style.transition = 'opacity 120ms ease';
