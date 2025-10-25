@@ -197,13 +197,17 @@ function enterPortal(camera) {
     if (progress >=0.6 && progress <0.78) {
       //TunnelProgress wird berrechnet
       const  tunnelProgress = (progress - 0.6) / 0.18; //0.6 (60%) -0.6 =0--> also startet bei null bis 0.18
+      //Tunnel-VISION
+      const baseFOV = 75; //Normal =75° sichtwinkel (breit)
+      const tunnelFOV = baseFOV - (tunnelProgress * 30); //wird enger!
+      
       //Kamera Shake
       const shakeIntensity = tunnelProgress * 0.02; //Stärke berrechnen, also zum beispiel 78% ladeviorgang *0.02=1
       camera.position.x += (Math.random() - 0.5) * shakeIntensity;  //zufällige Kamera bewergung in alle richtungen in der x Achse
+      
+    
     }
 
-
-   
     // FLASH-EFFEKT bei 78% der Animation 
     if (progress >= 0.78 && flashEl && (flashEl.style.opacity === '0' || flashEl.style.opacity === '')) {
       console.log('⚡ Flash wird aktiviert bei Progress:', progress);
