@@ -1,11 +1,43 @@
 // ====================================================================
-//                        PORTAL INTERAKTION
+//                        PORTAL INTERAKTION MODULE
 // ====================================================================
-// Diese Datei verwaltet alle Benutzer-Interaktionen mit dem Portal
-// - Maus/Touch-Klick-Erkennung auf das Portal
-// - Portal-Aktivierungsanimation mit Farbwechsel
-// - Kamera-Flug durch das Portal
-// - Flash-Effekte und UI-Updates
+// ZWECK DIESES MODULS:
+// Diese Datei macht das Portal interaktiv! Sie erkennt wenn der Benutzer
+// auf das Portal klickt und startet dann eine spektakuläre Aktivierungs-
+// sequenz mit Flug-Animation und Menü-Anzeige.
+//
+// WAS PASSIERT BEI EINEM KLICK:
+// 1. Raycasting erkennt Klick auf Portal-Geometrie
+// 2. Portal-Aktivierung mit dramatischen Effekten startet
+// 3. Kamera fliegt durch das Portal (enterPortal Animation)
+// 4. Farben wechseln von Magenta→Gold zu Cyan→Purple
+// 5. Bloom-Effekt wird verstärkt für dramatische Wirkung
+// 6. Flash-Overlay erscheint in der Mitte der Animation
+// 7. Radiales Navigationsmenü wird nach der Animation gezeigt
+//
+// TECHNISCHE UMSETZUNG:
+// • Raycaster: "Schießt" einen Strahl von Kamera durch Mausposition
+// • Intersection: Prüft ob der Strahl das Portal-Mesh trifft
+// • requestAnimationFrame: Für smooth 60fps Animationen
+// • CSS-Klassen: Steuert Sichtbarkeit von UI-Elementen
+// • Event-Listener: Horcht auf Maus/Touch-Events
+//
+// BENUTZER-ERFAHRUNG:
+// • Sofortiges Feedback auf Klick (keine Verzögerung)
+// • Cinematic Portal-Durchflug für "Wow"-Effekt
+// • Smooth Übergänge zwischen allen Zuständen
+// • Mobile-Touch und Desktop-Maus funktionieren gleich
+//
+// ZUSAMMENHANG MIT ANDEREN DATEIEN:
+// → main.js: Ruft initializePortalInteraction() beim Start auf
+// → portal.js: Verwendet changePortalColors() für Farbwechsel
+// → camera.js: Könnte Kamera-Presets für verschiedene Ansichten nutzen
+// → styles.css: Manipuliert CSS-Klassen für UI-Sichtbarkeit (.active)
+//
+// ZUSTANDS-MANAGEMENT:
+// • portalActivated: Verhindert Doppel-Aktivierung
+// • isAnimating: Blockiert Interaktion während Animationen
+// • entering: Verhindert mehrfache Flug-Animationen gleichzeitig
 // ====================================================================
 
 import * as THREE from 'three';
@@ -119,11 +151,11 @@ export function activatePortal(camera, portalUniforms, bloomPass) {
     if (progress < 1) {
       requestAnimationFrame(animateActivation);
     } else {
-      // Animation beendet - zeige Menü nach kurzer Verzögerung
+      // Animation beendet - zeige Menü nach Flash-Effekt
       setTimeout(() => {
         showRadialMenu();
         isAnimating = false;
-      }, 400); // Timing mit Flug-Animation abstimmen
+      }, 1000); // Längere Wartezeit damit Flash-Effekt komplett abgeschlossen ist
     }
   }
 
@@ -151,6 +183,7 @@ function enterPortal(camera) {
   
   // Flash-Element für dramatischen Effekt
   const flashEl = document.getElementById('flash');
+  console.log('🔍 Flash-Element gefunden:', flashEl);
   
   function animateFrame(time) {
     const elapsed = time - startTime;
@@ -160,10 +193,24 @@ function enterPortal(camera) {
     camera.position.lerpVectors(startPos, targetPos, progress);
     camera.lookAt(0, 0, 0); // Immer zum Portal schauen
     
-    // Flash-Effekt bei 78% der Animation
-    if (progress >= 0.78 && flashEl && flashEl.style.opacity === '0') {
+    //TUNEL-EFFEKT zwischen 60& und 78% der Animation
+    if (progress >=0.6 && progress <0.78) {
+      //TunnelProgress wird berrechnet
+      const  tunnelProgress = (progress - 0.6) / 0.18; //0.6 (60%) -0.6 =0--> also startet bei null bis 0.18
+      //Kamera Shake
+      const shakeIntensity = tunnelProgress * 0.02; //Stärke berrechnen, also zum beispiel 78% ladeviorgang *0.02=1
+      camera.position.x += (Math.random() - 0.5) * shakeIntensity;  //zufällige Kamera bewergung in alle richtungen in der x Achse
+    }
+
+
+   
+    // FLASH-EFFEKT bei 78% der Animation 
+    if (progress >= 0.78 && flashEl && (flashEl.style.opacity === '0' || flashEl.style.opacity === '')) {
+      console.log('⚡ Flash wird aktiviert bei Progress:', progress);
+      console.log('⚡ Aktuelle Flash-Opacity:', flashEl.style.opacity);
       flashEl.style.transition = 'opacity 120ms ease';
-      flashEl.style.opacity = '1';
+      flashEl.style.opacity = '1';  // Flash wird sichtbar
+      console.log('⚡ Flash-Opacity nach Änderung:', flashEl.style.opacity);
     }
     
     // Animation fortsetzen oder beenden
@@ -173,11 +220,12 @@ function enterPortal(camera) {
       // Animation beendet - Flash ausblenden und Kamera zurücksetzen
       setTimeout(() => {
         if (flashEl) {
-          flashEl.style.opacity = '0';
+          console.log('🌙 Flash wird ausgeblendet');
+          flashEl.style.opacity = '0';  // Flash ausblenden
         }
         camera.position.copy(startPos);  // Kamera zu Startposition zurück
         entering = false;
-      }, 50); // Schnelles Ausblenden
+      }, 50); // Verkürzt von 180ms auf 50ms - schnelles Ausblenden
     }
   }
   

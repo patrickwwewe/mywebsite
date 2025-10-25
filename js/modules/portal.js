@@ -1,10 +1,34 @@
 // ====================================================================
-//                           PORTAL SYSTEM
+//                           PORTAL SYSTEM MODULE
 // ====================================================================
-// Diese Datei erstellt das magische Portal mit animierten Shader-Effekten
-// - Portal-Geometrie und Material mit GLSL-Shadern
-// - Farbübergänge und Animationen
-// - Portal-Aktivierung und Interaktion
+// ZWECK DIESES MODULS:
+// Diese Datei erstellt das magische Portal - das Herzstück der Website.
+// Das Portal ist eine flache Ebene mit einem komplexen Shader-Material,
+// das animierte Ringe und Farbverläufe erzeugt.
+//
+// WAS PASSIERT HIER:
+// • Shader-Material: Spezielle GPU-Programme für realistische Effekte
+// • Portal-Geometrie: Eine einfache rechteckige Fläche (PlaneGeometry)
+// • Farb-Presets: Vordefinierte Farbkombinationen für verschiedene Stimmungen
+// • Animationen: Zeit-basierte Bewegungen der Ringe und Effekte
+//
+// TECHNISCHE DETAILS:
+// • GLSL-Shader: Programme die direkt auf der Grafikkarte (GPU) laufen
+// • Fragment Shader: Berechnet die Farbe jedes einzelnen Pixels
+// • Vertex Shader: Positioniert die Eckpunkte der Geometrie
+// • Uniforms: Variablen die von JavaScript an den Shader gesendet werden
+//
+// ZUSAMMENHANG MIT ANDEREN DATEIEN:
+// → main.js: Ruft createPortalMaterial() und createPortalGeometry() auf
+// → scene.js: Das Portal wird in die dort erstellte Szene eingefügt
+// → interactions.js: Erkennt Klicks auf das Portal für Aktivierung
+// → loading.js: Zeigt Fortschritt beim Kompilieren der Shader an
+//
+// ANALOGIE:
+// Das Portal ist wie ein magischer Spiegel:
+// • Geometrie = der physische Spiegel-Rahmen
+// • Shader = die magische Oberfläche mit bewegten Mustern
+// • Uniforms = Regler um die Magie zu steuern (Farbe, Geschwindigkeit)
 // ====================================================================
 
 import * as THREE from 'three';

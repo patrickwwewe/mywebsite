@@ -1,10 +1,46 @@
 // ====================================================================
-//                        LOADING SYSTEM
+//                        LOADING SYSTEM MODULE
 // ====================================================================
-// Diese Datei verwaltet das Ladesystem und den Ladebalken
-// - Ladefortschritt anzeigen während Szenen-Initialisierung  
-// - Smooth Ein-/Ausblenden des Loading-Overlays
-// - Benutzer-Feedback während des Ladevorgangs
+// ZWECK DIESES MODULS:
+// Diese Datei verwaltet das Ladesystem - den ersten Eindruck den Benutzer
+// von der Website bekommen. Statt eines langweiligen weißen Bildschirms
+// sehen sie einen animierten Ladebalken mit informativen Status-Texten.
+//
+// WARUM EIN LOADING-SYSTEM:
+// • 3D-Szenen brauchen Zeit zum Initialisieren (Shader kompilieren, etc.)
+// • Benutzer sollen wissen dass etwas passiert (nicht defekt)
+// • Professioneller Look statt "leerer weißer Bildschirm"
+// • Smooth Übergang von Loading zu 3D-Szene
+//
+// WAS WIRD GELADEN:
+// 1. Three.js Module und Dependencies
+// 2. Shader-Kompilierung (Portal GLSL-Code)
+// 3. 3D-Geometrie Erstellung (Portal, Ringe, Partikel)
+// 4. Post-Processing Setup (Bloom-Effekte)
+// 5. Event-Listener und Interaktions-Setup
+//
+// BENUTZER-ERFAHRUNG:
+// • Realistische Lade-Schritte mit entsprechenden Texten
+// • Smooth Ladebalken-Animation (nicht ruckelig)
+// • Auto-Hide nach erstem gerenderten Frame
+// • Fehlerbehandlung falls etwas schiefgeht
+//
+// TECHNISCHE UMSETZUNG:
+// • CSS-Manipulationen für Ladebalken-Breite
+// • setTimeout für realistische Lade-Verzögerungen
+// • requestAnimationFrame für smooth Animationen
+// • DOM-Manipulation für Text-Updates
+//
+// ZUSAMMENHANG MIT ANDEREN DATEIEN:
+// → main.js: Ruft setLoadingProgress() in jedem Initialisierungs-Schritt auf
+// → styles.css: Definiert das visuelle Aussehen des Loading-Overlays
+// → index.html: Enthält die HTML-Struktur für #loading Element
+//
+// ANALOGIE:
+// Das Loading-System ist wie der Vorhang vor einer Theater-Aufführung:
+// • Verbirgt die Vorbereitung hinter den Kulissen
+// • Baut Erwartung und Spannung auf
+// • Öffnet sich smooth wenn alles bereit ist
 // ====================================================================
 
 // ====================================================================

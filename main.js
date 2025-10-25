@@ -1,15 +1,37 @@
 // ====================================================================
-//                      3D PORTFOLIO PORTAL - MAIN
+//                      3D PORTFOLIO PORTAL - MAIN MODULE
 // ====================================================================
-// Hauptdatei für das interaktive 3D-Portfolio
-// 
-// Diese Datei orchestriert alle Module:
-// • Szenen-Setup (Renderer, Kamera, Beleuchtung)  
-// • Portal-System (Shader, Geometrie, Animationen)
-// • Dekorationen (Torus-Ringe, Säulen, Partikel)
-// • Interaktionen (Klick-Events, Aktivierung, Flug)
-// • Loading-System (Fortschritts-Anzeige)
-// • Kamera-Bewegungen (Parallax, Übergänge)
+// ZWECK DIESER DATEI:
+// Diese Datei ist der "Dirigent eines Orchesters" - sie koordiniert alle
+// anderen Module und bringt sie in der richtigen Reihenfolge zusammen,
+// um das komplette 3D-Portal zu erstellen.
+//
+// WAS PASSIERT HIER:
+// 1. Alle Module werden importiert (wie Instrumentengruppen im Orchester)
+// 2. Initialisierungs-Sequenz startet alle Systeme in der richtigen Reihenfolge
+// 3. Render-Schleife läuft kontinuierlich und aktualisiert alle Animationen
+// 4. Error-Handling falls etwas schiefgeht
+//
+// MODULE-ORCHESTRIERUNG:
+// • scene.js → Bühne aufbauen (Renderer, Kamera, Szene)
+// • portal.js → Hauptdarsteller erstellen (das magische Portal)
+// • decorations.js → Bühnenbild hinzufügen (Ringe, Säulen, Partikel)
+// • interactions.js → Publikum einbeziehen (Klick-Events, Menü)
+// • loading.js → Vorhang-Management (Loading-Screen)
+// • camera.js → Kameramann-Arbeit (Bewegungen, Übergänge)
+//
+// WARUM DIESE STRUKTUR:
+// • Trennung der Verantwortlichkeiten (jedes Module hat einen klaren Zweck)
+// • Wartbarkeit (Bugs sind in spezifischen Modulen lokalisiert)
+// • Skalierbarkeit (neue Features können als neue Module hinzugefügt werden)
+// • Teamwork (verschiedene Entwickler können an verschiedenen Modulen arbeiten)
+//
+// ANALOGIE:
+// Diese Datei ist wie der Regisseur eines Films:
+// • Koordiniert alle Abteilungen (Kamera, Beleuchtung, Spezialeffekte)
+// • Stellt sicher dass alles zur richtigen Zeit passiert
+// • Behält den Überblick über das große Ganze
+// • Sorgt für einen smooth Ablauf vom Start bis zum Ende
 // ====================================================================
 
 // ====================================================================

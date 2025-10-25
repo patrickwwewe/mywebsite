@@ -1,10 +1,49 @@
 // ====================================================================
-//                        KAMERA SYSTEM
+//                        KAMERA SYSTEM MODULE
 // ====================================================================
-// Diese Datei verwaltet alle Kamera-Bewegungen und -Animationen
-// - Subtile Parallax-Bewegungen für lebendige Szene
-// - Kamera-Blickrichtung und Position-Updates
-// - Smooth Kamera-Übergänge
+// ZWECK DIESES MODULS:
+// Diese Datei macht die Kamera "lebendig"! Statt einer statischen,
+// langweiligen Kamera bewegt sie sich subtil und natürlich, als würde
+// sie atmen oder leicht schweben.
+//
+// WARUM KAMERA-BEWEGUNGEN:
+// • Statische Kameras wirken "tot" und uninteressant
+// • Subtile Bewegungen erzeugen Immersion und Leben
+// • Parallax-Effekte geben Tiefengefühl
+// • Smooth Übergänge für professionelle Cinematik
+//
+// ARTEN VON BEWEGUNGEN:
+// • Parallax: Sehr subtile hin-und-her Bewegung (wie Atmen)
+// • Presets: Vordefinierte Kamera-Positionen für verschiedene Ansichten
+// • Orbit: Kreisförmige Bewegung um einen Mittelpunkt
+// • Animated Transitions: Smooth Übergang zwischen Positionen
+//
+// MATHEMATIK DAHINTER:
+// • Sinus/Cosinus Funktionen für natürliche, wellenförmige Bewegungen
+// • Lerp (Linear Interpolation) für smooth Übergänge
+// • Easing Functions für natürliche Beschleunigung/Verzögerung
+//
+// PERFORMANCE-OPTIMIERUNG:
+// • Bewegungen sind sehr subtil (< 0.2 Einheiten)
+// • Nur bei Bedarf aktiviert (nicht permanent)
+// • requestAnimationFrame für 60fps ohne CPU-Last
+//
+// ZUSAMMENHANG MIT ANDEREN DATEIEN:
+// → main.js: Ruft updateCameraMovement() in der Render-Schleife auf
+// → scene.js: Verwendet die dort erstellte Kamera
+// → interactions.js: Könnte Kamera-Presets für Portal-Übergänge nutzen
+//
+// BENUTZER-ERFAHRUNG:
+// • Unmerklich aber spürbar - Benutzer merken es nicht bewusst
+// • Erweckt die Szene zum Leben
+// • Professioneller, cinematischer Look
+// • Nie störend oder ablenkend
+//
+// ANALOGIE:
+// Die Kamera-Bewegungen sind wie der Herzschlag einer schlafenden Person:
+// • Kaum sichtbar, aber lebendig
+// • Rhythmisch und beruhigend  
+// • Zeigt dass "Leben" in der Szene ist
 // ====================================================================
 
 import * as THREE from 'three';

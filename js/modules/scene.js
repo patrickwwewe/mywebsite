@@ -1,10 +1,29 @@
 // ====================================================================
-//                           SZENE SETUP
+//                           SZENE SETUP MODULE
 // ====================================================================
-// Diese Datei erstellt die grundlegende 3D-Szene mit Three.js
-// - Renderer, Kamera, Szene
-// - Beleuchtung
-// - Post-Processing (Bloom-Effekte)
+// ZWECK DIESES MODULS:
+// Diese Datei erstellt die grundlegende 3D-Szene mit Three.js und ist
+// das Fundament für alle anderen 3D-Objekte im Portal.
+// 
+// WAS PASSIERT HIER:
+// • Renderer-Setup: Wandelt 3D-Geometrie in 2D-Pixel für den Bildschirm
+// • Kamera-Erstellung: Definiert den Blickwinkel in die 3D-Welt
+// • Szenen-Container: Ein leerer 3D-Raum, in den Objekte eingefügt werden
+// • Beleuchtung: Lichtquellen, damit 3D-Objekte sichtbar und schattiert werden
+// • Post-Processing: Nachbearbeitung für Glow- und Bloom-Effekte
+//
+// ZUSAMMENHANG MIT ANDEREN DATEIEN:
+// → main.js: Importiert diese Funktionen und ruft sie beim Start auf
+// → portal.js: Das Portal wird in die hier erstellte Szene eingefügt
+// → decorations.js: Torus-Ringe und Partikel werden hier hinzugefügt
+// → interactions.js: Verwendet die Kamera für Raycasting (Klick-Erkennung)
+//
+// ANALOGIE:
+// Stell dir vor, du baust eine Filmszene:
+// • Scene = leeres Filmstudio
+// • Camera = Filmkamera
+// • Renderer = entwickelt den Film
+// • Lights = Studiobeleuchtung
 // ====================================================================
 
 import * as THREE from 'three';

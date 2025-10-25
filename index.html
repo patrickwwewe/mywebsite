@@ -1,10 +1,56 @@
 <!doctype html>
-<html lang="de"> <!-- Sprache-->
+<!-- ====================================================================
+                           3D PORTFOLIO PORTAL - HTML
+     ====================================================================
+     Diese HTML-Datei ist die Hauptseite des 3D-Portfolio Portals.
+     
+     AUFBAU DER DATEI:
+     • HTML-Grundgerüst mit Meta-Informationen
+     • Three.js Import-Map für moderne ES6-Module
+     • Canvas-Element für die 3D-Szene
+     • HUD-Interface (versteckte Entwickler-Einstellungen)
+     • Hint-Text (Benutzer-Anweisung)
+     • Radiales Navigationsmenü (nach Portal-Aktivierung)
+     • Flash-Overlay (Blitz-Effekt beim Portal-Durchflug)
+     • Loading-Overlay (Ladebildschirm)
+     
+     ZUSAMMENHANG MIT ANDEREN DATEIEN:
+     • styles.css: Alle visuellen Styles und Animationen
+     • main.js: JavaScript-Hauptdatei, die alle Module orchestriert
+     • js/modules/: Spezialisierte Module für verschiedene Funktionen
+     
+     TECHNISCHE DETAILS:
+     • Verwendet ES6-Module mit Import-Maps für Three.js
+     • Responsive Design für Desktop und Mobile
+     • Accessibility-Features (lang-Attribut, Meta-Tags)
+     ==================================================================== -->
+
+<html lang="de"> <!-- Deutsche Sprache für Screenreader und SEO -->
   <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" /> <!-- Responsive design für Smartphones-->
+    <!-- ================================================================
+                           META-INFORMATIONEN
+         ================================================================
+         Wichtige Informationen für Browser und Suchmaschinen
+         ================================================================ -->
+    
+    <meta charset="utf-8" /> <!-- UTF-8 für internationale Zeichen -->
+    <meta name="viewport" content="width=device-width, initial-scale=1" /> <!-- Responsive Design für Smartphones -->
+    
+    <!-- Titel erscheint im Browser-Tab und in Bookmarks -->
     <title>3D Portfolio Portal</title>
-    <!-- Import map to resolve bare module specifiers (e.g. 'three') to CDN URLs -->
+    
+    <!-- Meta-Tags für SEO und Social Media -->
+    <meta name="description" content="Interaktives 3D-Portfolio mit WebGL Portal - Klicke ins Portal für Navigation" />
+    <meta name="author" content="Patrick" />
+    <meta name="keywords" content="3D, Portfolio, WebGL, Three.js, Interactive, Portal" />
+    
+    <!-- ================================================================
+                           THREE.JS IMPORT-MAP
+         ================================================================
+         Definiert wie ES6-Module aufgelöst werden.
+         Ermöglicht 'import * as THREE from "three"' statt langer URLs.
+         ================================================================ -->
+    
     <script type="importmap">
     {
       "imports": {
@@ -12,138 +58,20 @@
       }
     }
     </script>
-
-    <!----------------------->
-    <!--------CS Style------->
-    <!----------------------->
-    <style> 
-      :root{ /*Globale Farbvarianten*/
-        --bg:#03050a; /* Hintergrund*/
-        --neon: #00f0ff;
-        --neon-2: #9b00ff;
-        --accent: rgba(255,255,255,0.06);
-        --glass: rgba(255,255,255,0.04); /*leicht Transparent*/
-      }
-      html,body{height:100%;margin:0;background:var(--bg);font-family:Inter, system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial}
-      canvas{display:block;width:100%;height:100%;}
-
-      /* HUD top-right */
-  /* HUD top-right sieht man nicht aber hier*/
-  .hud{position:fixed;right:20px;top:20px;color:#dfe;backdrop-filter: blur(6px);-webkit-backdrop-filter: blur(6px);z-index:50}
-  .hud .panel{background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(0,0,0,0.02));padding:12px;border-radius:10px;border:1px solid rgba(255,255,255,0.04);box-shadow:0 6px 30px rgba(0,0,0,0.6)}
-  .hud label{display:block;font-size:12px;color:rgba(255,255,255,0.7);margin-bottom:6px}
-  .hud input[type=range]{width:160px;accent-color:var(--neon)}
-
-      /* Bottom hint (klick Tipp) */
-  .hint{position:fixed;left:50%;transform:translateX(-50%);bottom:18px;color:rgba(255,255,255,0.9);font-size:14px;padding:8px 12px;border-radius:20px;background:transparent;z-index:40}
-
-      /* Neon accents for focus */
-      .neon-outline{box-shadow:0 0 18px var(--neon),0 0 40px rgba(155,0,255,0.08) inset}
-
-      /* small overlay for flash transition */
-  /* small overlay for flash transition */
-  #flash{position:fixed;inset:0;background:white;opacity:0;pointer-events:none;z-index:200;transition:opacity 280ms ease}
-      /* Radiales Menü - versteckt bis Portal aktiviert */
-      .radial-menu {
-        position: fixed;
-        top: 50%;
-        left: 50%;
-        transform: translate(-50%, -50%) scale(0);
-        z-index: 100;
-        opacity: 0;
-        transition: all 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-        pointer-events: none;
-      }
-      
-      .radial-menu.active {
-        transform: translate(-50%, -50%) scale(1);
-        opacity: 1;
-        pointer-events: all;
-      }
-      
-      /* Zentraler Hub */
-      .radial-center {
-        width: 120px;
-        height: 120px;
-        border-radius: 50%;
-        background: linear-gradient(135deg, var(--neon), var(--neon-2));
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        box-shadow: 0 0 40px rgba(0, 240, 255, 0.4);
-        position: relative;
-        cursor: pointer;
-        transition: transform 0.3s ease;
-      }
-      
-      .radial-center:hover {
-        transform: scale(1.1);
-      }
-      
-      .radial-center-text {
-        color: white;
-        font-weight: 600;
-        font-size: 14px;
-        text-align: center;
-        text-shadow: 0 2px 4px rgba(0,0,0,0.5);
-      }
-      
-      /* Radial Menu Items */
-      .radial-item {
-        position: absolute;
-        width: 80px;
-        height: 80px;
-        border-radius: 50%;
-        background: linear-gradient(135deg, rgba(255,255,255,0.1), rgba(255,255,255,0.05));
-        backdrop-filter: blur(10px);
-        border: 1px solid rgba(255,255,255,0.2);
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        justify-content: center;
-        cursor: pointer;
-        transition: all 0.3s ease;
-        color: var(--text-primary);
-        text-decoration: none;
-        transform-origin: center;
-      }
-      
-      .radial-item:hover {
-        transform: scale(1.2);
-        background: linear-gradient(135deg, rgba(255,255,255,0.2), rgba(255,255,255,0.1));
-        box-shadow: 0 10px 30px rgba(0, 240, 255, 0.3);
-      }
-      
-      .radial-item-icon {
-        font-size: 24px;
-        margin-bottom: 4px;
-      }
-      
-      .radial-item-text {
-        font-size: 10px;
-        font-weight: 500;
-        text-align: center;
-        line-height: 1.1;
-        color: white;
-      }
-      
-      /* Positioning der Menu Items im Kreis (6 Items) */
-      .radial-item:nth-child(1) { top: -100px; left: 20px; }
-      .radial-item:nth-child(2) { top: -70px; right: -70px; }
-      .radial-item:nth-child(3) { top: 20px; right: -100px; }
-      .radial-item:nth-child(4) { bottom: -70px; right: -70px; }
-      .radial-item:nth-child(5) { bottom: -70px; left: -70px; }
-      .radial-item:nth-child(6) { top: 20px; left: -100px; }
-
-      /* mobile tweaks */
-      @media (max-width:480px){.hud{right:10px;top:10px}.hud input[type=range]{width:120px}}
-    </style>
+    
+    <!-- ================================================================
+                           CSS-STYLESHEET EINBINDEN
+         ================================================================
+         Alle Styles sind jetzt in separater CSS-Datei organisiert.
+         ================================================================ -->
+    
+    <link rel="stylesheet" href="styles.css">
   </head>
   <body>
     <canvas id="c"></canvas>
 
     <!-- HUD is hidden on load; settings are applied programmatically so users cannot change them -->
-    <div class="hud" aria-hidden="true" style="display:none">
+    <div class="hud" aria-hidden="true">
       <div class="panel">
         <!-- Hidden controls keep ids for script compatibility but are not visible -->
         <input id="ctrl-glow" type="hidden" value="0.3">
@@ -186,7 +114,7 @@
       <div class="radial-item-text">Portfolio</div>
     </a>
     
-    <a href="https://github.com/patrickwwewe" target="_blank" class="radial-item">
+    <a href="https://github.com/patrickwwewe" target="_blank" rel="noopener" class="radial-item">
       <div class="radial-item-icon">🐱</div>
       <div class="radial-item-text">GitHub</div>
     </a>
@@ -200,13 +128,13 @@
     <div id="flash"></div>
 
     <!-- Loading overlay -->
-    <div id="loading" style="position:fixed;inset:0;display:flex;align-items:center;justify-content:center;z-index:999;background:linear-gradient(180deg, rgba(0,0,0,0.95), rgba(0,0,0,0.9));transition:opacity 300ms ease">
-      <div style="width:420px;max-width:90%;padding:18px;border-radius:12px;background:rgba(255,255,255,0.02);border:1px solid rgba(255,255,255,0.04);text-align:center;color:#dfe">
-        <div style="font-size:14px;margin-bottom:12px">Lade Szene…</div>
-        <div style="height:10px;background:rgba(255,255,255,0.06);border-radius:6px;overflow:hidden;">
-          <div id="loading-bar" style="height:100%;width:0%;background:linear-gradient(90deg,var(--neon),var(--neon-2));box-shadow:0 6px 30px rgba(0,240,255,0.08)"></div>
+    <div id="loading">
+      <div class="loading-panel">
+        <div class="loading-title">Lade Szene…</div>
+        <div class="loading-bar-container">
+          <div id="loading-bar"></div>
         </div>
-        <div id="loading-text" style="font-size:12px;margin-top:10px;opacity:0.85">Initialisiere Renderer</div>
+        <div id="loading-text">Initialisiere Renderer</div>
       </div>
     </div>
 

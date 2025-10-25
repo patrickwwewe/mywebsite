@@ -1,10 +1,36 @@
 // ====================================================================
-//                        SZENEN DEKORATION
+//                        SZENEN DEKORATION MODULE
 // ====================================================================
-// Diese Datei erstellt alle dekorativen 3D-Objekte um das Portal herum
-// - Rotierende Torus-Ringe um das Portal
-// - Säulen im Hintergrund  
-// - Schwebende Partikel für Atmosphäre
+// ZWECK DIESES MODULS:
+// Diese Datei erstellt alle dekorativen 3D-Objekte, die das Portal umgeben
+// und der Szene Leben und Atmosphäre verleihen. Ohne diese Dekorationen
+// wäre das Portal alleine in einem leeren, schwarzen Raum.
+//
+// WAS WIRD ERSTELLT:
+// • Torus-Ringe: 3 rotierende Donut-förmige Ringe um das Portal
+// • Hintergrund-Säulen: 6 Säulen die im Kreis um die Szene stehen
+// • Partikel-System: 600 schwebende Lichtpunkte für Weltraum-Atmosphäre
+//
+// WARUM DIESE OBJEKTE:
+// • Torus-Ringe: Verstärken die Portal-Magie, leiten Blick zum Zentrum
+// • Säulen: Geben räumliche Orientierung, wie Säulen in einem Tempel
+// • Partikel: Erzeugen Tiefe und Bewegung, wie Sterne im Weltraum
+//
+// TECHNISCHE UMSETZUNG:
+// • THREE.Group: Container um mehrere Objekte zusammen zu verwalten
+// • BufferGeometry: Effiziente Geometrie für viele Partikel
+// • Float32Array: Optimierte Arrays für GPU-Performance
+// • HSL-Farben: Farbton/Sättigung/Helligkeit für schöne Farbverläufe
+//
+// ZUSAMMENHANG MIT ANDEREN DATEIEN:
+// → main.js: Ruft alle create-Funktionen auf und startet Animationen
+// → scene.js: Alle Dekorationen werden in die dortige Szene eingefügt
+// → camera.js: Kamera-Bewegungen berücksichtigen die Objektpositionen
+//
+// PERFORMANCE-HINWEISE:
+// • Partikel-Anzahl ist konfigurierbar (Standard: 600)
+// • BufferGeometry ist GPU-optimiert für viele Objekte
+// • Animationen verwenden requestAnimationFrame für 60 FPS
 // ====================================================================
 
 import * as THREE from 'three';
