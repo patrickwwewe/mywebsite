@@ -652,19 +652,29 @@ function createPortalMenu() {
     fontSize = Math.max(vmin * 0.032, 14);
     textSize = Math.max(vmin * 0.013, 8);
   } else {
-    // Desktop: Intelligente Berechnung verhindert Portal-Überlappung
+    // Desktop: Berücksichtigt Portal-Breite bei schmalen Fenstern
     const vmin = Math.min(screenWidth, screenHeight);
-    const baseContainerSize = vmin * 0.3;
+    const aspectRatio = screenWidth / screenHeight;
     
-    // WICHTIG: Mindestabstand zum Portal sicherstellen
-    const minContainerSize = 280; // Mindestgröße um Portal-Überlappung zu verhindern
+    // Portal-Größe berechnen (2.5 Einheiten * Skalierung)
+    const portalSize = 2.5;
+    const portalPixelSize = vmin * 0.25; // Ungefähre Portal-Größe in Pixeln
+    
+    // Bei schmalen Fenstern wird Portal breiter durch Aspect-Ratio-Korrektur
+    const portalEffectiveWidth = aspectRatio < 1.0 ? portalPixelSize / aspectRatio : portalPixelSize;
+    
+    // Container-Größe basierend auf Portal + notwendigem Abstand
+    const safeDistance = portalEffectiveWidth * 0.6; // 60% der Portal-Breite als Sicherheitsabstand
+    const baseContainerSize = vmin * 0.3;
+    const minContainerSize = portalEffectiveWidth + safeDistance * 2; // Portal + Abstand auf beiden Seiten
+    
     containerSize = Math.max(baseContainerSize, minContainerSize);
     
-    // Items und Offset proportional anpassen
+    // Items und Offset proportional zur Container-Größe
     const scale = containerSize / baseContainerSize;
-    itemSize = Math.max(vmin * 0.07, 50) * Math.min(scale, 1.2); // Max 20% größer
-    itemOffset = Math.max(vmin * 0.1, 80) * Math.min(scale, 1.3); // Max 30% größer für Abstand
-    fontSize = Math.max(vmin * 0.022, 18);
+    itemSize = vmin * 0.07 * Math.min(scale, 1.5);
+    itemOffset = containerSize * 0.33; // 33% der Container-Größe für konstanten relativen Abstand
+    fontSize = Math.max(vmin * 0.022, 16);
     textSize = Math.max(vmin * 0.01, 8);
   }
   
