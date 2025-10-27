@@ -144,15 +144,41 @@ class GameEngine {
         console.log("✅ HORROR-BALANCE erreicht - Sichtbar aber MAXIMAL bedrohlich!");
     }
 
+    // DEBUG: Datei-Zugriff testen
+    async debugFileAccess() {
+        const testPaths = [
+            '../../blender/need_some_space/need_some_space.glb',
+            '/mywebsite/blender/need_some_space/need_some_space.glb'
+        ];
+        
+        console.log("🔍 Debug: Teste Datei-Zugriff...");
+        
+        for (const path of testPaths) {
+            try {
+                const response = await fetch(path, { method: 'HEAD' });
+                console.log(`✅ ${path}: Status ${response.status} (${response.statusText})`);
+                if (response.ok) {
+                    console.log(`📊 Dateigröße: ${response.headers.get('content-length')} bytes`);
+                }
+            } catch (error) {
+                console.log(`❌ ${path}: ${error.message}`);
+            }
+        }
+    }
+
     // FALLBACK-PFADE wenn Hauptpfad fehlschlägt
     async tryFallbackPaths() {
         const fallbackPaths = [
-            // Verschiedene mögliche Pfade
-            '/mywebsite/blender/need_some_space/need_some_space.glb',  // GitHub Pages absolut
-            './../../blender/need_some_space/need_some_space.glb',    // Relativ mit ./
-            '../../../blender/need_some_space/need_some_space.glb',   // Eine Ebene höher
-            'blender/need_some_space/need_some_space.glb',            // Direkt vom Root
-            '/blender/need_some_space/need_some_space.glb'            // Absolut vom Root
+            // GitHub Pages spezifische Pfade
+            '../../blender/need_some_space/need_some_space.glb',        // Standard relativ
+            '/mywebsite/blender/need_some_space/need_some_space.glb',   // GitHub Pages absolut
+            './../../blender/need_some_space/need_some_space.glb',      // Mit ./
+            '../../../blender/need_some_space/need_some_space.glb',     // Eine Ebene höher
+            'blender/need_some_space/need_some_space.glb',              // Vom aktuellen Ordner
+            '/blender/need_some_space/need_some_space.glb',             // Root absolut
+            'https://patrickwwewe.github.io/mywebsite/blender/need_some_space/need_some_space.glb', // Vollständige URL
+            // Zusätzliche GitHub Pages Varianten
+            window.location.origin + window.location.pathname.replace('/pages/play/01_index.html', '') + '/blender/need_some_space/need_some_space.glb'
         ];
         
         for (const path of fallbackPaths) {
@@ -162,7 +188,19 @@ class GameEngine {
                 
                 const result = await new Promise((resolve, reject) => {
                     const loader = new THREE.GLTFLoader();
-                    loader.load(path, resolve, undefined, reject);
+                    loader.load(
+                        path, 
+                        resolve, 
+                        // Progress callback
+                        (progress) => {
+                            console.log(`📊 Fallback Loading ${path}: ${(progress.loaded / progress.total * 100).toFixed(1)}%`);
+                        },
+                        // Error callback
+                        (error) => {
+                            console.log(`❌ Fallback Error für ${path}:`, error.message || error);
+                            reject(error);
+                        }
+                    );
                 });
                 
                 console.log("✅ Fallback erfolgreich:", path);
@@ -199,8 +237,10 @@ class GameEngine {
         
         // Verschiedene Pfade für verschiedene Umgebungen
         if (isGitHubPages) {
-            // GitHub Pages Pfad
-            return '/mywebsite/blender/need_some_space/need_some_space.glb';
+            // GitHub Pages: Relativ vom aktuellen Pfad aus
+            // Aktuell: /mywebsite/pages/play/01_index.html
+            // Ziel:    /mywebsite/blender/need_some_space/need_some_space.glb
+            return '../../blender/need_some_space/need_some_space.glb';
         } else if (isLocal) {
             // Lokaler Pfad (relativ)
             return '../../blender/need_some_space/need_some_space.glb';
@@ -216,6 +256,9 @@ class GameEngine {
         
         // Loading Text aktualisieren
         this.updateLoadingText("Lade 3D-Modell...");
+        
+        // Debug: Prüfe ob GLB-Datei existiert
+        await this.debugFileAccess();
         
         return new Promise((resolve, reject) => {
             // GLTF Loader erstellen
