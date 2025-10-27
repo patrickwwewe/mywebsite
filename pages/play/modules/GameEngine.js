@@ -58,8 +58,8 @@ class GameEngine {
         // Größe setzen
         this.renderer.setSize(window.innerWidth, window.innerHeight);
         
-        // SCHWARZER HINTERGRUND
-        this.renderer.setClearColor(0x000000, 1); // Schwarz, 100% Deckkraft
+        // HORROR-HINTERGRUND: Fast schwarz mit minimalem Lila-Hauch
+        this.renderer.setClearColor(0x0d0518, 1); // Sehr dunkles Lila-Schwarz - bedrohlich aber sichtbar
         
         // Schatten aktivieren
         this.renderer.shadowMap.enabled = true;
@@ -78,46 +78,70 @@ class GameEngine {
         
         this.scene = new THREE.Scene();
         
-        // Optional: Nebel für Tiefe
-        this.scene.fog = new THREE.Fog(0x000000, 10, 50);
+        // HORROR-NEBEL: Dicht und bedrohlich, aber nicht komplett verdeckend
+        this.scene.fog = new THREE.Fog(0x0d0518, 50, 180); // Sehr dunkler Nebel, Horror-Atmosphäre
         
         console.log("✅ Szene erstellt");
     }
 
-    // KAMERA SETUP - UNSERE SICHT
+    // KAMERA SETUP - HORROR PERSPEKTIVE
     setupCamera() {
-        console.log("📹 Positioniere Kamera...");
+        console.log("📹 Positioniere Horror-Kamera...");
         
-        // Perspektiv-Kamera (wie unsere Augen)
+        // Weitwinkel-Kamera für DRAMATISCHEN Effekt
         this.camera = new THREE.PerspectiveCamera(
-            75,                                    // FOV (Sichtfeld)
+            90,                                    // BREITES FOV für Angst-Effekt
             window.innerWidth / window.innerHeight, // Seitenverhältnis
-            0.1,                                   // Nahebene
-            1000                                   // Fernebene
+            0.01,                                  // SEHR NAH für Intensität
+            10000                                  // SEHR WEIT für Riesigkeit
         );
         
-        // Kamera-Position - so dass wir alles sehen
-        this.camera.position.set(0, 5, 10);    // x=0, y=5 (oben), z=10 (zurück)
-        this.camera.lookAt(0, 0, 0);           // Schaut zum Zentrum
+        // DRAMA-KAMERA: Von unten nach oben blickend (macht alles RIESIG)
+        this.camera.position.set(0, -20, 15);   // Tief unten positioniert
+        this.camera.lookAt(0, 0, 0);            // Blickt nach oben zum schwarzen Loch
         
-        console.log("✅ Kamera positioniert");
+        console.log("✅ Horror-Kamera bereit - Weitwinkel für maximale Wirkung!");
     }
 
-    // BELEUCHTUNG SETUP
+    // PERFEKTE HORROR-BALANCE: Sichtbar aber BEDROHLICH
     setupLighting() {
-        console.log("💡 Füge Beleuchtung hinzu...");
+        console.log("💡 Erstelle BALANCE zwischen Sichtbarkeit und Horror...");
         
-        // Ambiente Beleuchtung (überall gleich hell)
-        const ambientLight = new THREE.AmbientLight(0x404040, 0.4);
+        // MINIMALE Ambient-Beleuchtung - nur damit es nicht komplett verschwindet
+        const ambientLight = new THREE.AmbientLight(0x1a0033, 0.12); // Sehr schwach, dunkles Lila
         this.scene.add(ambientLight);
         
-        // Direktionale Beleuchtung (wie Sonne)
-        const directionalLight = new THREE.DirectionalLight(0xffffff, 0.8);
-        directionalLight.position.set(10, 10, 5);
-        directionalLight.castShadow = true;
-        this.scene.add(directionalLight);
+        // SUBTILES UNTEN-LICHT - nur gerade genug für Sichtbarkeit
+        const bottomLight = new THREE.DirectionalLight(0x440088, 0.3); // Gedämpftes Lila
+        bottomLight.position.set(0, -80, 10); // Von unten-schräg
+        bottomLight.target.position.set(0, -10, 0); // Zielt auf unteren Teil
+        this.scene.add(bottomLight);
+        this.scene.add(bottomLight.target);
         
-        console.log("✅ Beleuchtung hinzugefügt");
+        // DRAMATISCHES RIM-LIGHT - erzeugt UNHEIMLICHE Silhouette
+        const rimLight = new THREE.DirectionalLight(0x6600aa, 0.6); // Stärkeres Lila
+        rimLight.position.set(0, 20, -100); // Von hinten-oben
+        rimLight.target.position.set(0, 0, 0);
+        this.scene.add(rimLight);
+        this.scene.add(rimLight.target);
+        
+        // HORROR-SPOT von oben - DRAMATISCHER Schatten
+        const horrorSpot = new THREE.SpotLight(0x0088cc, 0.8, 250, Math.PI / 3, 0.5); // Breiter Kegel
+        horrorSpot.position.set(0, 100, 80); // Hoch oben
+        horrorSpot.target.position.set(0, 0, 0); // Zielt ins Zentrum
+        horrorSpot.castShadow = true;
+        // Schatten-Qualität für DRAMATIK
+        horrorSpot.shadow.mapSize.width = 2048;
+        horrorSpot.shadow.mapSize.height = 2048;
+        this.scene.add(horrorSpot);
+        this.scene.add(horrorSpot.target);
+        
+        // BEDROHLICHES SEITENLICHT (nur eins, asymmetrisch für Unruhe)
+        const threatLight = new THREE.PointLight(0xaa0044, 0.4, 100); // Rötliches Licht
+        threatLight.position.set(-60, 10, 50); // Links-seitlich
+        this.scene.add(threatLight);
+        
+        console.log("✅ HORROR-BALANCE erreicht - Sichtbar aber MAXIMAL bedrohlich!");
     }
 
     // GLB-MODELL LADEN
@@ -142,6 +166,10 @@ class GameEngine {
                     
                     // Modell zur Szene hinzufügen
                     this.model = gltf.scene;
+                    
+                    // MATERIAL-OPTIMIERUNG für bessere Sichtbarkeit
+                    this.enhanceModelMaterials();
+                    
                     this.scene.add(this.model);
                     
                     // Modell-Größe anpassen (falls nötig)
@@ -166,7 +194,38 @@ class GameEngine {
         });
     }
 
-    // MODELL AN BILDSCHIRM ANPASSEN
+    // MATERIAL-VERBESSERUNG für bessere Sichtbarkeit
+    enhanceModelMaterials() {
+        if (!this.model) return;
+        
+        this.model.traverse((child) => {
+            if (child.isMesh && child.material) {
+                const material = child.material;
+                
+                // SUBTILES Eigenleuchten - sichtbar aber NICHT hell
+                if (material.emissive) {
+                    // Minimales Eigenleuchten nur für Kontur-Sichtbarkeit
+                    material.emissive.setHex(0x110022); // Sehr dunkles Lila-Leuchten
+                    material.emissiveIntensity = 0.08; // Sehr schwach
+                }
+                
+                // Erhöhe Metallic/Roughness für interessante Reflexionen
+                if (material.metalness !== undefined) {
+                    material.metalness = 0.8; // Mehr metallic
+                }
+                if (material.roughness !== undefined) {
+                    material.roughness = 0.3; // Weniger rau = mehr Reflexion
+                }
+                
+                // Material soll Licht besser empfangen
+                material.needsUpdate = true;
+            }
+        });
+        
+        console.log("✅ Material-Enhancement aktiviert - bessere Sichtbarkeit!");
+    }
+
+    // HORROR-MODELL: RIESIG UND BEDROHLICH MACHEN
     fitModelToView() {
         if (!this.model) return;
         
@@ -180,24 +239,54 @@ class GameEngine {
         this.model.position.y += (this.model.position.y - center.y);
         this.model.position.z += (this.model.position.z - center.z);
         
-        // Kamera optimal positionieren
-        const distance = size * 1.5; // 1.5x der Modell-Größe
-        this.camera.position.set(0, distance * 0.5, distance);
-        this.camera.lookAt(0, 0, 0);
+        // HORROR-EFFEKT: Modell RIESIG machen!
+        const HORROR_SCALE = 8.0; // 8x größer = GIGANTISCH!
+        this.model.scale.set(HORROR_SCALE, HORROR_SCALE, HORROR_SCALE);
         
-        console.log("✅ Modell an Sicht angepasst");
+        // Modell etwas nach oben verschieben für BEDROHLICHE Wirkung
+        this.model.position.y += 15;
+        
+        // KAMERA BLEIBT UNTEN - macht das schwarze Loch ÜBERWÄLTIGEND
+        // (Kamera-Position wird NICHT verändert - bleibt bei -20, 15)
+        
+        console.log("✅ HORROR-MODELL: 8x vergrößert und bedrohlich positioniert!");
+        console.log(`🌌 Schwarzes Loch Größe: ${size * HORROR_SCALE} Einheiten`);
     }
 
-    // GAME LOOP - ANIMATION
+    // HORROR GAME LOOP - BEDROHLICHE ANIMATION
     startGameLoop() {
-        console.log("🔄 Starte Game Loop...");
+        console.log("🔄 Starte HORROR Game Loop...");
+        
+        let time = 0; // Für Horror-Effekte
         
         const animate = () => {
             requestAnimationFrame(animate);
+            time += 0.016; // ~60fps timing
             
-            // Modell langsam drehen (optional)
             if (this.model && this.isLoaded) {
-                this.model.rotation.y += 0.005; // Langssam um Y-Achse drehen
+                // LANGSAME, UNHEIMLICHE Rotation
+                this.model.rotation.y += 0.002; // Noch langsamer für mehr SPANNUNG
+                
+                // BEDROHLICHES Pulsieren - unregelmäßiger
+                const pulse = Math.sin(time * 0.3) * 0.15 + 1.0; // Langsameres, stärkeres Pulsieren
+                this.model.scale.setScalar(8.0 * pulse);
+                
+                // VERSTÖRENDES Kamera-Wackeln
+                this.camera.position.x = Math.sin(time * 0.08) * 0.8;
+                this.camera.position.z = 15 + Math.cos(time * 0.12) * 1.5;
+                this.camera.position.y = -20 + Math.sin(time * 0.05) * 0.5; // Leichtes Auf/Ab
+                
+                // HORROR-EFFEKT: Gelegentlich "Atmung" der Beleuchtung
+                const breathe = Math.sin(time * 0.2) * 0.1 + 0.9; // 0.8 bis 1.0
+                this.scene.traverse((object) => {
+                    if (object.isLight && object.type !== 'AmbientLight') {
+                        object.intensity *= breathe; // Lichter "atmen"
+                    }
+                });
+                
+                // KAMERA BLICKT IMMER ZUM SCHWARZEN LOCH (leicht versetzt für Unruhe)
+                const lookOffset = Math.sin(time * 0.1) * 2;
+                this.camera.lookAt(lookOffset, 0, 0);
             }
             
             // Alles rendern
@@ -205,7 +294,7 @@ class GameEngine {
         };
         
         animate();
-        console.log("✅ Game Loop gestartet");
+        console.log("✅ HORROR Game Loop gestartet - Pulsierend und bedrohlich!");
     }
 
     // UI UPDATES
