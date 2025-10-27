@@ -140,13 +140,24 @@ background: radial-gradient(ellipse at bottom, #1b2735 0%, #090a0f 100%);
 }
 
 .loading-progress {
+   width: 300px;
+   height: 6px;
+   background: rgba(255, 255, 255, 0.3); 
+   border-radius: 3px;
+   overflow: hidden; 
+   margin: 20px 0;
 
 }
 
 .loading-progress-bar {
-
+height: 100%;
+background: linear-gradient(90deg, #00ff88 0%, #00ccff 100%);
+width: 0%; /* startet bei 0%, wird dann von JavaScript geändert*/
+transition: width 0.3s ease; /* Sanfte Animation beim Fortschrittsbalken */
+border-radius: 3px
 }
  
 .error-message {
-
+color: #ff6b6b;
+background: rgba(255,107,107,0.1);
 }   
