@@ -144,6 +144,72 @@ class GameEngine {
         console.log("✅ HORROR-BALANCE erreicht - Sichtbar aber MAXIMAL bedrohlich!");
     }
 
+    // FALLBACK-PFADE wenn Hauptpfad fehlschlägt
+    async tryFallbackPaths() {
+        const fallbackPaths = [
+            // Verschiedene mögliche Pfade
+            '/mywebsite/blender/need_some_space/need_some_space.glb',  // GitHub Pages absolut
+            './../../blender/need_some_space/need_some_space.glb',    // Relativ mit ./
+            '../../../blender/need_some_space/need_some_space.glb',   // Eine Ebene höher
+            'blender/need_some_space/need_some_space.glb',            // Direkt vom Root
+            '/blender/need_some_space/need_some_space.glb'            // Absolut vom Root
+        ];
+        
+        for (const path of fallbackPaths) {
+            try {
+                console.log("🔄 Versuche Fallback-Pfad:", path);
+                this.updateLoadingText(`Versuche alternativen Pfad: ${path}`);
+                
+                const result = await new Promise((resolve, reject) => {
+                    const loader = new THREE.GLTFLoader();
+                    loader.load(path, resolve, undefined, reject);
+                });
+                
+                console.log("✅ Fallback erfolgreich:", path);
+                this.model = result.scene;
+                this.enhanceModelMaterials();
+                this.scene.add(this.model);
+                this.fitModelToView();
+                return result;
+                
+            } catch (error) {
+                console.log("❌ Fallback fehlgeschlagen:", path);
+                continue;
+            }
+        }
+        
+        throw new Error("Alle Fallback-Pfade fehlgeschlagen");
+    }
+
+    // PFAD-DETECTION für verschiedene Umgebungen
+    getModelPath() {
+        // Aktuelle URL analysieren
+        const currentUrl = window.location.href;
+        const isGitHubPages = currentUrl.includes('github.io') || currentUrl.includes('githubusercontent.com');
+        const isLocal = currentUrl.includes('file://') || currentUrl.includes('localhost') || currentUrl.includes('127.0.0.1');
+        
+        console.log("🌐 Umgebung erkannt:", {
+            url: currentUrl,
+            isGitHubPages,
+            isLocal,
+            hostname: window.location.hostname,
+            pathname: window.location.pathname,
+            protocol: window.location.protocol
+        });
+        
+        // Verschiedene Pfade für verschiedene Umgebungen
+        if (isGitHubPages) {
+            // GitHub Pages Pfad
+            return '/mywebsite/blender/need_some_space/need_some_space.glb';
+        } else if (isLocal) {
+            // Lokaler Pfad (relativ)
+            return '../../blender/need_some_space/need_some_space.glb';
+        } else {
+            // Fallback für andere Server
+            return '../../blender/need_some_space/need_some_space.glb';
+        }
+    }
+
     // GLB-MODELL LADEN
     async loadModel() {
         console.log("📦 Lade GLB-Modell...");
@@ -155,10 +221,12 @@ class GameEngine {
             // GLTF Loader erstellen
             const loader = new THREE.GLTFLoader();
             
-            // GLB-Datei laden
+            // GLB-Datei laden mit robustem Pfad
+            const modelPath = this.getModelPath();
+            console.log("🔍 Versuche GLB zu laden von:", modelPath);
+            
             loader.load(
-                // Pfad zu deiner GLB-Datei
-                '../../blender/need_some_space/need_some_space.glb',
+                modelPath,
                 
                 // Erfolg-Callback
                 (gltf) => {
@@ -185,10 +253,16 @@ class GameEngine {
                     this.updateProgress(percent);
                 },
                 
-                // Fehler-Callback
+                // Fehler-Callback mit Fallback
                 (error) => {
-                    console.error("❌ Fehler beim Laden:", error);
-                    reject(new Error("GLB-Modell konnte nicht geladen werden"));
+                    console.error("❌ Fehler beim Laden von:", modelPath, error);
+                    
+                    // Fallback-Pfade versuchen
+                    this.tryFallbackPaths().then(resolve).catch(() => {
+                        const errorMsg = `GLB-Modell nicht gefunden. Versucht: ${modelPath}`;
+                        console.error("❌", errorMsg);
+                        reject(new Error(errorMsg));
+                    });
                 }
             );
         });
