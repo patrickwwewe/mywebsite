@@ -128,9 +128,21 @@ export function createPortalMaterial() {
       }    
 
       void main() {
-        // UV-Koordinaten zentrieren (-1 bis 1) und Seitenverhältnis korrigieren
+        // UV-Koordinaten zentrieren (-1 bis 1)
         vec2 uv = vUv * 2.0 - 1.0;
-        uv.x *= resolution.x / resolution.y;
+        
+        // RESPONSIVE Seitenverhältnis-Korrektur
+        float aspect = resolution.x / resolution.y;
+        
+        // Immer den kleineren Wert verwenden (wie vmin), um Abschneiden zu vermeiden
+        float scaleFactor = min(1.0, aspect);
+        if (aspect < 1.0) {
+          // Hochformat: Portal-Inhalt skalieren, damit alles sichtbar bleibt
+          uv *= 1.0 / aspect * 0.8; // 0.8 = Sicherheitsmargin
+        } else {
+          // Querformat: Normale Skalierung
+          uv.x *= aspect;
+        }
         
         // Entfernung vom Zentrum berechnen
         float dist = length(uv);
@@ -193,22 +205,26 @@ function calculateResponsivePortalSize() {
   const screenHeight = window.innerHeight;
   const aspectRatio = screenWidth / screenHeight;
   const isMobile = screenWidth < 768;
+  const isPortrait = aspectRatio < 1.0;
   const isNarrowPortrait = aspectRatio < 0.6; // Sehr schmale Hochformat-Handys
   
   let portalSize;
   
   if (isNarrowPortrait) {
-    // Sehr schmale Handys: Portal etwas kleiner aber nicht zu klein
-    portalSize = Math.max(2.0, Math.min(screenWidth / 200, 3.0));
+    // Sehr schmale Handys: Portal deutlich kleiner, basierend auf Breite
+    portalSize = Math.max(1.8, Math.min(screenWidth / 220, 2.5));
+  } else if (isPortrait && isMobile) {
+    // Normale Hochformat-Handys: Portal etwas kleiner
+    portalSize = Math.max(2.0, Math.min(screenWidth / 190, 2.8));
   } else if (isMobile) {
-    // Normale Mobile-Geräte: Ausgewogene Größe
+    // Mobile Querformat: Normale Mobile-Größe
     portalSize = Math.max(2.2, Math.min(screenWidth / 180, 3.2));
   } else {
     // Desktop: Vollgröße
     portalSize = Math.max(2.5, Math.min(screenWidth / 150, 4.0));
   }
   
-  console.log(`🌀 Portal-Größe berechnet: ${portalSize.toFixed(2)} (Screen: ${screenWidth}x${screenHeight}, Ratio: ${aspectRatio.toFixed(2)})`);
+  console.log(`🌀 Portal-Größe berechnet: ${portalSize.toFixed(2)} (Screen: ${screenWidth}x${screenHeight}, Ratio: ${aspectRatio.toFixed(2)}, Portrait: ${isPortrait})`);
   return portalSize;
 }
 
