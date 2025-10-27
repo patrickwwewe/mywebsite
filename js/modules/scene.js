@@ -36,11 +36,40 @@ import { UnrealBloomPass } from 'https://unpkg.com/three@0.152.0/examples/jsm/po
 // ====================================================================
 
 /**
+ * Prüft WebGL-Verfügbarkeit und gibt Diagnose-Informationen aus
+ */
+function diagnoseWebGL() {
+  console.log('🔍 WebGL-Diagnostik...');
+  
+  // WebGL-Unterstützung prüfen
+  const canvas = document.createElement('canvas');
+  const gl = canvas.getContext('webgl') || canvas.getContext('experimental-webgl');
+  
+  if (!gl) {
+    console.error('❌ WebGL nicht verfügbar');
+    return false;
+  }
+  
+  console.log('✅ WebGL verfügbar');
+  console.log('GPU Vendor:', gl.getParameter(gl.VENDOR));
+  console.log('GPU Renderer:', gl.getParameter(gl.RENDERER));
+  console.log('WebGL Version:', gl.getParameter(gl.VERSION));
+  console.log('GLSL Version:', gl.getParameter(gl.SHADING_LANGUAGE_VERSION));
+  
+  return true;
+}
+
+/**
  * Erstellt und konfiguriert die grundlegende 3D-Szene
- * @returns {Object} Objekt mit scene, camera, renderer, composer
+ * @returns {Object} Objekt mit scene, camera, renderer
  */
 export function initializeScene() {
   console.log('🎬 Initialisiere 3D-Szene...');
+  
+  // WebGL-Diagnostik
+  if (!diagnoseWebGL()) {
+    throw new Error('WebGL ist in diesem Browser nicht verfügbar oder deaktiviert');
+  }
   
   // Canvas-Element holen
   const canvas = document.getElementById('c');
@@ -54,11 +83,36 @@ export function initializeScene() {
   camera.position.set(0, 0, 6); // Kamera 6 Einheiten vor dem Portal positionieren
   
   // Renderer erstellen - wandelt 3D in 2D-Pixel um
-  const renderer = new THREE.WebGLRenderer({ 
-    canvas, 
-    antialias: true,    // Glättet scharfe Kanten
-    alpha: true         // Transparenter Hintergrund möglich
-  });
+  let renderer;
+  
+  try {
+    // Versuche WebGL2 zuerst
+    renderer = new THREE.WebGLRenderer({ 
+      canvas, 
+      antialias: true,    // Glättet scharfe Kanten
+      alpha: true,        // Transparenter Hintergrund möglich
+      context: null       // Lasse Three.js den besten Kontext wählen
+    });
+    console.log('✅ WebGL Renderer erfolgreich erstellt');
+  } catch (webglError) {
+    console.warn('⚠️ WebGL Renderer fehlgeschlagen, versuche Fallback...', webglError);
+    
+    try {
+      // Fallback: Canvas Renderer für bessere Kompatibilität
+      renderer = new THREE.WebGLRenderer({ 
+        canvas, 
+        antialias: false,   // Weniger GPU-intensiv
+        alpha: true,
+        powerPreference: "high-performance", // GPU bevorzugen
+        failIfMajorPerformanceCaveat: false   // Auch bei langsamer GPU erlauben
+      });
+      console.log('✅ WebGL Fallback-Renderer erstellt');
+    } catch (fallbackError) {
+      console.error('❌ Alle Renderer-Optionen fehlgeschlagen:', fallbackError);
+      throw new Error(`WebGL nicht verfügbar: ${webglError.message}`);
+    }
+  }
+  
   renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2)); // Hochauflösende Displays
   renderer.setSize(innerWidth, innerHeight);
   renderer.toneMappingExposure = 1; // Helligkeit anpassen

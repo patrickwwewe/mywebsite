@@ -79,7 +79,8 @@ import {
   setLoadingProgress, 
   hideLoading, 
   checkAutoHide, 
-  enableAutoHide 
+  enableAutoHide,
+  setLoadingError 
 } from './js/modules/loading.js';
 
 // Kamera-System
