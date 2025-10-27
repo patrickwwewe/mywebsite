@@ -169,6 +169,8 @@ class GameEngine {
     // FALLBACK-PFADE wenn Hauptpfad fehlschlägt
     async tryFallbackPaths() {
         const fallbackPaths = [
+            // Cache-Busting URL (Timestamp um Cache zu umgehen)
+            `https://patrickwwewe.github.io/mywebsite/blender/need_some_space/need_some_space.glb?v=${Date.now()}`,
             // GitHub Pages spezifische Pfade
             '../../blender/need_some_space/need_some_space.glb',        // Standard relativ
             '/mywebsite/blender/need_some_space/need_some_space.glb',   // GitHub Pages absolut
