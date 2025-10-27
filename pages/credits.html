@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Credits & Lizenzen - Portfolio</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #0f0f23 0%, #1a1a2e 50%, #16213e 100%);
+            color: #ffffff;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 2rem;
+        }
+
+        .container {
+            max-width: 1000px;
+            width: 100%;
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border: 1px solid rgba(0, 255, 255, 0.2);
+            border-radius: 15px;
+            padding: 3rem;
+            box-shadow: 0 8px 32px rgba(0, 255, 255, 0.1);
+            animation: fadeIn 0.8s ease-out;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        h1 {
+            color: #00f0ff;
+            font-size: 2.5rem;
+            margin-bottom: 2rem;
+            text-align: center;
+            text-shadow: 0 0 20px rgba(0, 240, 255, 0.5);
+        }
+
+        h2 {
+            color: #00f0ff;
+            font-size: 1.5rem;
+            margin: 2rem 0 1rem 0;
+            border-bottom: 2px solid rgba(0, 255, 255, 0.3);
+            padding-bottom: 0.5rem;
+        }
+
+        h3 {
+            color: #66d9ff;
+            font-size: 1.2rem;
+            margin: 1.5rem 0 0.5rem 0;
+        }
+
+        p {
+            line-height: 1.6;
+            margin-bottom: 1rem;
+            color: rgba(255, 255, 255, 0.9);
+        }
+
+        .asset-card {
+            background: rgba(0, 255, 255, 0.08);
+            border: 1px solid rgba(0, 255, 255, 0.2);
+            border-radius: 10px;
+            padding: 1.5rem;
+            margin: 1rem 0;
+            transition: all 0.3s ease;
+        }
+
+        .asset-card:hover {
+            background: rgba(0, 255, 255, 0.12);
+            border-color: rgba(0, 255, 255, 0.4);
+            transform: translateY(-2px);
+        }
+
+        .asset-title {
+            color: #00f0ff;
+            font-weight: bold;
+            font-size: 1.1rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .asset-info {
+            display: grid;
+            grid-template-columns: auto 1fr;
+            gap: 0.5rem 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .asset-label {
+            color: #66d9ff;
+            font-weight: bold;
+        }
+
+        .asset-value {
+            color: rgba(255, 255, 255, 0.9);
+        }
+
+        .asset-link {
+            color: #00f0ff;
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        .asset-link:hover {
+            color: #66d9ff;
+            text-decoration: underline;
+        }
+
+        .license-badge {
+            display: inline-block;
+            background: rgba(0, 255, 255, 0.2);
+            color: #00f0ff;
+            padding: 0.3rem 0.8rem;
+            border-radius: 15px;
+            font-size: 0.9rem;
+            font-weight: bold;
+            margin-top: 0.5rem;
+        }
+
+        .back-button {
+            position: fixed;
+            top: 2rem;
+            left: 2rem;
+            background: rgba(0, 255, 255, 0.2);
+            border: 2px solid rgba(0, 255, 255, 0.5);
+            color: #ffffff;
+            padding: 0.8rem 1.5rem;
+            border-radius: 25px;
+            text-decoration: none;
+            font-weight: bold;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            z-index: 1000;
+        }
+
+        .back-button:hover {
+            background: rgba(0, 255, 255, 0.3);
+            border-color: rgba(0, 255, 255, 0.8);
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 255, 255, 0.3);
+        }
+
+        .template-info {
+            background: rgba(255, 140, 0, 0.1);
+            border: 1px solid rgba(255, 140, 0, 0.5);
+            border-radius: 10px;
+            padding: 1rem;
+            margin: 2rem 0;
+            color: #ffcc00;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 2rem;
+                margin: 1rem;
+            }
+            
+            h1 {
+                font-size: 2rem;
+            }
+            
+            .back-button {
+                top: 1rem;
+                left: 1rem;
+                padding: 0.6rem 1rem;
+            }
+
+            .asset-info {
+                grid-template-columns: 1fr;
+                gap: 0.3rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <a href="../index.html" class="back-button">← Zurück zum Portal</a>
+    
+    <div class="container">
+        <h1>🎨 Credits & Lizenzen</h1>
+        
+        <div class="template-info">
+            ⚠️ <strong>Template-Hinweis:</strong> Füge hier alle externen 3D-Assets, Texturen, Sounds etc. hinzu, die du verwendest!
+        </div>
+
+        <h2>🔧 Eigenentwicklung</h2>
+        <div class="asset-card">
+            <div class="asset-title">3D Portal & Shader-Effekte</div>
+            <div class="asset-info">
+                <span class="asset-label">Ersteller:</span>
+                <span class="asset-value">[Dein Name]</span>
+                <span class="asset-label">Technologie:</span>
+                <span class="asset-value">Three.js, WebGL, GLSL Shader</span>
+                <span class="asset-label">Jahr:</span>
+                <span class="asset-value">2025</span>
+            </div>
+            <div class="license-badge">Eigenentwicklung</div>
+        </div>
+
+        <h2>🎮 3D-Modelle & Assets</h2>
+        
+        <h3>Blender Market</h3>
+        <div class="asset-card">
+            <div class="asset-title">[Beispiel: Sci-Fi Environment Pack]</div>
+            <div class="asset-info">
+                <span class="asset-label">Ersteller:</span>
+                <span class="asset-value">[Creator Name]</span>
+                <span class="asset-label">Quelle:</span>
+                <span class="asset-value"><a href="[URL]" target="_blank" rel="noopener" class="asset-link">Blender Market</a></span>
+                <span class="asset-label">Modifikationen:</span>
+                <span class="asset-value">[Beschreibung deiner Änderungen]</span>
+            </div>
+            <div class="license-badge">Royalty Free</div>
+        </div>
+
+        <h3>Sketchfab</h3>
+        <div class="asset-card">
+            <div class="asset-title">[Beispiel: Portal Ring Model]</div>
+            <div class="asset-info">
+                <span class="asset-label">Ersteller:</span>
+                <span class="asset-value">[Artist Name]</span>
+                <span class="asset-label">Quelle:</span>
+                <span class="asset-value"><a href="[URL]" target="_blank" rel="noopener" class="asset-link">Sketchfab</a></span>
+                <span class="asset-label">Lizenz:</span>
+                <span class="asset-value">CC BY 4.0</span>
+            </div>
+            <div class="license-badge">Creative Commons</div>
+        </div>
+
+        <h3>Free3D / CGTrader</h3>
+        <div class="asset-card">
+            <div class="asset-title">[Beispiel: Particle System Elements]</div>
+            <div class="asset-info">
+                <span class="asset-label">Ersteller:</span>
+                <span class="asset-value">[Creator Name]</span>
+                <span class="asset-label">Quelle:</span>
+                <span class="asset-value"><a href="[URL]" target="_blank" rel="noopener" class="asset-link">Free3D</a></span>
+                <span class="asset-label">Verwendung:</span>
+                <span class="asset-value">Partikel-Effekte im Portal</span>
+            </div>
+            <div class="license-badge">Free License</div>
+        </div>
+
+        <h2>🔊 Audio & Sound-Effekte</h2>
+        <div class="asset-card">
+            <div class="asset-title">[Beispiel: Sci-Fi Sound Pack]</div>
+            <div class="asset-info">
+                <span class="asset-label">Ersteller:</span>
+                <span class="asset-value">[Audio Artist]</span>
+                <span class="asset-label">Quelle:</span>
+                <span class="asset-value"><a href="[URL]" target="_blank" rel="noopener" class="asset-link">Freesound.org</a></span>
+                <span class="asset-label">Lizenz:</span>
+                <span class="asset-value">CC BY 3.0</span>
+            </div>
+            <div class="license-badge">Creative Commons</div>
+        </div>
+
+        <h2>🖼️ Texturen & Materialien</h2>
+        <div class="asset-card">
+            <div class="asset-title">[Beispiel: Metal Texture Pack]</div>
+            <div class="asset-info">
+                <span class="asset-label">Ersteller:</span>
+                <span class="asset-value">[Texture Artist]</span>
+                <span class="asset-label">Quelle:</span>
+                <span class="asset-value"><a href="[URL]" target="_blank" rel="noopener" class="asset-link">Textures.com</a></span>
+                <span class="asset-label">Auflösung:</span>
+                <span class="asset-value">2K, PBR Materials</span>
+            </div>
+            <div class="license-badge">Standard License</div>
+        </div>
+
+        <h2>📚 Frameworks & Libraries</h2>
+        <div class="asset-card">
+            <div class="asset-title">Three.js</div>
+            <div class="asset-info">
+                <span class="asset-label">Ersteller:</span>
+                <span class="asset-value">Mr. doob & Contributors</span>
+                <span class="asset-label">Quelle:</span>
+                <span class="asset-value"><a href="https://threejs.org" target="_blank" rel="noopener" class="asset-link">threejs.org</a></span>
+                <span class="asset-label">Version:</span>
+                <span class="asset-value">r152</span>
+            </div>
+            <div class="license-badge">MIT License</div>
+        </div>
+
+        <div class="template-info">
+            <strong>💡 Anleitung zum Ausfüllen:</strong><br><br>
+            1. <strong>Ersetze alle [Beispiel] Einträge</strong> mit deinen tatsächlich verwendeten Assets<br>
+            2. <strong>Lösche Beispiele</strong> die du nicht verwendest<br>
+            3. <strong>Füge neue Kategorien hinzu</strong> falls nötig (z.B. Fonts, Icons)<br>
+            4. <strong>Achte auf korrekte Lizenz-Angaben</strong> - im Zweifel beim Ersteller nachfragen<br>
+            5. <strong>Links sollten funktionieren</strong> und auf die Original-Quelle zeigen
+        </div>
+
+        <p style="text-align: center; margin-top: 3rem; color: rgba(255, 255, 255, 0.6);">
+            Letzte Aktualisierung: Oktober 2025
+        </p>
+    </div>
+</body>
+</html>

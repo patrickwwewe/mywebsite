@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Impressum - Portfolio</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #0f0f23 0%, #1a1a2e 50%, #16213e 100%);
+            color: #ffffff;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 2rem;
+        }
+
+        .container {
+            max-width: 800px;
+            width: 100%;
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(0, 255, 255, 0.2);
+            border-radius: 15px;
+            padding: 3rem;
+            box-shadow: 0 8px 32px rgba(0, 255, 255, 0.1);
+            animation: fadeIn 0.8s ease-out;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        h1 {
+            color: #00f0ff;
+            font-size: 2.5rem;
+            margin-bottom: 2rem;
+            text-align: center;
+            text-shadow: 0 0 20px rgba(0, 240, 255, 0.5);
+        }
+
+        h2 {
+            color: #00f0ff;
+            font-size: 1.5rem;
+            margin: 2rem 0 1rem 0;
+            border-bottom: 2px solid rgba(0, 255, 255, 0.3);
+            padding-bottom: 0.5rem;
+        }
+
+        p {
+            line-height: 1.6;
+            margin-bottom: 1rem;
+            color: rgba(255, 255, 255, 0.9);
+        }
+
+        .info-box {
+            background: rgba(0, 255, 255, 0.1);
+            border: 1px solid rgba(0, 255, 255, 0.3);
+            border-radius: 10px;
+            padding: 1.5rem;
+            margin: 1.5rem 0;
+        }
+
+        .back-button {
+            position: fixed;
+            top: 2rem;
+            left: 2rem;
+            background: rgba(0, 255, 255, 0.2);
+            border: 2px solid rgba(0, 255, 255, 0.5);
+            color: #ffffff;
+            padding: 0.8rem 1.5rem;
+            border-radius: 25px;
+            text-decoration: none;
+            font-weight: bold;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(10px);
+            z-index: 1000;
+        }
+
+        .back-button:hover {
+            background: rgba(0, 255, 255, 0.3);
+            border-color: rgba(0, 255, 255, 0.8);
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 255, 255, 0.3);
+        }
+
+        .warning {
+            background: rgba(255, 140, 0, 0.1);
+            border: 1px solid rgba(255, 140, 0, 0.5);
+            border-radius: 10px;
+            padding: 1rem;
+            margin: 1rem 0;
+            color: #ffcc00;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 2rem;
+                margin: 1rem;
+            }
+            
+            h1 {
+                font-size: 2rem;
+            }
+            
+            .back-button {
+                top: 1rem;
+                left: 1rem;
+                padding: 0.6rem 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <a href="../index.html" class="back-button">← Zurück zum Portal</a>
+    
+    <div class="container">
+        <h1>📋 Impressum</h1>
+        
+       <!--<div class="warning">
+            ⚠️ <strong>Hinweis:</strong> Dies ist ein Template - bitte mit deinen echten Daten ausfüllen!<br>
+            🇦🇹 <strong>Österreich:</strong> Impressumspflicht gilt für alle geschäftlich genutzten Websites (auch Portfolio/Jobsuche)!
+        </div>--> 
+
+        <h2>Angaben gemäß § 5 ECG (E-Commerce-Gesetz)</h2>
+        <div class="info-box">
+            <p><strong>Name:</strong>
+                 Patrick Eder</p>
+            <p><strong>Anschrift:</strong><br>
+               Mitterbrunnwald 11<br>
+               4183 Traberg<br>
+               Österreich
+            </p>
+        </div>
+
+        <h2>Kontakt</h2>
+        <div class="info-box">
+            <p><strong>E-Mail:</strong> patrick.mobil@gmx.at</p>
+            <p><strong>Telefon:</strong> +43 677 625 568 73</p>
+        </div>
+
+        <h2>Haftungsausschluss</h2>
+        
+        <h3>Haftung für Inhalte</h3>
+        <p>Als Diensteanbieter sind wir gemäß § 16 ECG für eigene Inhalte auf diesen Seiten nach den allgemeinen Gesetzen verantwortlich. Nach §§ 13-15 ECG sind wir als Diensteanbieter jedoch nicht verpflichtet, übermittelte oder gespeicherte fremde Informationen zu überwachen oder nach Umständen zu forschen, die auf eine rechtswidrige Tätigkeit hinweisen.</p>
+
+        <h3>Haftung für Links</h3>
+        <p>Unser Angebot enthält Links zu externen Websites Dritter, auf deren Inhalte wir keinen Einfluss haben. Deshalb können wir für diese fremden Inhalte auch keine Gewähr übernehmen. Für die Inhalte der verlinkten Seiten ist stets der jeweilige Anbieter oder Betreiber der Seiten verantwortlich. Die verlinkten Seiten wurden zum Zeitpunkt der Verlinkung auf mögliche Rechtsverstöße überprüft. Rechtswidrige Inhalte waren zum Zeitpunkt der Verlinkung nicht erkennbar.</p>
+
+        <h3>EU-Streitschlichtung</h3>
+        <p>Die Europäische Kommission stellt eine Plattform zur Online-Streitbeilegung (OS) bereit: <a href="https://ec.europa.eu/consumers/odr/" target="_blank" style="color: #00f0ff;">https://ec.europa.eu/consumers/odr/</a><br>
+        Unsere E-Mail-Adresse finden Sie oben im Impressum.</p>
+
+        <h2>Urheberrecht</h2>
+        <p>Die durch die Seitenbetreiber erstellten Inhalte und Werke auf diesen Seiten unterliegen dem österreichischen Urheberrecht. Die Vervielfältigung, Bearbeitung, Verbreitung und jede Art der Verwertung außerhalb der Grenzen des Urheberrechtes bedürfen der schriftlichen Zustimmung des jeweiligen Autors bzw. Erstellers. Downloads und Kopien dieser Seite sind nur für den privaten, nicht kommerziellen Gebrauch gestattet.</p>
+        <!--
+        <h2>🎨 3D-Assets & Lizenzen</h2>
+        <div class="info-box">
+            <p><strong>Verwendete 3D-Modelle und Assets:</strong></p>
+            
+            <h3>Eigene Erstellung</h3>
+            <p>• Portal-Effekte und Animationen: Eigenentwicklung<br>
+               • Website-Code und Shader: Eigenentwicklung</p>
+            
+            <h3>Externe 3D-Assets (Beispiele - anpassen nach Bedarf)</h3>
+            <p><strong>Blender Market:</strong><br>
+               • [Asset Name] von [Creator] - <a href="[URL]" target="_blank" style="color: #00f0ff;">[Link]</a><br>
+               • Lizenz: [Lizenztyp, z.B. Royalty Free, CC BY 4.0]</p>
+            
+            <p><strong>Sketchfab:</strong><br>
+               • [Asset Name] von [Creator] - <a href="[URL]" target="_blank" style="color: #00f0ff;">[Link]</a><br>
+               • Lizenz: [Lizenztyp]</p>
+            
+            <p><strong>Free3D / CGTrader:</strong><br>
+               • [Asset Name] von [Creator] - <a href="[URL]" target="_blank" style="color: #00f0ff;">[Link]</a><br>
+               • Lizenz: [Lizenztyp]</p>
+            
+            <div class="warning">
+                ⚠️ <strong>Wichtig:</strong> Füge hier alle verwendeten externen Assets hinzu mit:
+                <ul style="margin-left: 1rem; margin-top: 0.5rem;">
+                    <li>Name des Assets/Modells</li>
+                    <li>Name des Erstellers/Künstlers</li>
+                    <li>Quelle/Website (mit Link)</li>
+                    <li>Lizenztyp (CC BY, Royalty Free, etc.)</li>
+                    <li>Eventuelle Modifikationen die du gemacht hast</li>
+                </ul>
+                <p style="margin-top: 1rem;"><strong>📋 Ausführliche Credits:</strong> <a href="credits.html" style="color: #00f0ff;">Vollständige Credits & Lizenzen-Übersicht</a></p>
+            </div>
+        </div>
+
+        <div class="info-box">
+            <p><strong>💡 Tipp:</strong> Ersetze alle Platzhalter in [eckigen Klammern] mit deinen echten Daten!</p>
+            <p><strong>🇦🇹 Österreich-spezifisch:</strong></p>
+            <ul style="margin-left: 1rem; color: rgba(255, 255, 255, 0.8);">
+                <li>Rechtliche Grundlage: E-Commerce-Gesetz (ECG)</li>
+                <li>Bei Gewerbebetrieb: Gewerbeberechtigung/Firmenbuchnummer angeben</li>
+                <li>Bei freiberuflicher Tätigkeit: Kammer-Zugehörigkeit angeben</li>
+                <li>Umsatzsteuer-ID nur bei Umsatz > €30.000/Jahr</li>
+            </ul>
+        </div>
+
+        <p style="text-align: center; margin-top: 3rem; color: rgba(255, 255, 255, 0.6);">
+            Erstellt: Oktober 2025
+        </p>
+    
+    </div>
+    -->
+</body>
+</html>

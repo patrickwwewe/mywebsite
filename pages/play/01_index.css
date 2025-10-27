@@ -1,0 +1,152 @@
+/* ========================================== */
+/* 📚 CSS GRUNDLAGEN - WIE FUNKTIONIERT CSS? */
+/* ========================================== */
+
+/*
+CSS SYNTAX ERKLÄRUNG:
+
+AUFBAU EINER CSS-REGEL:
+selektor {
+    eigenschaft: wert;
+    eigenschaft: wert;
+}
+
+BEISPIEL:
+h1 {
+    color: red;
+    font-size: 24px;
+}
+
+BEDEUTUNG:
+- "h1" = SELEKTOR (wählt alle <h1> Elemente aus)
+- "color" = EIGENSCHAFT (was soll geändert werden?)
+- "red" = WERT (wie soll es geändert werden?)
+- ";" = TRENNT verschiedene Eigenschaften
+- "{}" = UMSCHLIESSEN alle Regeln für diesen Selektor
+*/
+
+/* ========================================== */
+/* 🎯 SELEKTOR-ARTEN IN CSS                   */
+/* ========================================== */
+
+/*
+VERSCHIEDENE WEGE, HTML-ELEMENTE AUSZUWÄHLEN:
+
+1. UNIVERSAL SELEKTOR:
+   * { } = Wählt ALLE Elemente aus
+
+2. ELEMENT SELEKTOR:
+   h1 { } = Wählt alle <h1> Elemente
+   p { } = Wählt alle <p> Elemente
+   div { } = Wählt alle <div> Elemente
+
+3. ID SELEKTOR:
+   #meinID { } = Wählt Element mit id="meinID"
+   
+4. CLASS SELEKTOR:
+   .meineKlasse { } = Wählt alle Elemente mit class="meineKlasse"
+
+5. KOMBINATION:
+   div.meineKlasse { } = Nur <div> Elemente MIT der Klasse
+*/
+
+/* ========================================== */
+
+
+  /*========================================= */
+  /*-- 🎨 CSS STYLING - KOMPLETTES UI DESIGN    */
+  /*-- ========================================= */
+
+  /*ALle HTML-Elemente auswählen*/
+  *{
+    margin:0; /*Außenabstand auf 0 setzen*/
+    padding:0; /*Innenabstand auf 0 setzen*/
+
+    /* box-sizzing= Wie wird die größe berrechnet?
+       content-box: Breite +padding +border= Gesamtbreite (Standard)
+    Breite INKLUSIVE padding + border = Gesamtbreite (besser!) */
+    box-sizing: border-box;
+}
+/* ========================================== */
+/* 🎨 BODY STYLING - DAS GRUND-LAYOUT        */
+/* ========================================== */
+body { /*wählt das body Elemt aus*/ 
+/*font-family= Schriftarten*/
+font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; /*Schriftart festlegen*/
+
+ /*  radial-gradient = Kreisförmiger Verlauf
+       - ellipse at bottom = Oval-Form, startet unten
+       - #1b2735 0% = Erste Farbe (dunkelblau) bei 0%
+       - #090a0f 100% = Zweite Farbe (schwarz) bei 100% */
+background: radial-gradient(ellipse at bottom, #1b2735 0%, #090a0f 100%);
+
+/* overflow = Was passiert bei Überlauf?
+       - hidden = Überstehender Inhalt wird abgeschnitten
+       - scroll = Scrollbalken erscheinen
+       - visible = Alles wird angezeigt (Standard) */
+    overflow: hidden;
+    
+    /* color = Textfarbe (Standard für alle Kinder-Elemente) */
+    color: white;
+}
+
+
+/* ========================================== */
+/* 🖼️ 3D CANVAS - WO THREE.JS HINZEICHNET   */
+/* ========================================== */
+
+
+
+/* ========================================== */
+/* 🔄 LOADING SCREEN - LADE-BILDSCHIRM       */
+/* ========================================== */
+#loadingOverlay {
+     position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+
+    background: linear-gradient(135deg, #66733a 0%, #764ba2 100%);
+    /*Flexbox für perfekte Zentrierung des Inhalts*/
+    display:flex; 
+    flex-direction: column; /*Stapelt Elemente vertikal*/
+    justify-content: center; /*Zentriert vertikal*/
+    align-items: center; /*Zentriert horizontal*/
+    /* z-index höher als gameUI, damit Loading Screen über allem liegt
+    z-index: 200  ← Loading Screen (ganz oben)
+    z-index: 100  ← Game UI (darüber)
+    z-index: 0    ← 3D Canvas (unten) */
+    z-index: 200;
+    /* transition = Sanfte Animation beim Ein-/Ausblenden
+       opacity = Transparenz (0 = unsichtbar, 1 = sichtbar)
+       0.5s = Animation dauert eine halbe Sekunde
+       ease = Natürliche Animations-Kurve */
+    transition: opacity 0.5s ease;
+}
+
+.loading-content {
+    text-align:center;
+
+}
+
+.loading-title {
+    font-size: 48px;
+    font-weight:bold;
+    margin-bottom: 20px;
+    text-shadow: 2px 2px 4px rgba(255, 255, 255, 0.3);
+
+
+}
+
+.loading-progress {
+
+}
+
+.loading-progress-bar {
+
+}
+ 
+.error-message {
+
+}   

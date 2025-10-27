@@ -1,0 +1,446 @@
+/* ====================================================================
+                           PORTFOLIO PORTAL CSS
+   ====================================================================
+   Diese CSS-Datei enthält alle Styles für das 3D-Portfolio Portal
+   
+   AUFBAU DER DATEI:
+   • CSS-Variablen (Farben, die überall verwendet werden)
+   • Basis-Styles (HTML, Body, Canvas)
+   • HUD-Interface (versteckte Einstellungen)
+   • Loading-Overlay (Ladebalken und Animationen)
+   • Hint-Text (Klick-Anweisung für Benutzer)
+   • Flash-Overlay (weißer Blitz-Effekt beim Portal-Durchflug)
+   • Radiales Menü (kreisförmiges Navigationsmenü)
+   • Responsive Design (Anpassung für mobile Geräte)
+   
+   ZUSAMMENHANG MIT ANDEREN DATEIEN:
+   • index.html: Verwendet diese CSS-Klassen für Styling
+   • main.js: Manipuliert CSS-Klassen via JavaScript (z.B. .active)
+   • modules/interactions.js: Zeigt/versteckt Elemente über CSS
+   ==================================================================== */
+
+/* ====================================================================
+                          CSS-VARIABLEN (FARB-PALETTE)
+   ====================================================================
+   Diese Variablen definieren das Farbschema des gesamten Portals.
+   Durch Verwendung von Variablen kann das Design einfach geändert werden.
+   ==================================================================== */
+
+:root {
+  /* Haupt-Hintergrundfarbe - sehr dunkles Blau für Weltraum-Atmosphäre */
+  --bg: #03050a;
+  
+  /* Neon-Farben für das Portal und Effekte */
+  --neon: #00f0ff;      /* Cyan - primäre Neon-Farbe */
+  --neon-2: #9b00ff;    /* Lila - sekundäre Neon-Farbe */
+  
+  /* Subtile Akzent-Farben für UI-Elemente */
+  --accent: rgba(255,255,255,0.06);   /* Sehr transparentes Weiß für Rahmen */
+  --glass: rgba(255,255,255,0.04);    /* Glasmorphism-Effekt */
+}
+
+/* ====================================================================
+                          BASIS HTML & BODY STYLES
+   ====================================================================
+   Diese Styles sorgen für eine vollflächige 3D-Szene ohne Scrollbalken.
+   ==================================================================== */
+
+html, body {
+  height: 100%;           /* Vollbildhöhe */
+  margin: 0;              /* Keine Browser-Standardränder */
+  padding: 0;             /* Keine Browser-Standard-Innenabstände */
+  background: var(--bg);  /* Dunkler Hintergrund aus CSS-Variable */
+  
+  /* Moderne Schriftart-Kaskade für optimale Lesbarkeit */
+  font-family: Inter, system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial;
+  
+  /* Verhindere Scrolling und Text-Selektion für App-ähnliches Gefühl */
+  overflow: hidden;
+  -webkit-user-select: none;  /* Safari-Kompatibilität */
+  user-select: none;
+}
+
+/* ====================================================================
+                          3D-CANVAS STYLING
+   ====================================================================
+   Das Canvas-Element rendert die Three.js 3D-Szene.
+   ==================================================================== */
+
+canvas {
+  display: block;         /* Verhindert Inline-Spacing-Probleme */
+  width: 100%;           /* Vollständige Breite */
+  height: 100%;          /* Vollständige Höhe */
+  cursor: pointer;       /* Zeigt an, dass Canvas interaktiv ist */
+}
+
+/* ====================================================================
+                          HUD-INTERFACE (VERSTECKT)
+   ====================================================================
+   Das HUD (Heads-Up Display) enthält Entwickler-Einstellungen.
+   Es ist standardmäßig versteckt, da die Werte programmatisch gesetzt werden.
+   ==================================================================== */
+
+.hud {
+  position: fixed;              /* Bleibt an fester Position beim Scrollen */
+  right: 20px;                 /* 20px vom rechten Bildschirmrand */
+  top: 20px;                   /* 20px vom oberen Bildschirmrand */
+  color: #dfe;                 /* Helle Textfarbe */
+  z-index: 50;                 /* Über anderen Elementen, aber unter Overlays */
+  display: none;               /* Standardmäßig versteckt */
+  
+  /* Glasmorphism-Effekt - moderner durchsichtiger Look */
+  -webkit-backdrop-filter: blur(6px);  /* Safari-Kompatibilität */
+  backdrop-filter: blur(6px);
+}
+
+.hud .panel {
+  /* Subtiler Glasmorphism-Container */
+  background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(0,0,0,0.02));
+  padding: 12px;
+  border-radius: 10px;
+  border: 1px solid var(--accent);      /* Verwendet CSS-Variable für Rahmen */
+  box-shadow: 0 6px 30px rgba(0,0,0,0.6);  /* Tiefenschatten */
+}
+
+.hud label {
+  display: block;               /* Jedes Label in eigener Zeile */
+  font-size: 12px;
+  color: rgba(255,255,255,0.7); /* Transparenter weißer Text */
+  margin-bottom: 6px;
+}
+
+.hud input[type=range] {
+  width: 160px;
+  accent-color: var(--neon);    /* Slider verwendet Portal-Neon-Farbe */
+}
+
+/* ====================================================================
+                          KLICK-HINT (BENUTZER-ANWEISUNG)
+   ====================================================================
+   Zeigt dem Benutzer, was er tun soll, um das Portal zu aktivieren.
+   ==================================================================== */
+
+.hint {
+  position: fixed;
+  left: 50%;                    /* Horizontal zentriert... */
+  transform: translateX(-50%);  /* ...durch negative Translation der eigenen Breite */
+  bottom: 18px;                 /* 18px vom unteren Bildschirmrand */
+  
+  /* Text-Styling */
+  color: rgba(255,255,255,0.9);
+  font-size: 14px;
+  padding: 8px 12px;
+  border-radius: 20px;          /* Runde Pill-Form */
+  background: transparent;       /* Kein Hintergrund für minimalen Look */
+  z-index: 40;                  /* Über 3D-Szene, unter Overlays */
+  
+  /* Smooth Übergang beim Ausblenden */
+  transition: opacity 0.5s ease;
+}
+
+/* ====================================================================
+                          FLASH-OVERLAY (PORTAL-DURCHFLUG)
+   ====================================================================
+   Weißer Vollbild-Blitz beim Durchfliegen des Portals.
+   Erzeugt dramatischen Übergangs-Effekt.
+   ==================================================================== */
+
+#flash {
+  position: fixed;              /* Vollbild-Overlay */
+  inset: 0;                    /* Kurzform für top:0, right:0, bottom:0, left:0 */
+  background: white;           /* Reines Weiß für Blitz-Effekt */
+  opacity: 0;                  /* Standardmäßig unsichtbar */
+  pointer-events: none;        /* Blockiert keine Maus-Interaktionen */
+  z-index: 200;               /* Über allem anderen */
+  transition: opacity 280ms ease;  /* Smooth Ein-/Ausblenden */
+}
+
+/* ====================================================================
+                          RADIALES MENÜ (NAVIGATION)
+   ====================================================================
+   Kreisförmiges Navigationsmenü, das nach Portal-Aktivierung erscheint.
+   Verwendet moderne CSS-Transforms für smooth Animationen.
+   ==================================================================== */
+
+.radial-menu {
+  position: fixed;
+  top: 50%;                    /* Vertikal zentriert... */
+  left: 50%;                   /* Horizontal zentriert... */
+  transform: translate(-50%, -50%) scale(0);  /* ...und initial skaliert auf 0 (unsichtbar) */
+  z-index: 100;               /* Über 3D-Szene */
+  opacity: 0;                 /* Initial transparent */
+  pointer-events: none;       /* Initial nicht klickbar */
+  
+  /* Smooth Entrance-Animation mit Bounce-Effekt */
+  transition: all 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+/* Aktiver Zustand - Menü wird sichtbar und interaktiv */
+.radial-menu.active {
+  transform: translate(-50%, -50%) scale(1);  /* Auf normale Größe skalieren */
+  opacity: 1;                                 /* Vollständig sichtbar */
+  pointer-events: all;                        /* Interaktionen aktivieren */
+}
+
+/* ====================================================================
+                          ZENTRALER HUB (MENÜ-ZENTRUM)
+   ====================================================================
+   Der mittlere Button des radialen Menüs - Portal Hub.
+   ==================================================================== */
+
+.radial-center {
+  width: 120px;
+  height: 120px;
+  border-radius: 50%;          /* Perfekter Kreis */
+  
+  /* Gradient von beiden Portal-Neon-Farben */
+  background: linear-gradient(135deg, var(--neon), var(--neon-2));
+  
+  /* Flexbox für perfekte Text-Zentrierung */
+  display: flex;
+  align-items: center;         /* Vertikal zentriert */
+  justify-content: center;     /* Horizontal zentriert */
+  
+  /* Neon-Glow-Effekt */
+  box-shadow: 0 0 40px rgba(0, 240, 255, 0.4);
+  
+  position: relative;          /* Für absolute Positionierung von Kindern */
+  cursor: pointer;             /* Zeigt Interaktivität an */
+  transition: transform 0.3s ease;  /* Smooth Hover-Animation */
+}
+
+/* Hover-Effekt für zentralen Hub */
+.radial-center:hover {
+  transform: scale(1.1);       /* 10% größer beim Hovern */
+}
+
+.radial-center-text {
+  color: white;
+  font-weight: 600;            /* Semi-bold */
+  font-size: 14px;
+  text-align: center;
+  text-shadow: 0 2px 4px rgba(0,0,0,0.5);  /* Subtiler Schatten für Lesbarkeit */
+}
+
+/* ====================================================================
+                          RADIALE MENÜ-ITEMS (NAVIGATION)
+   ====================================================================
+   Die 6 Navigations-Buttons, die um den zentralen Hub angeordnet sind.
+   ==================================================================== */
+
+.radial-item {
+  position: absolute;          /* Absolute Positionierung für Kreis-Layout */
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;          /* Runde Buttons */
+  
+  /* Glasmorphism-Hintergrund */
+  background: linear-gradient(135deg, rgba(255,255,255,0.1), rgba(255,255,255,0.05));
+  -webkit-backdrop-filter: blur(10px); /* Safari-Kompatibilität */
+  backdrop-filter: blur(10px); /* Hintergrund-Unschärfe */
+  border: 1px solid rgba(255,255,255,0.2);  /* Subtiler Rahmen */
+  
+  /* Flexbox für Icon/Text-Zentrierung */
+  display: flex;
+  flex-direction: column;      /* Icon oben, Text unten */
+  align-items: center;
+  justify-content: center;
+  
+  cursor: pointer;
+  text-decoration: none;       /* Keine Link-Unterstreichung */
+  color: white;               /* Weiße Text-/Icon-Farbe */
+  
+  /* Smooth Hover-Animationen */
+  transition: all 0.3s ease;
+  transform-origin: center;    /* Skalierung vom Zentrum aus */
+}
+
+/* Hover-Effekt für Menü-Items */
+.radial-item:hover {
+  transform: scale(1.2);       /* 20% größer */
+  background: linear-gradient(135deg, rgba(255,255,255,0.2), rgba(255,255,255,0.1));
+  box-shadow: 0 10px 30px rgba(0, 240, 255, 0.3);  /* Neon-Glow beim Hovern */
+}
+
+.radial-item-icon {
+  font-size: 24px;            /* Große Icons */
+  margin-bottom: 4px;         /* Abstand zum Text */
+}
+
+.radial-item-text {
+  font-size: 10px;            /* Kleiner Text */
+  font-weight: 500;           /* Medium-bold */
+  text-align: center;
+  line-height: 1.1;           /* Kompakter Zeilenabstand */
+  color: white;
+}
+
+/* ====================================================================
+                          MENÜ-ITEM POSITIONEN (KREIS-LAYOUT)
+   ====================================================================
+   Positioniert die 6 Menü-Items gleichmäßig um den zentralen Hub.
+   Die Positionen bilden einen perfekten Kreis.
+   ==================================================================== */
+
+/* Item 1 - Oben rechts (1 Uhr Position) */
+.radial-item:nth-child(1) { 
+  top: -100px; 
+  left: 20px; 
+}
+
+/* Item 2 - Rechts oben (3 Uhr Position) */
+.radial-item:nth-child(2) { 
+  top: -70px; 
+  right: -70px; 
+}
+
+/* Item 3 - Rechts unten (5 Uhr Position) */
+.radial-item:nth-child(3) { 
+  top: 20px; 
+  right: -100px; 
+}
+
+/* Item 4 - Unten rechts (7 Uhr Position) */
+.radial-item:nth-child(4) { 
+  bottom: -70px; 
+  right: -70px; 
+}
+
+/* Item 5 - Unten links (9 Uhr Position) */
+.radial-item:nth-child(5) { 
+  bottom: -70px; 
+  left: -70px; 
+}
+
+/* Item 6 - Links oben (11 Uhr Position) */
+.radial-item:nth-child(6) { 
+  top: 20px; 
+  left: -100px; 
+}
+
+/* ====================================================================
+                          LOADING-OVERLAY (LADEBILDSCHIRM)
+   ====================================================================
+   Vollbild-Overlay mit Ladebalken während der Szenen-Initialisierung.
+   ==================================================================== */
+
+#loading {
+  position: fixed;
+  inset: 0;                    /* Vollbild */
+  display: flex;               /* Flexbox für Zentrierung */
+  align-items: center;         /* Vertikal zentriert */
+  justify-content: center;     /* Horizontal zentriert */
+  z-index: 999;               /* Über allem anderen */
+  
+  /* Dunkler Gradient-Hintergrund */
+  background: linear-gradient(180deg, rgba(0,0,0,0.95), rgba(0,0,0,0.9));
+  transition: opacity 300ms ease;  /* Smooth Ausblenden */
+}
+
+/* Loading-Panel (Container für Ladebalken und Text) */
+.loading-panel {
+  width: 420px;
+  max-width: 90%;              /* Responsive: max 90% der Bildschirmbreite */
+  padding: 18px;
+  border-radius: 12px;
+  background: rgba(255,255,255,0.02);  /* Subtiler Glasmorphism */
+  border: 1px solid var(--accent);
+  text-align: center;
+  color: #dfe;                 /* Helle Textfarbe */
+}
+
+/* Loading-Titel */
+.loading-title {
+  font-size: 14px;
+  margin-bottom: 12px;
+}
+
+/* Ladebalken-Container */
+.loading-bar-container {
+  height: 10px;
+  background: rgba(255,255,255,0.06);  /* Dunkler Hintergrund */
+  border-radius: 6px;
+  overflow: hidden;            /* Verhindert Überlauf des Ladebalkens */
+  margin: 12px 0;             /* Vertikaler Abstand */
+}
+
+/* Animierter Ladebalken */
+#loading-bar {
+  height: 100%;
+  width: 0%;                   /* Startet bei 0% */
+  background: linear-gradient(90deg, var(--neon), var(--neon-2));  /* Neon-Gradient */
+  box-shadow: 0 6px 30px rgba(0,240,255,0.08);  /* Subtiler Glow */
+  transition: width 0.3s ease; /* Smooth Balken-Animation */
+}
+
+/* Loading-Text Styling */
+#loading-text {
+  font-size: 12px;
+  margin-top: 10px;
+  opacity: 0.85;               /* Leicht transparent */
+}
+
+/* ====================================================================
+                          RESPONSIVE DESIGN (MOBILE)
+   ====================================================================
+   Anpassungen für kleinere Bildschirme und Touch-Geräte.
+   ==================================================================== */
+
+@media (max-width: 480px) {
+  /* HUD-Anpassungen für mobile Geräte */
+  .hud {
+    right: 10px;               /* Weniger Rand auf kleinen Screens */
+    top: 10px;
+  }
+  
+  .hud input[type=range] {
+    width: 120px;              /* Schmalere Slider */
+  }
+  
+  /* Radiales Menü für Touch-Geräte optimieren */
+  .radial-item {
+    width: 70px;               /* Kleinere Touch-Targets */
+    height: 70px;
+  }
+  
+  .radial-center {
+    width: 100px;              /* Kleinerer zentraler Hub */
+    height: 100px;
+  }
+  
+  /* Hint-Text anpassen */
+  .hint {
+    font-size: 12px;           /* Kleinere Schrift */
+    bottom: 12px;              /* Weniger Abstand */
+  }
+}
+
+/* ====================================================================
+                          NEON-OUTLINE UTILITY CLASS
+   ====================================================================
+   Wiederverwendbare Klasse für Neon-Glow-Effekte.
+   ==================================================================== */
+
+.neon-outline {
+  box-shadow: 0 0 18px var(--neon), 0 0 40px rgba(155,0,255,0.08) inset;
+}
+
+/* ====================================================================
+                          ENTWICKLER-NOTIZEN
+   ====================================================================
+   
+   PERFORMANCE-OPTIMIERUNGEN:
+   • backdrop-filter wird nur bei Bedarf verwendet (HUD)
+   • CSS-Transforms statt position-changes für Animationen
+   • will-change wird vermieden (nur bei Bedarf verwenden)
+   
+   BROWSER-KOMPATIBILITÄT:
+   • -webkit-backdrop-filter für Safari
+   • Fallbacks für ältere Browser bei CSS Grid/Flexbox
+   
+   WARTUNG:
+   • Alle Farben über CSS-Variablen (:root) änderbar
+   • Responsive Breakpoints konsistent
+   • Kommentierte Sektionen für einfache Navigation
+   
+   ==================================================================== */

@@ -1,0 +1,143 @@
+<!doctype html>
+<!-- ====================================================================
+                           3D PORTFOLIO PORTAL - HTML
+     ====================================================================
+     Diese HTML-Datei ist die Hauptseite des 3D-Portfolio Portals.
+     
+     AUFBAU DER DATEI:
+     • HTML-Grundgerüst mit Meta-Informationen
+     • Three.js Import-Map für moderne ES6-Module
+     • Canvas-Element für die 3D-Szene
+     • HUD-Interface (versteckte Entwickler-Einstellungen)
+     • Hint-Text (Benutzer-Anweisung)
+     • Radiales Navigationsmenü (nach Portal-Aktivierung)
+     • Flash-Overlay (Blitz-Effekt beim Portal-Durchflug)
+     • Loading-Overlay (Ladebildschirm)
+     
+     ZUSAMMENHANG MIT ANDEREN DATEIEN:
+     • styles.css: Alle visuellen Styles und Animationen
+     • main.js: JavaScript-Hauptdatei, die alle Module orchestriert
+     • js/modules/: Spezialisierte Module für verschiedene Funktionen
+     
+     TECHNISCHE DETAILS:
+     • Verwendet ES6-Module mit Import-Maps für Three.js
+     • Responsive Design für Desktop und Mobile
+     • Accessibility-Features (lang-Attribut, Meta-Tags)
+     ==================================================================== -->
+
+<html lang="de"> <!-- Deutsche Sprache für Screenreader und SEO -->
+  <head>
+    <!-- ================================================================
+                           META-INFORMATIONEN
+         ================================================================
+         Wichtige Informationen für Browser und Suchmaschinen
+         ================================================================ -->
+    
+    <meta charset="utf-8" /> <!-- UTF-8 für internationale Zeichen -->
+    <meta name="viewport" content="width=device-width, initial-scale=1" /> <!-- Responsive Design für Smartphones -->
+    
+    <!-- Titel erscheint im Browser-Tab und in Bookmarks -->
+    <title>3D Portfolio Portal</title>
+    
+    <!-- Meta-Tags für SEO und Social Media -->
+    <meta name="description" content="Interaktives 3D-Portfolio mit WebGL Portal - Klicke ins Portal für Navigation" />
+    <meta name="author" content="Patrick" />
+    <meta name="keywords" content="3D, Portfolio, WebGL, Three.js, Interactive, Portal" />
+    
+    <!-- ================================================================
+                           THREE.JS IMPORT-MAP
+         ================================================================
+         Definiert wie ES6-Module aufgelöst werden.
+         Ermöglicht 'import * as THREE from "three"' statt langer URLs.
+         ================================================================ -->
+    
+    <script type="importmap">
+    {
+      "imports": {
+        "three": "https://unpkg.com/three@0.152.0/build/three.module.js"
+      }
+    }
+    </script>
+    
+    <!-- ================================================================
+                           CSS-STYLESHEET EINBINDEN
+         ================================================================
+         Alle Styles sind jetzt in separater CSS-Datei organisiert.
+         ================================================================ -->
+    
+    <link rel="stylesheet" href="styles.css">
+  </head>
+  <body>
+    <canvas id="c"></canvas>
+
+    <!-- HUD is hidden on load; settings are applied programmatically so users cannot change them -->
+    <div class="hud" aria-hidden="true">
+      <div class="panel">
+        <!-- Hidden controls keep ids for script compatibility but are not visible -->
+        <input id="ctrl-glow" type="hidden" value="0.3">
+        <input id="ctrl-speed" type="hidden" value="1.6">
+        <input id="ctrl-bloom" type="hidden" value="2.9">
+      </div>
+    </div>
+
+
+
+    <div class="hint">Klicke ins Portal, um das Menü zu öffnen</div>
+
+
+
+    <!-- Radiales Menü (versteckt bis Portal aktiviert) -->
+  <div class="radial-menu" id="radialMenu">
+    <!-- Menu Items im Kreis angeordnet -->
+    <a href="#about" class="radial-item" data-section="about">
+      <div class="radial-item-icon">👨‍💻</div>
+      <div class="radial-item-text">Über<br>Mich</div>
+    </a>
+    
+    <a href="#projects" class="radial-item" data-section="projects">
+      <div class="radial-item-icon">💼</div>
+      <div class="radial-item-text">Projekte</div>
+    </a>
+    
+    <a href="#skills" class="radial-item" data-section="skills">
+      <div class="radial-item-icon">🛠️</div>
+      <div class="radial-item-text">Skills</div>
+    </a>
+    
+    <a href="#contact" class="radial-item" data-section="contact">
+      <div class="radial-item-icon">📧</div>
+      <div class="radial-item-text">Kontakt</div>
+    </a>
+    
+    <a href="#portfolio" class="radial-item" data-section="portfolio">
+      <div class="radial-item-icon">🎨</div>
+      <div class="radial-item-text">Portfolio</div>
+    </a>
+    
+    <a href="https://github.com/patrickwwewe" target="_blank" rel="noopener" class="radial-item">
+      <div class="radial-item-icon">🐱</div>
+      <div class="radial-item-text">GitHub</div>
+    </a>
+    
+    <!-- Zentraler Hub -->
+    <div class="radial-center" id="radialCenter">
+      <div class="radial-center-text">Portfolio<br>Hub</div>
+    </div>
+  </div>
+   
+    <div id="flash"></div>
+
+    <!-- Loading overlay -->
+    <div id="loading">
+      <div class="loading-panel">
+        <div class="loading-title">Lade Szene…</div>
+        <div class="loading-bar-container">
+          <div id="loading-bar"></div>
+        </div>
+        <div id="loading-text">Initialisiere Renderer</div>
+      </div>
+    </div>
+
+    <script type="module" src="./main.js"></script>
+  </body>
+</html>

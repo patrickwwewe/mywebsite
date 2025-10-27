@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="de">
+    <head>
+        <meta charset ="UTF-8">
+        <meta name ="viewport" content="width=device-width, initial-scale=1.0">
+        <title>space adventure</title>
+    <!--========================================= -->
+    <!-- 🔗 CSS-DATEI VERKNÜPFEN                  -->
+    <!-- ========================================= -->
+    <link rel="stylesheet" href="01_index.css">
+       <!-- OPTIONAL: Fallback für ältere Browser -->
+    <style>
+        /* Nur für Browser-Kompatibilität (Safari) */
+        .ui-panel {
+            -webkit-backdrop-filter: blur(10px); /* Safari-Support */
+            backdrop-filter: blur(10px);         /* Standard */
+        }
+    </style>
+    </head>
+    <body>
+        <!--
+    ==========================================
+    👁️ BODY BEREICH - SICHTBARER INHALT
+    ========================================== -->
+
+    <!--
+    ==========================================
+    🔄 LOADING SCREEN - LADE-BILDSCHIRM
+    ==========================================
+    -->
+    <div id="loadingOverlay"> <!--Haupt Container für Loading Screen-->
+        <div class="loading-content"> </div> <!-- CSS Klasse
+            - id="eindeutig" = Nur EINMAL pro Seite
+            - class="gruppe" = Kann MEHRFACH verwendet werden -->
+
+            <div class="loading-title">🚀 SPACE ADVENTURE</div>
+            <div>Lade 3D-Assets...</div>
+
+            <!--Progress Bar Container-->
+            <div class="loading-progress">
+                <div class="loading-progress-bar" id="loadingBar"></div>
+            </div>
+            <!-- Dynamischer Loading-Text (wird per JavaScript geändert) -->
+
+            <div id="loadingText">Initialisiere Game Engine...</div>
+            
+            <!-- Error-Anzeige (standardmäßig versteckt) -->
+            <div class="error-message" id="errorDisplay" style="display: none;"></div>
+        </div>
+
+    </div>
+    </body>
+</html>
