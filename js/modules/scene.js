@@ -132,8 +132,9 @@ export function setupPostProcessing(renderer, scene, camera) {
  * @param {THREE.WebGLRenderer} renderer - Der Renderer
  * @param {EffectComposer} composer - Der Post-Processing Composer
  * @param {Object} portalUniforms - Portal Shader Uniforms für Auflösung
+ * @param {THREE.Mesh} portalMesh - Das Portal-Mesh für Größenanpassung (optional)
  */
-export function setupResizeHandler(camera, renderer, composer, portalUniforms) {
+export function setupResizeHandler(camera, renderer, composer, portalUniforms, portalMesh = null) {
   window.addEventListener('resize', () => {
     console.log('📱 Passe Szene an neue Fenstergröße an...');
     
@@ -152,5 +153,25 @@ export function setupResizeHandler(camera, renderer, composer, portalUniforms) {
     if (portalUniforms?.resolution) {
       portalUniforms.resolution.value.set(w, h);
     }
+    
+    // Portal-Größe anpassen (wenn Portal-Mesh verfügbar)
+    if (portalMesh) {
+      // Dynamischer Import um zirkuläre Abhängigkeiten zu vermeiden
+      import('./portal.js').then(({ resizePortal }) => {
+        resizePortal(portalMesh);
+      }).catch(err => {
+        console.warn('⚠️ Portal-Resize fehlgeschlagen:', err);
+      });
+    }
+    
+    // Portal-Menü aktualisieren falls sichtbar
+    import('./interactions.js').then(({ refreshPortalMenuOnResize }) => {
+      // Timeout um sicherzustellen, dass Resize vollständig ist
+      setTimeout(() => {
+        refreshPortalMenuOnResize();
+      }, 100);
+    }).catch(err => {
+      console.warn('⚠️ Portal-Menü-Resize fehlgeschlagen:', err);
+    });
   });
 }

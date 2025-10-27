@@ -613,23 +613,66 @@ function resetPortalToFullVisibility() {
 
 /**
  * Erstellt ein rundes Menü mit 4 Icons nach Portal-Öffnung
+ * Responsive Design für optimale Mobile-Erfahrung
  */
 function createPortalMenu() {
   console.log('🎯 Portal-Menü wird erstellt...');
+  
+  // Bildschirm-Dimensionen analysieren
+  const screenWidth = window.innerWidth;
+  const screenHeight = window.innerHeight;
+  const aspectRatio = screenWidth / screenHeight;
+  const isMobile = screenWidth < 768;
+  const isPortrait = aspectRatio < 1;
+  const isNarrowPortrait = aspectRatio < 0.6; // Sehr schmale Hochformat-Handys
+  
+  console.log(`📱 Screen: ${screenWidth}x${screenHeight}, Ratio: ${aspectRatio.toFixed(2)}, Mobile: ${isMobile}, Portrait: ${isPortrait}, Narrow: ${isNarrowPortrait}`);
+  
+  // Intelligente Größenberechnung basierend auf Bildschirm-Verhältnis
+  let containerSize;
+  let itemSize;
+  let itemOffset;
+  let fontSize;
+  let textSize;
+  
+  if (isNarrowPortrait) {
+    // Sehr schmale Handys: Größe basierend auf Breite (nicht vmin!)
+    containerSize = Math.min(screenWidth * 0.8, 280); // Max 80% der Breite oder 280px
+    itemSize = containerSize * 0.25; // 25% der Container-Größe
+    itemOffset = containerSize * 0.35; // 35% für Positionierung
+    fontSize = Math.max(itemSize * 0.4, 18); // Mindestens 18px für Touch
+    textSize = Math.max(itemSize * 0.18, 10); // Mindestens 10px für Lesbarkeit
+  } else if (isMobile) {
+    // Normale Mobile-Geräte: Balance zwischen vmin und festen Größen
+    containerSize = Math.min(30 * (screenWidth / 100), screenHeight * 0.4, 300);
+    itemSize = Math.max(containerSize * 0.23, 50); // Mindestens 50px für Touch
+    itemOffset = containerSize * 0.32;
+    fontSize = Math.max(itemSize * 0.35, 16);
+    textSize = Math.max(itemSize * 0.16, 9);
+  } else {
+    // Desktop: vmin funktioniert gut
+    containerSize = Math.min(screenWidth, screenHeight) * 0.3;
+    itemSize = containerSize * 0.23;
+    itemOffset = containerSize * 0.32;
+    fontSize = itemSize * 0.35;
+    textSize = itemSize * 0.16;
+  }
+  
+  console.log(`🎯 Berechnete Größen: Container: ${containerSize}px, Item: ${itemSize}px, Offset: ${itemOffset}px`);
   
   // Menü-Container erstellen
   const menuContainer = document.createElement('div');
   menuContainer.id = 'portal-menu';
   menuContainer.className = 'portal-menu-container';
   
-  // CSS-Styling (responsive mit viewport-basierten Einheiten)
+  // CSS-Styling mit berechneten Pixelwerten für bessere Kontrolle
   menuContainer.style.cssText = `
     position: fixed;
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-    width: 30vmin;
-    height: 30vmin;
+    width: ${containerSize}px;
+    height: ${containerSize}px;
     z-index: 1000;
     opacity: 0;
     transition: all 0.8s ease;
@@ -639,25 +682,30 @@ function createPortalMenu() {
     justify-content: center;
   `;
   
-  // 4 Menüpunkte definieren - Ecken-Layout noch näher zur Mitte (in vmin-Einheiten)
+  // 4 Menüpunkte definieren - Positionen als Faktoren (werden mit itemOffset multipliziert)
   const menuItems = [
-    { icon: '🚀', text: 'Play', x: -15, y: -10, id: 'play' },       // Top Left: Projekte
-    { icon: '👨‍💻', text: 'Über mich', x: 15, y: -10, id: 'überMich' },        // Top Right: Über mich
-    { icon: '📋', text: 'Impressum', x: 15, y: 10, id: 'impressum' },           // Bottom Right: Impressum
-    { icon: '🔐', text: 'Anmelden', x: -15, y: 10, id: 'andmelden' }       // Bottom Left: Portfolio
+    { icon: '🚀', text: 'Play', x: -1, y: -0.67, id: 'play' },       // Top Left
+    { icon: '👨‍💻', text: 'Über mich', x: 1, y: -0.67, id: 'überMich' }, // Top Right
+    { icon: '📋', text: 'Impressum', x: 1, y: 0.67, id: 'impressum' }, // Bottom Right
+    { icon: '🔐', text: 'Anmelden', x: -1, y: 0.67, id: 'andmelden' } // Bottom Left
   ]
   
   // Menüpunkte erstellen
   menuItems.forEach((item, index) => {
     const menuItem = document.createElement('div');
     menuItem.className = `menu-item menu-item-${item.id}`;
+    
+    // Berechnete Positionen
+    const xPos = containerSize / 2 + (item.x * itemOffset) - itemSize / 2;
+    const yPos = containerSize / 2 + (item.y * itemOffset) - itemSize / 2;
+    
     menuItem.style.cssText = `
       position: absolute;
-      width: 7vmin;
-      height: 7vmin;
+      width: ${itemSize}px;
+      height: ${itemSize}px;
       border-radius: 50%;
       background: rgba(0, 255, 255, 0.2);
-      border: 0.2vmin solid rgba(0, 255, 255, 0.5);
+      border: 2px solid rgba(0, 255, 255, 0.5);
       display: flex;
       flex-direction: column;
       align-items: center;
@@ -665,45 +713,45 @@ function createPortalMenu() {
       cursor: pointer;
       transition: all 0.4s ease;
       backdrop-filter: blur(5px);
-      left: calc(50% + ${item.x}vmin - 3.5vmin);
-      top: calc(50% + ${item.y}vmin - 3.5vmin);
+      left: ${xPos}px;
+      top: ${yPos}px;
       opacity: 0;
-      box-shadow: 0 0 1vmin rgba(0, 255, 255, 0.2);
+      box-shadow: 0 0 ${itemSize * 0.15}px rgba(0, 255, 255, 0.2);
     `;
     
     // Icon
     const iconElement = document.createElement('div');
     iconElement.style.cssText = `
-      font-size: 2.2vmin;
-      margin-bottom: 0.2vmin;
-      filter: drop-shadow(0 0 0.5vmin rgba(0, 255, 255, 0.5));
+      font-size: ${fontSize}px;
+      margin-bottom: 2px;
+      filter: drop-shadow(0 0 ${fontSize * 0.2}px rgba(0, 255, 255, 0.5));
     `;
     iconElement.textContent = item.icon;
     
     // Text
     const textElement = document.createElement('div');
     textElement.style.cssText = `
-      font-size: 1vmin;
+      font-size: ${textSize}px;
       color: rgba(255, 255, 255, 0.9);
       text-align: center;
       font-weight: bold;
-      text-shadow: 0 0 0.5vmin rgba(0, 255, 255, 0.3);
+      text-shadow: 0 0 ${textSize * 0.3}px rgba(0, 255, 255, 0.3);
       font-family: 'Orbitron', monospace;
       line-height: 1;
     `;
     textElement.textContent = item.text;
     
-    // Hover-Effekte (responsive)
+    // Hover-Effekte (responsive mit berechneten Werten)
     menuItem.addEventListener('mouseenter', () => {
       menuItem.style.transform = 'scale(1.15)';
-      menuItem.style.boxShadow = '0 0 2vmin rgba(0, 255, 255, 0.6), 0 0 3vmin rgba(0, 255, 255, 0.3)';
+      menuItem.style.boxShadow = `0 0 ${itemSize * 0.3}px rgba(0, 255, 255, 0.6), 0 0 ${itemSize * 0.5}px rgba(0, 255, 255, 0.3)`;
       menuItem.style.background = 'rgba(0, 255, 255, 0.3)';
       menuItem.style.borderColor = 'rgba(0, 255, 255, 0.8)';
     });
     
     menuItem.addEventListener('mouseleave', () => {
       menuItem.style.transform = 'scale(1)';
-      menuItem.style.boxShadow = '0 0 1vmin rgba(0, 255, 255, 0.2)';
+      menuItem.style.boxShadow = `0 0 ${itemSize * 0.15}px rgba(0, 255, 255, 0.2)`;
       menuItem.style.background = 'rgba(0, 255, 255, 0.2)';
       menuItem.style.borderColor = 'rgba(0, 255, 255, 0.5)';
     });
@@ -823,6 +871,18 @@ function hidePortalMenu() {
       menu.remove();
       console.log('🔸 Portal-Menü entfernt');
     }, 800);
+  }
+}
+
+/**
+ * Aktualisiert das Portal-Menü bei Viewport-Änderungen
+ */
+function refreshPortalMenuOnResize() {
+  const menu = document.getElementById('portal-menu');
+  if (menu) {
+    console.log('🔄 Portal-Menü bei Resize aktualisieren');
+    // Menü ist sichtbar, also neu erstellen mit neuen Dimensionen
+    showPortalMenu();
   }
 }
 
@@ -964,3 +1024,6 @@ window.resetPortalState = function() {
  * 🔧 DEBUG: Portal-Diagnose manuell starten
  */
 window.diagnosPortal = diagnosPortalProblems;
+
+// Export für Resize-Funktionalität
+export { refreshPortalMenuOnResize };

@@ -185,6 +185,34 @@ export function createPortalMaterial() {
 // ====================================================================
 
 /**
+ * Berechnet optimale Portal-Größe basierend auf Viewport
+ * @returns {number} Portal-Größe in 3D-Einheiten
+ */
+function calculateResponsivePortalSize() {
+  const screenWidth = window.innerWidth;
+  const screenHeight = window.innerHeight;
+  const aspectRatio = screenWidth / screenHeight;
+  const isMobile = screenWidth < 768;
+  const isNarrowPortrait = aspectRatio < 0.6; // Sehr schmale Hochformat-Handys
+  
+  let portalSize;
+  
+  if (isNarrowPortrait) {
+    // Sehr schmale Handys: Portal etwas kleiner aber nicht zu klein
+    portalSize = Math.max(2.0, Math.min(screenWidth / 200, 3.0));
+  } else if (isMobile) {
+    // Normale Mobile-Geräte: Ausgewogene Größe
+    portalSize = Math.max(2.2, Math.min(screenWidth / 180, 3.2));
+  } else {
+    // Desktop: Vollgröße
+    portalSize = Math.max(2.5, Math.min(screenWidth / 150, 4.0));
+  }
+  
+  console.log(`🌀 Portal-Größe berechnet: ${portalSize.toFixed(2)} (Screen: ${screenWidth}x${screenHeight}, Ratio: ${aspectRatio.toFixed(2)})`);
+  return portalSize;
+}
+
+/**
  * Erstellt die Portal-Geometrie und fügt sie zur Szene hinzu
  * @param {THREE.Scene} scene - Die 3D-Szene
  * @param {THREE.ShaderMaterial} portalMaterial - Das Portal-Material
@@ -193,9 +221,11 @@ export function createPortalMaterial() {
 export function createPortalGeometry(scene, portalMaterial) {
   console.log('🔷 Erstelle Portal-Geometrie...');
   
-  // Plane Geometry - flache Rechteck-Fläche für das Portal
-  // Parameter: Breite (2.5), Höhe (2.5), Segmente (1x1 = einfach) - KLEINER für weniger Weiß!
-  const portalGeo = new THREE.PlaneGeometry(2.5, 2.5, 1, 1);
+  // Responsive Portal-Größe berechnen
+  const portalSize = calculateResponsivePortalSize();
+  
+  // Plane Geometry - flache Rechteck-Fläche für das Portal (jetzt responsive!)
+  const portalGeo = new THREE.PlaneGeometry(portalSize, portalSize, 1, 1);
   
   // Mesh erstellen - verbindet Geometrie mit Material
   const portalMesh = new THREE.Mesh(portalGeo, portalMaterial);
@@ -205,8 +235,37 @@ export function createPortalGeometry(scene, portalMaterial) {
   portalMesh.renderOrder = 1000;  // Hohe Priorität = im Vordergrund
   portalMesh.position.z = 0.1;    // Leicht nach vorne
   
+  // Portal-Größe für spätere Resize-Events speichern
+  portalMesh.userData.originalSize = portalSize;
+  
   scene.add(portalMesh);
   return portalMesh;
+}
+
+/**
+ * Passt Portal-Größe bei Viewport-Änderungen an
+ * @param {THREE.Mesh} portalMesh - Das Portal-Mesh
+ */
+export function resizePortal(portalMesh) {
+  if (!portalMesh || !portalMesh.geometry) return;
+  
+  const newSize = calculateResponsivePortalSize();
+  const currentSize = portalMesh.userData.originalSize || 2.5;
+  
+  // Nur wenn sich die Größe signifikant ändert (> 10% Unterschied)
+  if (Math.abs(newSize - currentSize) > 0.25) {
+    console.log(`🔄 Portal-Größe anpassen: ${currentSize.toFixed(2)} → ${newSize.toFixed(2)}`);
+    
+    // Neue Geometrie erstellen
+    const newGeometry = new THREE.PlaneGeometry(newSize, newSize, 1, 1);
+    
+    // Alte Geometrie entsorgen (Memory-Management)
+    portalMesh.geometry.dispose();
+    
+    // Neue Geometrie zuweisen
+    portalMesh.geometry = newGeometry;
+    portalMesh.userData.originalSize = newSize;
+  }
 }
 
 // ====================================================================

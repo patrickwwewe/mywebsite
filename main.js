@@ -219,7 +219,7 @@ async function initialize() {
     // ================================================================
     // SCHRITT 12: EVENT-LISTENER
     // ================================================================
-    setupResizeHandler(camera, renderer, composer, portalUniforms);
+    setupResizeHandler(camera, renderer, composer, portalUniforms, portalMesh);
     
     // ================================================================
     // SCHRITT 13: FINALE KONFIGURATION
