@@ -28,26 +28,49 @@
     🔄 LOADING SCREEN - LADE-BILDSCHIRM
     ==========================================
     -->
-    <div id="loadingOverlay"> <!--Haupt Container für Loading Screen-->
-        <div class="loading-content"> </div> <!-- CSS Klasse
-            - id="eindeutig" = Nur EINMAL pro Seite
-            - class="gruppe" = Kann MEHRFACH verwendet werden -->
-
+    <!-- LOADING SCREEN - Korrigiert -->
+    <div id="loadingOverlay">
+        <div class="loading-content">
             <div class="loading-title">🚀 SPACE ADVENTURE</div>
             <div>Lade 3D-Assets...</div>
-
-            <!--Progress Bar Container-->
+            
             <div class="loading-progress">
                 <div class="loading-progress-bar" id="loadingBar"></div>
             </div>
-            <!-- Dynamischer Loading-Text (wird per JavaScript geändert) -->
-
-            <div id="loadingText">Initialisiere Game Engine...</div>
             
-            <!-- Error-Anzeige (standardmäßig versteckt) -->
+            <div id="loadingText">Initialisiere Game Engine...</div>
             <div class="error-message" id="errorDisplay" style="display: none;"></div>
         </div>
-
     </div>
+
+    <!-- GAME UI - Korrigiert -->
+    <div id="gameUI">
+        <!-- Stats Panel (oben links) -->
+        <div class="ui-panel top-left">
+            <div class="stat-item">
+                <span>Level:</span>
+                <span id="levelValue">1</span>
+            </div>
+        </div>
+        
+        <!-- Performance Panel (oben rechts) -->
+        <div class="ui-panel top-right">
+            <div class="stat-item">
+                <span>FPS:</span>
+                <span id="fpsValue">60</span>
+            </div>
+        </div>
+
+        <!-- Controls Panel (unten mitte) -->
+        <div class="ui-panel bottom-center">
+            <div class="controls-grid">
+                <div><strong>WASD:</strong> Bewegen</div>
+                <div><strong>SPACE:</strong> Springen</div>
+                <div><strong>SHIFT:</strong> Rennen</div>
+                <div><strong>Maus:</strong> Kamera</div>
+            </div>
+        </div>
+    </div>
+
     </body>
 </html>
