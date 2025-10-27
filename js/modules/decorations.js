@@ -278,7 +278,7 @@ function createPulsingBackgroundStars(scene) {
     // Einzelne Sterne als separate Meshes für individuelle Animation
     const starGeometry = new THREE.BufferGeometry();
     const positions = new Float32Array([0, 0, 0]); // Ein einzelner Punkt
-    starGeometry.setAttribute('position', new THREE.BufferAttribute(positions, 1));
+    starGeometry.setAttribute('position', new THREE.BufferAttribute(positions, 3));
     
     // Zufällige Position weit hinten
     const angle = Math.random() * Math.PI * 2;
@@ -332,7 +332,7 @@ function createBigForegroundStars(scene) {
   for (let i = 0; i < 3; i++) {
     const starGeometry = new THREE.BufferGeometry();
     const positions = new Float32Array([0, 0, 0]);
-    starGeometry.setAttribute('position', new THREE.BufferAttribute(positions, 1));
+    starGeometry.setAttribute('position', new THREE.BufferAttribute(positions, 3));
     
     // Große, helle Sterne
     const starMaterial = new THREE.PointsMaterial({
