@@ -72,5 +72,72 @@
         </div>
     </div>
 
+    <!-- ========================================= -->
+    <!-- 📚 EXTERNE JAVASCRIPT-BIBLIOTHEKEN LADEN -->
+    <!-- ========================================= -->
+    
+    <!-- THREE.JS CORE - Das Herzstück für 3D-Grafiken -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    
+    <!-- THREE.JS GLTF LOADER - Für .glb Dateien -->
+    <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/loaders/GLTFLoader.js"></script>
+
+    <!-- ========================================= -->
+    <!-- 🎮 UNSERE GAME MODULE                    -->
+    <!-- ========================================= -->
+    
+    <!-- GameEngine = Haupt-Klasse, lädt und zeigt das GLB-Modell -->
+    <script src="modules/GameEngine.js"></script>
+
+    <!-- ========================================= -->
+    <!-- 🚀 SPIEL STARTEN                         -->
+    <!-- ========================================= -->
+    <script>
+        // GLOBALE SPIEL-VARIABLE
+        let spaceAdventure = null;
+
+        // SPIEL INITIALISIEREN
+        async function initGame() {
+            try {
+                console.log("🚀 Starting Space Adventure Game...");
+                
+                // GameEngine erstellen und starten
+                spaceAdventure = new GameEngine();
+                await spaceAdventure.initialize();
+                
+                console.log("✅ Game initialized successfully!");
+                
+            } catch (error) {
+                console.error("❌ Game initialization failed:", error);
+                
+                // Fehler im UI anzeigen
+                const errorDisplay = document.getElementById('errorDisplay');
+                if (errorDisplay) {
+                    errorDisplay.textContent = `Fehler: ${error.message}`;
+                    errorDisplay.style.display = 'block';
+                }
+            }
+        }
+
+        // ERROR HANDLING
+        window.addEventListener('error', (event) => {
+            console.error('Global Error:', event.error);
+        });
+
+        window.addEventListener('unhandledrejection', (event) => {
+            console.error('Unhandled Promise Rejection:', event.reason);
+        });
+
+        // SPIEL STARTEN wenn Seite geladen ist
+        window.addEventListener('load', initGame);
+
+        // FENSTER-RESIZE behandeln
+        window.addEventListener('resize', () => {
+            if (spaceAdventure) {
+                spaceAdventure.handleResize();
+            }
+        });
+    </script>
+
     </body>
 </html>
