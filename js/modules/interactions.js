@@ -628,7 +628,7 @@ function createPortalMenu() {
   
   console.log(`📱 Screen: ${screenWidth}x${screenHeight}, Ratio: ${aspectRatio.toFixed(2)}, Mobile: ${isMobile}, Portrait: ${isPortrait}, Narrow: ${isNarrowPortrait}`);
   
-  // Vereinfachte, näher am Original orientierte Größenberechnung
+  // Intelligente Größenberechnung mit Mindestabstand zum Portal
   let containerSize;
   let itemSize;
   let itemOffset;
@@ -638,10 +638,10 @@ function createPortalMenu() {
   if (isNarrowPortrait) {
     // Sehr schmale Handys: Etwas kleiner aber nicht dramatisch
     const vmin = Math.min(screenWidth, screenHeight);
-    containerSize = vmin * 0.35; // Etwas größer als vorher
-    itemSize = vmin * 0.08; // Ca. 8% von vmin
-    itemOffset = vmin * 0.12; // 12% für Positionierung
-    fontSize = Math.max(vmin * 0.03, 16); // Responsive Font basierend auf vmin
+    containerSize = vmin * 0.35;
+    itemSize = vmin * 0.08;
+    itemOffset = vmin * 0.12;
+    fontSize = Math.max(vmin * 0.03, 16);
     textSize = Math.max(vmin * 0.012, 9);
   } else if (isMobile) {
     // Mobile: Näher am Original vmin-Ansatz
@@ -652,13 +652,20 @@ function createPortalMenu() {
     fontSize = Math.max(vmin * 0.032, 14);
     textSize = Math.max(vmin * 0.013, 8);
   } else {
-    // Desktop: Original vmin-System
+    // Desktop: Intelligente Berechnung verhindert Portal-Überlappung
     const vmin = Math.min(screenWidth, screenHeight);
-    containerSize = vmin * 0.3;
-    itemSize = vmin * 0.07;
-    itemOffset = vmin * 0.1;
-    fontSize = vmin * 0.022;
-    textSize = vmin * 0.01;
+    const baseContainerSize = vmin * 0.3;
+    
+    // WICHTIG: Mindestabstand zum Portal sicherstellen
+    const minContainerSize = 280; // Mindestgröße um Portal-Überlappung zu verhindern
+    containerSize = Math.max(baseContainerSize, minContainerSize);
+    
+    // Items und Offset proportional anpassen
+    const scale = containerSize / baseContainerSize;
+    itemSize = Math.max(vmin * 0.07, 50) * Math.min(scale, 1.2); // Max 20% größer
+    itemOffset = Math.max(vmin * 0.1, 80) * Math.min(scale, 1.3); // Max 30% größer für Abstand
+    fontSize = Math.max(vmin * 0.022, 18);
+    textSize = Math.max(vmin * 0.01, 8);
   }
   
   console.log(`🎯 Berechnete Größen: Container: ${containerSize}px, Item: ${itemSize}px, Offset: ${itemOffset}px`);
