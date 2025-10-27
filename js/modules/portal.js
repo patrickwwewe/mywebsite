@@ -211,17 +211,14 @@ function calculateResponsivePortalSize() {
   let portalSize;
   
   if (isNarrowPortrait) {
-    // Sehr schmale Handys: Portal deutlich kleiner, basierend auf Breite
-    portalSize = Math.max(1.8, Math.min(screenWidth / 220, 2.5));
+    // Sehr schmale Handys: Nur leicht kleiner als Original
+    portalSize = 2.2;
   } else if (isPortrait && isMobile) {
-    // Normale Hochformat-Handys: Portal etwas kleiner
-    portalSize = Math.max(2.0, Math.min(screenWidth / 190, 2.8));
-  } else if (isMobile) {
-    // Mobile Querformat: Normale Mobile-Größe
-    portalSize = Math.max(2.2, Math.min(screenWidth / 180, 3.2));
+    // Normale Hochformat-Handys: Fast Original-Größe
+    portalSize = 2.3;
   } else {
-    // Desktop: Vollgröße
-    portalSize = Math.max(2.5, Math.min(screenWidth / 150, 4.0));
+    // Desktop UND Mobile Querformat: Original-Größe beibehalten
+    portalSize = 2.5;
   }
   
   console.log(`🌀 Portal-Größe berechnet: ${portalSize.toFixed(2)} (Screen: ${screenWidth}x${screenHeight}, Ratio: ${aspectRatio.toFixed(2)}, Portrait: ${isPortrait})`);

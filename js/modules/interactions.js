@@ -628,7 +628,7 @@ function createPortalMenu() {
   
   console.log(`📱 Screen: ${screenWidth}x${screenHeight}, Ratio: ${aspectRatio.toFixed(2)}, Mobile: ${isMobile}, Portrait: ${isPortrait}, Narrow: ${isNarrowPortrait}`);
   
-  // Intelligente Größenberechnung basierend auf Bildschirm-Verhältnis
+  // Vereinfachte, näher am Original orientierte Größenberechnung
   let containerSize;
   let itemSize;
   let itemOffset;
@@ -636,26 +636,29 @@ function createPortalMenu() {
   let textSize;
   
   if (isNarrowPortrait) {
-    // Sehr schmale Handys: Größe basierend auf Breite (nicht vmin!)
-    containerSize = Math.min(screenWidth * 0.8, 280); // Max 80% der Breite oder 280px
-    itemSize = containerSize * 0.25; // 25% der Container-Größe
-    itemOffset = containerSize * 0.35; // 35% für Positionierung
-    fontSize = Math.max(itemSize * 0.4, 18); // Mindestens 18px für Touch
-    textSize = Math.max(itemSize * 0.18, 10); // Mindestens 10px für Lesbarkeit
+    // Sehr schmale Handys: Etwas kleiner aber nicht dramatisch
+    const vmin = Math.min(screenWidth, screenHeight);
+    containerSize = vmin * 0.35; // Etwas größer als vorher
+    itemSize = vmin * 0.08; // Ca. 8% von vmin
+    itemOffset = vmin * 0.12; // 12% für Positionierung
+    fontSize = Math.max(vmin * 0.03, 16); // Responsive Font basierend auf vmin
+    textSize = Math.max(vmin * 0.012, 9);
   } else if (isMobile) {
-    // Normale Mobile-Geräte: Balance zwischen vmin und festen Größen
-    containerSize = Math.min(30 * (screenWidth / 100), screenHeight * 0.4, 300);
-    itemSize = Math.max(containerSize * 0.23, 50); // Mindestens 50px für Touch
-    itemOffset = containerSize * 0.32;
-    fontSize = Math.max(itemSize * 0.35, 16);
-    textSize = Math.max(itemSize * 0.16, 9);
+    // Mobile: Näher am Original vmin-Ansatz
+    const vmin = Math.min(screenWidth, screenHeight);
+    containerSize = vmin * 0.4;
+    itemSize = Math.max(vmin * 0.09, 45); // Mindestens 45px für Touch
+    itemOffset = vmin * 0.13;
+    fontSize = Math.max(vmin * 0.032, 14);
+    textSize = Math.max(vmin * 0.013, 8);
   } else {
-    // Desktop: vmin funktioniert gut
-    containerSize = Math.min(screenWidth, screenHeight) * 0.3;
-    itemSize = containerSize * 0.23;
-    itemOffset = containerSize * 0.32;
-    fontSize = itemSize * 0.35;
-    textSize = itemSize * 0.16;
+    // Desktop: Original vmin-System
+    const vmin = Math.min(screenWidth, screenHeight);
+    containerSize = vmin * 0.3;
+    itemSize = vmin * 0.07;
+    itemOffset = vmin * 0.1;
+    fontSize = vmin * 0.022;
+    textSize = vmin * 0.01;
   }
   
   console.log(`🎯 Berechnete Größen: Container: ${containerSize}px, Item: ${itemSize}px, Offset: ${itemOffset}px`);
