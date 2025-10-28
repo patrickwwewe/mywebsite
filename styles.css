@@ -399,8 +399,15 @@ canvas {
   
   /* Radiales Menü für Touch-Geräte optimieren */
   .radial-item {
-    width: 70px;               /* Kleinere Touch-Targets */
-    height: 70px;
+    width: 110px;              /* NOCH GRÖßERE Touch-Targets für längere Texte */
+    height: 110px;
+    font-size: 10px;           /* Kleinere Schrift für mehr Platz */
+    line-height: 1.0;          /* Sehr kompakte Zeilenhöhe */
+  }
+  
+  .radial-item-text {
+    padding: 1px;              /* Minimales Padding für maximalen Textplatz */
+    word-break: break-word;    /* Erlaubt Wörter zu umbrechen falls nötig */
   }
   
   .radial-center {

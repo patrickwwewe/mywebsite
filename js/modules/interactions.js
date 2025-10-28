@@ -622,11 +622,12 @@ function createPortalMenu() {
   const screenWidth = window.innerWidth;
   const screenHeight = window.innerHeight;
   const aspectRatio = screenWidth / screenHeight;
-  const isMobile = screenWidth < 768;
+  const isMobile = screenWidth < 768 || /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
   const isPortrait = aspectRatio < 1;
   const isNarrowPortrait = aspectRatio < 0.6; // Sehr schmale Hochformat-Handys
   
   console.log(`📱 Screen: ${screenWidth}x${screenHeight}, Ratio: ${aspectRatio.toFixed(2)}, Mobile: ${isMobile}, Portrait: ${isPortrait}, Narrow: ${isNarrowPortrait}`);
+  console.log(`🔍 UserAgent: ${navigator.userAgent}`);
   
   // Intelligente Größenberechnung mit Mindestabstand zum Portal
   let containerSize;
@@ -636,21 +637,21 @@ function createPortalMenu() {
   let textSize;
   
   if (isNarrowPortrait) {
-    // Sehr schmale Handys: Etwas kleiner aber nicht dramatisch
+    // Sehr schmale Handys: GRÖßERE Items für bessere Touch-Bedienung  
     const vmin = Math.min(screenWidth, screenHeight);
-    containerSize = vmin * 0.35;
-    itemSize = vmin * 0.08;
-    itemOffset = vmin * 0.12;
-    fontSize = Math.max(vmin * 0.03, 16);
-    textSize = Math.max(vmin * 0.012, 9);
+    containerSize = vmin * 0.6; // GRÖßER: von 0.35 auf 0.6
+    itemSize = Math.max(vmin * 0.14, 70); // GRÖßER: von 0.08 auf 0.14, minimum 70px
+    itemOffset = vmin * 0.22; // WEITER WEG: von 0.12 auf 0.22
+    fontSize = Math.max(vmin * 0.035, 16);
+    textSize = Math.max(vmin * 0.015, 10);
   } else if (isMobile) {
-    // Mobile: Näher am Original vmin-Ansatz
+    // Mobile: GRÖßERE Items und WEITER VOM PORTAL weg für bessere Touch-Bedienung
     const vmin = Math.min(screenWidth, screenHeight);
-    containerSize = vmin * 0.4;
-    itemSize = Math.max(vmin * 0.09, 45); // Mindestens 45px für Touch
-    itemOffset = vmin * 0.13;
-    fontSize = Math.max(vmin * 0.032, 14);
-    textSize = Math.max(vmin * 0.013, 8);
+    containerSize = vmin * 0.7; // Größerer Container
+    itemSize = Math.max(vmin * 0.15, 80); // GRÖßERE Items: 80px minimum
+    itemOffset = vmin * 0.25; // WEITER WEG aber vernünftig
+    fontSize = Math.max(vmin * 0.035, 16);
+    textSize = Math.max(vmin * 0.015, 10);
   } else {
     // Desktop: Berücksichtigt Portal-Breite bei schmalen Fenstern
     const vmin = Math.min(screenWidth, screenHeight);
@@ -703,11 +704,12 @@ function createPortalMenu() {
   `;
   
   // 4 Menüpunkte definieren - Positionen als Faktoren (werden mit itemOffset multipliziert)
+  // Mobile-optimierte Texte für bessere Platznutzung
   const menuItems = [
     { icon: '🚀', text: 'Play', x: -1, y: -0.67, id: 'play' },       // Top Left
-    { icon: '👨‍💻', text: 'Über mich', x: 1, y: -0.67, id: 'überMich' }, // Top Right
-    { icon: '📋', text: 'Impressum', x: 1, y: 0.67, id: 'impressum' }, // Bottom Right
-    { icon: '🔐', text: 'Anmelden', x: -1, y: 0.67, id: 'andmelden' } // Bottom Left
+    { icon: '👨‍💻', text: isMobile ? 'Über\nmich' : 'Über mich', x: 1, y: -0.67, id: 'überMich' }, // Top Right
+    { icon: '📋', text: isMobile ? 'Info' : 'Impressum', x: 1, y: 0.67, id: 'impressum' }, // Bottom Right
+    { icon: '🔐', text: isMobile ? 'Login' : 'Anmelden', x: -1, y: 0.67, id: 'andmelden' } // Bottom Left
   ]
   
   // Menüpunkte erstellen
@@ -715,9 +717,18 @@ function createPortalMenu() {
     const menuItem = document.createElement('div');
     menuItem.className = `menu-item menu-item-${item.id}`;
     
-    // Berechnete Positionen
-    const xPos = containerSize / 2 + (item.x * itemOffset) - itemSize / 2;
-    const yPos = containerSize / 2 + (item.y * itemOffset) - itemSize / 2;
+    // Berechnete Positionen - bei schmalen Handys: horizontal näher, vertikal weiter
+    let xMultiplier = item.x;
+    let yMultiplier = item.y;
+    
+    if (isNarrowPortrait) {
+      // Für schmale Handys: X-Positionen näher (0.7x), Y-Positionen weiter (1.4x)
+      xMultiplier = item.x * 0.7; // Horizontal näher zum Portal
+      yMultiplier = item.y * 1.4; // Vertikal weiter vom Portal weg
+    }
+    
+    const xPos = containerSize / 2 + (xMultiplier * itemOffset) - itemSize / 2;
+    const yPos = containerSize / 2 + (yMultiplier * itemOffset) - itemSize / 2;
     
     menuItem.style.cssText = `
       position: absolute;

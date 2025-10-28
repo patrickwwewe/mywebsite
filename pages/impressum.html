@@ -67,6 +67,52 @@
             color: rgba(255, 255, 255, 0.9);
         }
 
+        /* Link-Styling mit Overflow-Schutz */
+        a {
+            color: #00f0ff;
+            text-decoration: underline;
+            word-break: break-all; /* Bricht lange URLs um */
+            overflow-wrap: break-word; /* Alternative für bessere Browser-Unterstützung */
+            hyphens: auto; /* Automatische Worttrennungen */
+            display: inline-block;
+            max-width: 100%; /* Nie breiter als Container */
+        }
+
+        a:hover {
+            color: #66ffff;
+            text-shadow: 0 0 5px rgba(0, 240, 255, 0.5);
+        }
+
+        /* Listen-Styling */
+        ul {
+            margin-left: 1rem;
+            color: rgba(255, 255, 255, 0.9);
+            line-height: 1.8;
+        }
+
+        /* Verbesserte mobile Unterstützung für sehr schmale Bildschirme */
+        @media (max-width: 480px) {
+            .container {
+                padding: 1rem;
+                margin: 0.5rem;
+            }
+            
+            h1 {
+                font-size: 1.8rem;
+            }
+            
+            /* Noch aggressiverer Text-Umbruch auf sehr kleinen Bildschirmen */
+            a {
+                word-break: break-all;
+                line-height: 1.4;
+                font-size: 0.9rem; /* Kleinere Schrift für bessere Platznutzung */
+            }
+            
+            p {
+                font-size: 0.9rem;
+            }
+        }
+
         .info-box {
             background: rgba(0, 255, 255, 0.1);
             border: 1px solid rgba(0, 255, 255, 0.3);
