@@ -1,0 +1,952 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Über mich - Patrick</title>
+    <style>
+        /* ====================================================================
+                               ÜBER MICH - MINIMALISTISCHES DESIGN
+           ====================================================================
+           Dunkles, elegantes Design ähnlich dem Ladebildschirm mit 
+           minimalistischem weißen Menübalken oben
+           ==================================================================== */
+
+        :root {
+            --bg-dark: #03050a;
+            --bg-secondary: #0a0f1a;
+            --accent-white: rgba(255,255,255,0.9);
+            --accent-dim: rgba(255,255,255,0.6);
+            --accent-subtle: rgba(255,255,255,0.3);
+            --neon-cyan: #00f0ff;
+            --glass: rgba(255,255,255,0.04);
+            --border-subtle: rgba(255,255,255,0.1);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: var(--bg-dark);
+            font-family: 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto;
+            color: var(--accent-white);
+            overflow-x: hidden;
+            min-height: 100vh;
+        }
+
+        /* ====================================================================
+                                   MINIMALISTISCHER HEADER
+           ====================================================================
+           Weißer horizontaler Strich mit 5 Menüpunkten
+           ==================================================================== */
+
+        .header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+            background: rgba(3, 5, 10, 0.95);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid var(--border-subtle);
+        }
+
+        .header-line {
+            width: 100%;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, var(--accent-white), transparent);
+            margin-bottom: 20px;
+        }
+
+        .nav-menu {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px 40px;
+            gap: 60px;
+        }
+
+        .nav-item {
+            color: var(--accent-dim);
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: 400;
+            letter-spacing: 0.5px;
+            transition: all 0.3s ease;
+            position: relative;
+            text-transform: uppercase;
+        }
+
+        .nav-item:hover {
+            color: var(--accent-white);
+        }
+
+        .nav-item.active {
+            color: var(--neon-cyan);
+        }
+
+        .nav-item.active::after {
+            content: '';
+            position: absolute;
+            bottom: -8px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 4px;
+            height: 4px;
+            background: var(--neon-cyan);
+            border-radius: 50%;
+            box-shadow: 0 0 10px var(--neon-cyan);
+        }
+
+        /* ====================================================================
+                                   MAIN CONTENT AREA
+           ====================================================================
+           Dunkler, eleganter Inhaltsbereich mit Glasmorphism-Karten
+           ==================================================================== */
+
+        .main-content {
+            margin-top: 100px;
+            padding: 60px 40px;
+            max-width: 1200px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .hero-section {
+            text-align: center;
+            margin-bottom: 80px;
+        }
+
+        .hero-title {
+            font-size: clamp(2.5rem, 5vw, 4rem);
+            font-weight: 300;
+            margin-bottom: 20px;
+            background: linear-gradient(135deg, var(--accent-white), var(--neon-cyan));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .hero-subtitle {
+            font-size: 1.2rem;
+            color: var(--accent-dim);
+            font-weight: 300;
+            letter-spacing: 1px;
+        }
+
+        /* ====================================================================
+                                   CONTENT GRID
+           ====================================================================
+           Glasmorphism-Karten mit eleganten Effekten
+           ==================================================================== */
+
+        .content-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 30px;
+            margin-bottom: 60px;
+        }
+
+        .content-card {
+            background: linear-gradient(135deg, var(--glass), rgba(255,255,255,0.02));
+            border: 1px solid var(--border-subtle);
+            border-radius: 12px;
+            padding: 40px;
+            backdrop-filter: blur(10px);
+            transition: all 0.4s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .content-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, var(--neon-cyan), transparent);
+            transition: left 0.6s ease;
+        }
+
+        .content-card:hover::before {
+            left: 100%;
+        }
+
+        .content-card:hover {
+            border-color: rgba(0, 240, 255, 0.3);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+            transform: translateY(-5px);
+        }
+
+        .card-icon {
+            font-size: 2.5rem;
+            margin-bottom: 20px;
+            display: block;
+        }
+
+        .card-title {
+            font-size: 1.4rem;
+            font-weight: 500;
+            margin-bottom: 15px;
+            color: var(--accent-white);
+        }
+
+        .card-text {
+            color: var(--accent-dim);
+            line-height: 1.6;
+            font-size: 0.95rem;
+        }
+
+        /* ====================================================================
+                                   EXPERIENCE TIMELINE
+           ====================================================================
+           Elegante Timeline für Berufserfahrung
+           ==================================================================== */
+
+        .experience-section {
+            margin: 80px 0;
+        }
+
+        .timeline {
+            position: relative;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px 0;
+        }
+
+        .timeline::before {
+            content: '';
+            position: absolute;
+            left: 50%;
+            top: 0;
+            bottom: 0;
+            width: 1px;
+            background: linear-gradient(180deg, transparent, var(--neon-cyan), transparent);
+            transform: translateX(-50%);
+        }
+
+        .timeline-item {
+            position: relative;
+            margin: 40px 0;
+            display: flex;
+            align-items: flex-start;
+        }
+
+        .timeline-item:nth-child(odd) {
+            flex-direction: row;
+        }
+
+        .timeline-item:nth-child(even) {
+            flex-direction: row-reverse;
+        }
+
+        .timeline-date {
+            flex: 0 0 120px;
+            text-align: center;
+            color: var(--neon-cyan);
+            font-size: 0.85rem;
+            font-weight: 600;
+            background: var(--bg-dark);
+            padding: 8px 12px;
+            border-radius: 20px;
+            border: 1px solid rgba(0, 240, 255, 0.3);
+            margin: 0 20px;
+            position: relative;
+            z-index: 2;
+        }
+
+        .timeline-content {
+            flex: 1;
+            background: linear-gradient(135deg, var(--glass), rgba(255,255,255,0.02));
+            border: 1px solid var(--border-subtle);
+            border-radius: 12px;
+            padding: 25px;
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            transition: all 0.4s ease;
+        }
+
+        .timeline-content:hover {
+            border-color: rgba(0, 240, 255, 0.3);
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+        }
+
+        .timeline-title {
+            font-size: 1.2rem;
+            font-weight: 600;
+            margin-bottom: 8px;
+            color: var(--accent-white);
+        }
+
+        .timeline-role {
+            color: var(--neon-cyan);
+            font-size: 0.9rem;
+            font-weight: 500;
+            margin-bottom: 15px;
+        }
+
+        .timeline-details {
+            list-style: none;
+            padding: 0;
+        }
+
+        .timeline-details li {
+            color: var(--accent-dim);
+            font-size: 0.85rem;
+            line-height: 1.5;
+            margin-bottom: 8px;
+            padding-left: 20px;
+            position: relative;
+        }
+
+        .timeline-details li::before {
+            content: '▸';
+            position: absolute;
+            left: 0;
+            color: var(--neon-cyan);
+            font-size: 0.7rem;
+        }
+
+        /* ====================================================================
+                                   SKILLS SECTION
+           ====================================================================
+           Minimalistic Progress Bars mit Glow-Effekt
+           ==================================================================== */
+
+        .skills-section {
+            margin-top: 80px;
+        }
+
+        .section-title {
+            font-size: 2rem;
+            font-weight: 300;
+            text-align: center;
+            margin-bottom: 50px;
+            color: var(--accent-white);
+        }
+
+        .skills-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 25px;
+        }
+
+        .skill-item {
+            padding: 20px 0;
+        }
+
+        .skill-name {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 10px;
+            font-size: 0.9rem;
+            color: var(--accent-dim);
+        }
+
+        .skill-bar {
+            width: 100%;
+            height: 2px;
+            background: rgba(255,255,255,0.1);
+            border-radius: 1px;
+            overflow: hidden;
+        }
+
+        .skill-progress {
+            height: 100%;
+            background: linear-gradient(90deg, var(--neon-cyan), rgba(0, 240, 255, 0.6));
+            border-radius: 1px;
+            transition: width 2s ease;
+            box-shadow: 0 0 10px rgba(0, 240, 255, 0.3);
+            width: 0%; /* Initial state */
+        }
+
+        /* Skill Level Classes */
+        .skill-95 { width: 95% !important; }
+        .skill-92 { width: 92% !important; }
+        .skill-90 { width: 90% !important; }
+        .skill-88 { width: 88% !important; }
+        .skill-85 { width: 85% !important; }
+        .skill-82 { width: 82% !important; }
+        .skill-80 { width: 80% !important; }
+
+        /* Skill Categories */
+        .skill-category {
+            margin-bottom: 50px;
+        }
+
+        .skill-category-title {
+            font-size: 1.4rem;
+            font-weight: 500;
+            color: var(--accent-white);
+            margin-bottom: 25px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid var(--border-subtle);
+        }
+
+        /* ====================================================================
+                                   PERSONAL SECTION
+           ====================================================================
+           Persönliche Skills, Sprachen und Hobbies
+           ==================================================================== */
+
+        .personal-section {
+            margin-top: 80px;
+        }
+
+        .personal-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+        }
+
+        .personal-card {
+            background: linear-gradient(135deg, var(--glass), rgba(255,255,255,0.02));
+            border: 1px solid var(--border-subtle);
+            border-radius: 12px;
+            padding: 30px;
+            -webkit-backdrop-filter: blur(10px);
+            backdrop-filter: blur(10px);
+            transition: all 0.4s ease;
+            text-align: center;
+        }
+
+        .personal-card:hover {
+            border-color: rgba(0, 240, 255, 0.3);
+            transform: translateY(-5px);
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2);
+        }
+
+        .language-list {
+            text-align: left;
+            margin-top: 20px;
+        }
+
+        .language-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 8px 0;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+        }
+
+        .language-item:last-child {
+            border-bottom: none;
+        }
+
+        .language-level {
+            color: var(--neon-cyan);
+            font-size: 0.85rem;
+            font-weight: 500;
+        }
+
+        .soft-skills {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            justify-content: center;
+            margin-top: 20px;
+        }
+
+        .skill-tag {
+            background: rgba(0, 240, 255, 0.1);
+            color: var(--neon-cyan);
+            padding: 6px 12px;
+            border-radius: 15px;
+            font-size: 0.8rem;
+            border: 1px solid rgba(0, 240, 255, 0.3);
+            transition: all 0.3s ease;
+        }
+
+        .skill-tag:hover {
+            background: rgba(0, 240, 255, 0.2);
+            transform: translateY(-2px);
+        }
+
+        .hobbies {
+            text-align: left;
+            margin-top: 20px;
+        }
+
+        .hobby-item {
+            display: flex;
+            align-items: center;
+            padding: 10px 0;
+            color: var(--accent-dim);
+            transition: color 0.3s ease;
+        }
+
+        .hobby-item:hover {
+            color: var(--accent-white);
+        }
+
+        .hobby-icon {
+            margin-right: 12px;
+            font-size: 1.2rem;
+        }
+
+        /* ====================================================================
+                                   RESPONSIVE DESIGN
+           ====================================================================
+           Mobile-optimierte Anpassungen
+           ==================================================================== */
+
+        @media (max-width: 768px) {
+            .nav-menu {
+                gap: 20px;
+                padding: 15px 20px;
+                flex-wrap: wrap;
+            }
+
+            .nav-item {
+                font-size: 11px;
+                padding: 5px 8px;
+            }
+
+            .main-content {
+                padding: 40px 20px;
+                margin-top: 80px;
+            }
+
+            .content-grid, .personal-grid {
+                grid-template-columns: 1fr;
+                gap: 20px;
+            }
+
+            .content-card, .personal-card {
+                padding: 25px 20px;
+            }
+
+            /* Mobile Timeline */
+            .timeline::before {
+                left: 20px;
+            }
+
+            .timeline-item {
+                flex-direction: column !important;
+                padding-left: 50px;
+            }
+
+            .timeline-item:nth-child(even) {
+                flex-direction: column !important;
+            }
+
+            .timeline-date {
+                flex: none;
+                margin: 0 0 15px 0;
+                align-self: flex-start;
+                font-size: 0.75rem;
+                padding: 6px 10px;
+            }
+
+            .timeline-content {
+                width: 100%;
+                padding: 20px;
+            }
+
+            .timeline-title {
+                font-size: 1.1rem;
+            }
+
+            .timeline-details li {
+                font-size: 0.8rem;
+            }
+
+            /* Mobile Skills */
+            .skills-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .skill-category-title {
+                font-size: 1.2rem;
+            }
+
+            .soft-skills {
+                gap: 6px;
+            }
+
+            .skill-tag {
+                font-size: 0.75rem;
+                padding: 4px 8px;
+            }
+        }
+
+        /* ====================================================================
+                                   LOADING ANIMATION
+           ====================================================================
+           Subtle Fade-in Animationen für Content
+           ==================================================================== */
+
+        .fade-in {
+            opacity: 0;
+            transform: translateY(20px);
+            animation: fadeInUp 0.8s ease forwards;
+        }
+
+        .fade-in-delay-1 { animation-delay: 0.2s; }
+        .fade-in-delay-2 { animation-delay: 0.4s; }
+        .fade-in-delay-3 { animation-delay: 0.6s; }
+
+        @keyframes fadeInUp {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- ====================================================================
+                               MINIMALISTISCHER HEADER
+         ====================================================================
+         Weißer Linie mit 5 Menüpunkten - elegant und minimalistisch
+         ==================================================================== -->
+    
+    <header class="header">
+        <div class="header-line"></div>
+        <nav class="nav-menu">
+            <a href="../index.html" class="nav-item">Portal</a>
+            <a href="#" class="nav-item active">Über mich</a>
+            <a href="../pages/play/01_index.html" class="nav-item">Projekte</a>
+            <a href="../pages/impressum.html" class="nav-item">Impressum</a>
+            <a href="#" class="nav-item">Kontakt</a>
+        </nav>
+    </header>
+
+    <!-- ====================================================================
+                               MAIN CONTENT BEREICH
+         ====================================================================
+         Dunkler, eleganter Inhalt mit Glasmorphism-Effekten
+         ==================================================================== -->
+
+    <main class="main-content">
+        <!-- Hero Section -->
+        <section class="hero-section fade-in">
+            <h1 class="hero-title">Patrick Eder</h1>
+            <p class="hero-subtitle">Full-Stack Developer & IT-Security Specialist</p>
+        </section>
+
+        <!-- Professional Experience Section -->
+        <section class="experience-section">
+            <h2 class="section-title fade-in">Berufserfahrung</h2>
+            <div class="timeline">
+                <div class="timeline-item fade-in fade-in-delay-1">
+                    <div class="timeline-date">01/2024 - 02/2025</div>
+                    <div class="timeline-content">
+                        <h3 class="timeline-title">🤖 PATHfindr gGmbH, Wien</h3>
+                        <p class="timeline-role">Lead Developer & Technical Project Manager</p>
+                        <ul class="timeline-details">
+                            <li>Leitung und technische Umsetzung eines Discord-Chatbots zur automatisierten Wirkungsmessung</li>
+                            <li>Entwicklung modularer, skalierbarer Systeme mit Python, Discord API und Google Sheets</li>
+                            <li>Implementierung mehrstufigen Session-Trackings für komplexe Beratungsanalyse</li>
+                            <li>Instagram-Bot für plattformübergreifende Interaktionsanalyse</li>
+                            <li>Logo-Design und animierte Erklärvideos für Nutzerschulungen</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="timeline-item fade-in fade-in-delay-2">
+                    <div class="timeline-date">07/2023 - 08/2023</div>
+                    <div class="timeline-content">
+                        <h3 class="timeline-title">🔌 Ploier + Hörmann, Traun</h3>
+                        <p class="timeline-role">IT & Network Infrastructure Intern</p>
+                        <ul class="timeline-details">
+                            <li>Glasfaseranschlüsse und Netzwerk-Installation</li>
+                            <li>Datenerfassung und EDV-Routinearbeiten</li>
+                            <li>Dokumentenmanagement und technische Unterstützung</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="timeline-item fade-in fade-in-delay-3">
+                    <div class="timeline-date">07/2020 - 08/2020</div>
+                    <div class="timeline-content">
+                        <h3 class="timeline-title">🏢 WAG Wohnungsanlagen, Linz</h3>
+                        <p class="timeline-role">Business Administration Intern</p>
+                        <ul class="timeline-details">
+                            <li>Kundendatenmanagement im Hausverwaltungsprogramm</li>
+                            <li>Arbeit mit .Net-Framework und Domizil+ Software</li>
+                            <li>Kundenkontakt und professionelle Kundenbetreuung</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Content Grid -->
+        <section class="content-grid">
+            <div class="content-card fade-in fade-in-delay-1">
+                <span class="card-icon">👨‍💻</span>
+                <h3 class="card-title">Über mich</h3>
+                <p class="card-text">
+                    HAK-Absolvent mit starkem Fokus auf IT-Security und Softwareentwicklung. 
+                    Kombiniere kaufmännische Expertise mit technischer Innovationskraft.
+                    Spezialisiert auf 3D-Webanwendungen, API-Integration und Cybersecurity.
+                </p>
+            </div>
+
+            <div class="content-card fade-in fade-in-delay-2">
+                <span class="card-icon">🛡️</span>
+                <h3 class="card-title">IT-Security Expertise</h3>
+                <p class="card-text">
+                    Fundierte Kenntnisse in Penetration Testing, Vulnerability Assessment und 
+                    Web-Security. Erfahrung mit Tools wie Metasploit, Nmap, Wireshark und 
+                    verschiedenen Security-Frameworks (OSSTMM).
+                </p>
+            </div>
+
+            <div class="content-card fade-in fade-in-delay-3">
+                <span class="card-icon">🌐</span>
+                <h3 class="card-title">Entwicklung & Design</h3>
+                <p class="card-text">
+                    Full-Stack Entwicklung mit C#, Python und modernen Web-Technologien.
+                    3D-Visualisierung mit Three.js, Unity und Blender. 
+                    Multimedia-Design mit Adobe Creative Suite.
+                </p>
+            </div>
+        </section>
+
+        <!-- Skills Section -->
+        <section class="skills-section">
+            <h2 class="section-title fade-in">Kernkompetenzen</h2>
+            
+            <!-- Programming & Development -->
+            <div class="skill-category fade-in fade-in-delay-1">
+                <h3 class="skill-category-title">💻 Programmierung & Entwicklung</h3>
+                <div class="skills-grid">
+                    <div class="skill-item">
+                        <div class="skill-name">
+                            <span>C# / .NET Framework</span>
+                            <span>92%</span>
+                        </div>
+                        <div class="skill-bar">
+                            <div class="skill-progress skill-92"></div>
+                        </div>
+                    </div>
+                    <div class="skill-item">
+                        <div class="skill-name">
+                            <span>Python (APIs & Automation)</span>
+                            <span>90%</span>
+                        </div>
+                        <div class="skill-bar">
+                            <div class="skill-progress skill-90"></div>
+                        </div>
+                    </div>
+                    <div class="skill-item">
+                        <div class="skill-name">
+                            <span>HTML5 / CSS3 / JavaScript</span>
+                            <span>95%</span>
+                        </div>
+                        <div class="skill-bar">
+                            <div class="skill-progress skill-95"></div>
+                        </div>
+                    </div>
+                    <div class="skill-item">
+                        <div class="skill-name">
+                            <span>Three.js / 3D Development</span>
+                            <span>85%</span>
+                        </div>
+                        <div class="skill-bar">
+                            <div class="skill-progress skill-85"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Cybersecurity -->
+            <div class="skill-category fade-in fade-in-delay-2">
+                <h3 class="skill-category-title">🛡️ Cybersecurity & Penetration Testing</h3>
+                <div class="skills-grid">
+                    <div class="skill-item">
+                        <div class="skill-name">
+                            <span>Penetration Testing (OSSTMM)</span>
+                            <span>88%</span>
+                        </div>
+                        <div class="skill-bar">
+                            <div class="skill-progress skill-88"></div>
+                        </div>
+                    </div>
+                    <div class="skill-item">
+                        <div class="skill-name">
+                            <span>Security Tools (Metasploit, Nmap)</span>
+                            <span>82%</span>
+                        </div>
+                        <div class="skill-bar">
+                            <div class="skill-progress skill-82"></div>
+                        </div>
+                    </div>
+                    <div class="skill-item">
+                        <div class="skill-name">
+                            <span>Web Security (XSS, SQLi, CSRF)</span>
+                            <span>85%</span>
+                        </div>
+                        <div class="skill-bar">
+                            <div class="skill-progress skill-85"></div>
+                        </div>
+                    </div>
+                    <div class="skill-item">
+                        <div class="skill-name">
+                            <span>Network Security & Analysis</span>
+                            <span>80%</span>
+                        </div>
+                        <div class="skill-bar">
+                            <div class="skill-progress skill-80"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Business & Administration -->
+            <div class="skill-category fade-in fade-in-delay-3">
+                <h3 class="skill-category-title">📊 Kaufmännischer Bereich</h3>
+                <div class="skills-grid">
+                    <div class="skill-item">
+                        <div class="skill-name">
+                            <span>Rechnungswesen & Buchführung</span>
+                            <span>90%</span>
+                        </div>
+                        <div class="skill-bar">
+                            <div class="skill-progress skill-90"></div>
+                        </div>
+                    </div>
+                    <div class="skill-item">
+                        <div class="skill-name">
+                            <span>Personalverrechnung (AT)</span>
+                            <span>85%</span>
+                        </div>
+                        <div class="skill-bar">
+                            <div class="skill-progress skill-85"></div>
+                        </div>
+                    </div>
+                    <div class="skill-item">
+                        <div class="skill-name">
+                            <span>Projektmanagement</span>
+                            <span>88%</span>
+                        </div>
+                        <div class="skill-bar">
+                            <div class="skill-progress skill-88"></div>
+                        </div>
+                    </div>
+                    <div class="skill-item">
+                        <div class="skill-name">
+                            <span>DSGVO & Datenschutzrecht</span>
+                            <span>82%</span>
+                        </div>
+                        <div class="skill-bar">
+                            <div class="skill-progress skill-82"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Personal Skills & Languages -->
+        <section class="personal-section">
+            <div class="personal-grid">
+                <div class="personal-card fade-in fade-in-delay-1">
+                    <span class="card-icon">🗣️</span>
+                    <h3 class="card-title">Sprachen</h3>
+                    <div class="language-list">
+                        <div class="language-item">
+                            <span>Deutsch</span>
+                            <span class="language-level">Muttersprache</span>
+                        </div>
+                        <div class="language-item">
+                            <span>Englisch</span>
+                            <span class="language-level">Fließend (Business)</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="personal-card fade-in fade-in-delay-2">
+                    <span class="card-icon">💪</span>
+                    <h3 class="card-title">Soft Skills</h3>
+                    <div class="soft-skills">
+                        <span class="skill-tag">Analytisches Denken</span>
+                        <span class="skill-tag">Verantwortungsbewusstsein</span>
+                        <span class="skill-tag">Teamfähigkeit</span>
+                        <span class="skill-tag">Technische Neugier</span>
+                        <span class="skill-tag">Selbstständige Arbeitsweise</span>
+                    </div>
+                </div>
+
+                <div class="personal-card fade-in fade-in-delay-3">
+                    <span class="card-icon">🎨</span>
+                    <h3 class="card-title">Hobbies & Interessen</h3>
+                    <div class="hobbies">
+                        <div class="hobby-item">
+                            <span class="hobby-icon">✈️</span>
+                            <span>Reisen & Kulturen entdecken</span>
+                        </div>
+                        <div class="hobby-item">
+                            <span class="hobby-icon">📸</span>
+                            <span>Fotografie & Bildbearbeitung</span>
+                        </div>
+                        <div class="hobby-item">
+                            <span class="hobby-icon">🎮</span>
+                            <span>3D-Design & Gaming</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <script>
+        // ====================================================================
+        //                           INTERACTIVE ANIMATIONS
+        // ====================================================================
+        
+        // Skill bars animate on scroll
+        const observerOptions = {
+            threshold: 0.3,
+            rootMargin: '0px 0px -50px 0px'
+        };
+
+        const skillObserver = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    const progressBars = entry.target.querySelectorAll('.skill-progress');
+                    progressBars.forEach(bar => {
+                        bar.style.width = bar.style.width || '0%';
+                    });
+                }
+            });
+        }, observerOptions);
+
+        // Observe skills section
+        const skillsSection = document.querySelector('.skills-section');
+        if (skillsSection) {
+            skillObserver.observe(skillsSection);
+        }
+
+        // Smooth scroll for navigation
+        document.querySelectorAll('.nav-item').forEach(item => {
+            item.addEventListener('click', (e) => {
+                if (item.getAttribute('href').startsWith('#')) {
+                    e.preventDefault();
+                    const target = document.querySelector(item.getAttribute('href'));
+                    if (target) {
+                        target.scrollIntoView({ behavior: 'smooth' });
+                    }
+                }
+            });
+        });
+
+        // Add glitch effect on hover for hero title
+        const heroTitle = document.querySelector('.hero-title');
+        if (heroTitle) {
+            heroTitle.addEventListener('mouseenter', () => {
+                heroTitle.style.textShadow = '2px 0 0 #00f0ff, -2px 0 0 #ff0040';
+                setTimeout(() => {
+                    heroTitle.style.textShadow = 'none';
+                }, 200);
+            });
+        }
+    </script>
+</body>
+</html>

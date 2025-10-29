@@ -872,7 +872,7 @@ function handleMenuClick(itemId, itemText) {
       
     case 'überMich':
       console.log('👨‍💻 Navigiere zu Über mich-Sektion...');
-      // TODO: Navigation zu Über mich implementieren
+      window.open('pages/about.html', '_blank');
       break;
       
     case 'impressum':
