@@ -49,14 +49,44 @@ class GameEngine {
     setupRenderer() {
         console.log("🖼️ Erstelle Renderer...");
         
-        // WebGL Renderer erstellen
+        // WebGL Renderer mit PREMIUM-Qualität für Ultra-Schärfe
         this.renderer = new THREE.WebGLRenderer({ 
             antialias: true,           // Glatte Kanten
-            alpha: true                // Transparenz möglich
+            alpha: true,               // Transparenz möglich
+            powerPreference: "high-performance", // Beste GPU-Performance
+            precision: "highp",        // Höchste Präzision
+            stencil: false,            // Deaktiviert für Performance
+            depth: true,               // Tiefenpuffer aktiviert
+            logarithmicDepthBuffer: true, // Bessere Tiefenauflösung
+            preserveDrawingBuffer: false // Performance-Optimierung
         });
         
-        // Größe setzen
-        this.renderer.setSize(window.innerWidth, window.innerHeight);
+        // ULTRA-HOCHAUFLÖSENDER Canvas - extrem scharf bei allen Zoom-Levels
+        const baseWidth = window.innerWidth;
+        const baseHeight = window.innerHeight;
+        
+        // EXTREME Render-Scale für perfekte Schärfe bei allen Zoom-Levels
+        // Strategy: Überkompensation um sichtbare Unterschiede zu eliminieren
+        let renderScale;
+        if (baseWidth > 2500) renderScale = 6.0; // Extrem reingezoomt = 6x Auflösung
+        else if (baseWidth > 2000) renderScale = 5.0; // Sehr reingezoomt = 5x Auflösung
+        else if (baseWidth > 1500) renderScale = 4.0; // Mittel reingezoomt = 4x Auflösung
+        else if (baseWidth > 1000) renderScale = 3.5; // Normal = 3.5x Auflösung
+        else if (baseWidth > 800) renderScale = 3.0; // Leicht rausgezoomt = 3x Auflösung
+        else renderScale = 2.5; // Stark rausgezoomt = 2.5x Auflösung
+        
+        const renderWidth = Math.floor(baseWidth * renderScale);
+        const renderHeight = Math.floor(baseHeight * renderScale);
+        
+        // Renderer intern auf ULTRA-hohe Auflösung
+        this.renderer.setPixelRatio(1.0); // Kein Browser-Scaling
+        this.renderer.setSize(renderWidth, renderHeight, false);
+        
+        // Canvas DOM-Element auf Anzeige-Größe (Browser skaliert runter)
+        this.renderer.domElement.style.width = baseWidth + 'px';
+        this.renderer.domElement.style.height = baseHeight + 'px';
+        
+        console.log(`🎯 Ultra-Sharp: Render ${renderWidth}x${renderHeight} → Display ${baseWidth}x${baseHeight} (${renderScale}x Scale)`);
         
         // HORROR-HINTERGRUND: Fast schwarz mit minimalem Lila-Hauch
         this.renderer.setClearColor(0x0d0518, 1); // Sehr dunkles Lila-Schwarz - bedrohlich aber sichtbar
@@ -449,13 +479,39 @@ class GameEngine {
         }
     }
 
-    // FENSTER-RESIZE BEHANDELN
+    // FENSTER-RESIZE BEHANDELN - mit Pixel Ratio Update
     handleResize() {
         if (!this.camera || !this.renderer) return;
         
+        // Kamera-Aspect aktualisieren
         this.camera.aspect = window.innerWidth / window.innerHeight;
         this.camera.updateProjectionMatrix();
-        this.renderer.setSize(window.innerWidth, window.innerHeight);
+        
+        // ULTRA-HOCHAUFLÖSENDER Resize - dynamisch skaliert
+        const baseWidth = window.innerWidth;
+        const baseHeight = window.innerHeight;
+        
+        // EXTREME Scale - eliminiert alle sichtbaren Unterschiede
+        let renderScale;
+        if (baseWidth > 2500) renderScale = 6.0; // Extrem reingezoomt = 6x Auflösung
+        else if (baseWidth > 2000) renderScale = 5.0; // Sehr reingezoomt = 5x Auflösung
+        else if (baseWidth > 1500) renderScale = 4.0; // Mittel reingezoomt = 4x Auflösung
+        else if (baseWidth > 1000) renderScale = 3.5; // Normal = 3.5x Auflösung
+        else if (baseWidth > 800) renderScale = 3.0; // Leicht rausgezoomt = 3x Auflösung
+        else renderScale = 2.5; // Stark rausgezoomt = 2.5x Auflösung
+        
+        const renderWidth = Math.floor(baseWidth * renderScale);
+        const renderHeight = Math.floor(baseHeight * renderScale);
+        
+        // Renderer auf Ultra-Auflösung
+        this.renderer.setPixelRatio(1.0);
+        this.renderer.setSize(renderWidth, renderHeight, false);
+        
+        // Canvas DOM-Größe
+        this.renderer.domElement.style.width = baseWidth + 'px';
+        this.renderer.domElement.style.height = baseHeight + 'px';
+        
+        console.log(`🔄 Ultra-Resize: Render ${renderWidth}x${renderHeight} → Display ${baseWidth}x${baseHeight} (${renderScale}x)`);
     }
 }
 

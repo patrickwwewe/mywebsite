@@ -306,81 +306,7 @@
             transform: scale(1.05);
         }
 
-        /* ====================================================================
-                                   CONTACT FORM
-           ====================================================================
-           Elegantes Kontaktformular
-           ==================================================================== */
 
-        .contact-form {
-            background: linear-gradient(135deg, rgba(255,255,255,0.05), rgba(255,255,255,0.02));
-            border: 1px solid var(--border-subtle);
-            border-radius: 15px;
-            padding: 40px;
-            margin-top: 30px;
-        }
-
-        .form-group {
-            margin-bottom: 25px;
-        }
-
-        .form-label {
-            display: block;
-            color: var(--accent-white);
-            font-size: 0.9rem;
-            margin-bottom: 8px;
-            font-weight: 500;
-        }
-
-        .form-input,
-        .form-textarea {
-            width: 100%;
-            padding: 15px 20px;
-            background: rgba(255,255,255,0.05);
-            border: 1px solid var(--border-subtle);
-            border-radius: 10px;
-            color: var(--accent-white);
-            font-size: 0.95rem;
-            transition: all 0.3s ease;
-            resize: vertical;
-        }
-
-        .form-input:focus,
-        .form-textarea:focus {
-            outline: none;
-            border-color: var(--neon-cyan);
-            box-shadow: 0 0 15px rgba(0, 240, 255, 0.2);
-            background: rgba(255,255,255,0.08);
-        }
-
-        .form-textarea {
-            min-height: 120px;
-            font-family: inherit;
-        }
-
-        .form-button {
-            background: linear-gradient(135deg, var(--neon-cyan), var(--neon-2));
-            color: white;
-            border: none;
-            padding: 15px 40px;
-            border-radius: 10px;
-            font-size: 1rem;
-            font-weight: 500;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            box-shadow: 0 5px 20px rgba(0, 240, 255, 0.3);
-        }
-
-        .form-button:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 8px 25px rgba(0, 240, 255, 0.4);
-        }
-
-        .form-button:active {
-            transform: translateY(0);
-        }
 
         /* ====================================================================
                                    SOCIAL MEDIA SECTION
@@ -494,10 +420,7 @@
                 margin: 0 5px;
             }
 
-            .form-button {
-                width: 100%;
-                padding: 18px;
-            }
+
 
             .nav-menu {
                 gap: 20px;
@@ -536,9 +459,9 @@
         <nav class="nav-menu">
             <a href="../index.html" class="nav-item">Portal</a>
             <a href="about.html" class="nav-item">Über Mich</a>
+            <a href="projekte.html" class="nav-item">Projekte</a>
             <a href="#" class="nav-item active">Kontakt</a>
             <a href="impressum.html" class="nav-item">Impressum</a>
-            <a href="https://github.com/patrickwwewe" target="_blank" rel="noopener" class="nav-item">GitHub</a>
         </nav>
     </header>
 
@@ -587,39 +510,7 @@
                 </div>
             </section>
 
-            <!-- Contact Form -->
-            <section class="contact-section">
-                <h2 class="section-title">✉️ Nachricht senden</h2>
-                <form class="contact-form fade-in fade-in-delay-1" action="#" method="post">
-                    <div class="form-group">
-                        <label for="name" class="form-label">Name *</label>
-                        <input type="text" id="name" name="name" class="form-input" required 
-                               placeholder="Ihr vollständiger Name">
-                    </div>
 
-                    <div class="form-group">
-                        <label for="email" class="form-label">E-Mail *</label>
-                        <input type="email" id="email" name="email" class="form-input" required 
-                               placeholder="ihre.email@beispiel.com">
-                    </div>
-
-                    <div class="form-group">
-                        <label for="subject" class="form-label">Betreff</label>
-                        <input type="text" id="subject" name="subject" class="form-input" 
-                               placeholder="Worum geht es?">
-                    </div>
-
-                    <div class="form-group">
-                        <label for="message" class="form-label">Nachricht *</label>
-                        <textarea id="message" name="message" class="form-textarea" required 
-                                  placeholder="Ihre Nachricht..."></textarea>
-                    </div>
-
-                    <button type="submit" class="form-button">
-                        Nachricht Senden
-                    </button>
-                </form>
-            </section>
 
             <!-- Social Media -->
             <section class="social-section fade-in fade-in-delay-2">
@@ -663,11 +554,7 @@
             });
         });
 
-        // Form handling (placeholder)
-        document.querySelector('.contact-form').addEventListener('submit', function(e) {
-            e.preventDefault();
-            alert('Vielen Dank für Ihre Nachricht! Das Formular ist noch nicht vollständig implementiert.');
-        });
+
 
         // Intersection Observer für Animationen
         const observerOptions = {

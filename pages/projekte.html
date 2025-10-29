@@ -1,0 +1,523 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Projekte - Patrick</title>
+    <style>
+        /* ====================================================================
+                               PROJEKTE - ELEGANTES DESIGN
+           ====================================================================
+           Kombiniert das minimalistische Design der About-Seite mit
+           anklickbaren Projekt-Kärtchen
+           ==================================================================== */
+
+        :root {
+            --bg-dark: #03050a;
+            --bg-secondary: #0a0f1a;
+            --accent-white: rgba(255,255,255,0.9);
+            --accent-dim: rgba(255,255,255,0.6);
+            --accent-subtle: rgba(255,255,255,0.3);
+            --neon-cyan: #00f0ff;
+            --neon-2: #9b00ff;
+            --glass: rgba(255,255,255,0.04);
+            --border-subtle: rgba(255,255,255,0.1);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: var(--bg-dark);
+            font-family: 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto;
+            color: var(--accent-white);
+            overflow-x: hidden;
+            min-height: 100vh;
+        }
+
+        /* ====================================================================
+                                   MINIMALISTISCHER HEADER
+           ====================================================================
+           Identisch zu anderen Seiten für Konsistenz
+           ==================================================================== */
+
+        .header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+            background: rgba(3, 5, 10, 0.95);
+            -webkit-backdrop-filter: blur(10px);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid var(--border-subtle);
+        }
+
+        .header-line {
+            width: 100%;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, var(--accent-white), transparent);
+            margin-bottom: 20px;
+        }
+
+        .nav-menu {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px 40px;
+            gap: 60px;
+        }
+
+        .nav-item {
+            color: var(--accent-dim);
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: 400;
+            letter-spacing: 0.5px;
+            transition: all 0.3s ease;
+            position: relative;
+            text-transform: uppercase;
+        }
+
+        .nav-item:hover {
+            color: var(--accent-white);
+        }
+
+        .nav-item.active {
+            color: var(--neon-cyan);
+        }
+
+        .nav-item.active::after {
+            content: '';
+            position: absolute;
+            bottom: -8px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 4px;
+            height: 4px;
+            background: var(--neon-cyan);
+            border-radius: 50%;
+            box-shadow: 0 0 10px var(--neon-cyan);
+        }
+
+        /* ====================================================================
+                                   MAIN CONTENT AREA
+           ====================================================================
+           Hauptbereich für Projekt-Kärtchen
+           ==================================================================== */
+
+        .main-content {
+            margin-top: 100px;
+            padding: 60px 40px;
+            max-width: 1200px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .hero-section {
+            text-align: center;
+            margin-bottom: 60px;
+        }
+
+        .hero-title {
+            font-size: clamp(2.5rem, 5vw, 4rem);
+            font-weight: 300;
+            margin-bottom: 20px;
+            background: linear-gradient(135deg, var(--accent-white), var(--neon-cyan));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .hero-subtitle {
+            font-size: 1.2rem;
+            color: var(--accent-dim);
+            font-weight: 300;
+            letter-spacing: 1px;
+        }
+
+        /* ====================================================================
+                                   PROJECTS GRID
+           ====================================================================
+           Responsive Grid für Projekt-Kärtchen
+           ==================================================================== */
+
+        .projects-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 30px;
+            margin-top: 40px;
+        }
+
+        /* ====================================================================
+                                   PROJECT CARDS
+           ====================================================================
+           Anklickbare Projekt-Kärtchen mit Hover-Effekten
+           ==================================================================== */
+
+        .project-card {
+            background: linear-gradient(135deg, var(--glass), rgba(255,255,255,0.02));
+            border: 1px solid var(--border-subtle);
+            border-radius: 15px;
+            padding: 30px;
+            transition: all 0.4s ease;
+            position: relative;
+            overflow: hidden;
+            cursor: pointer;
+            text-decoration: none;
+            color: inherit;
+            display: block;
+        }
+
+        .project-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(0, 240, 255, 0.05), transparent);
+            transition: left 0.6s ease;
+        }
+
+        .project-card:hover::before {
+            left: 100%;
+        }
+
+        .project-card:hover {
+            border-color: rgba(0, 240, 255, 0.4);
+            transform: translateY(-8px);
+            box-shadow: 
+                0 20px 40px rgba(0, 0, 0, 0.3),
+                0 0 30px rgba(0, 240, 255, 0.15);
+        }
+
+        .project-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .project-icon {
+            font-size: 2.5rem;
+            margin-right: 15px;
+            filter: drop-shadow(0 0 10px rgba(0, 240, 255, 0.3));
+        }
+
+        .project-title {
+            font-size: 1.4rem;
+            font-weight: 500;
+            color: var(--accent-white);
+            margin-bottom: 5px;
+        }
+
+        .project-subtitle {
+            font-size: 0.9rem;
+            color: var(--neon-cyan);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .project-description {
+            color: var(--accent-dim);
+            line-height: 1.6;
+            margin-bottom: 20px;
+            font-size: 0.95rem;
+        }
+
+        .project-tech {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-bottom: 20px;
+        }
+
+        .tech-tag {
+            background: rgba(0, 240, 255, 0.1);
+            border: 1px solid rgba(0, 240, 255, 0.3);
+            color: var(--neon-cyan);
+            padding: 4px 12px;
+            border-radius: 15px;
+            font-size: 0.8rem;
+            font-weight: 500;
+        }
+
+        .project-status {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .status-indicator {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: #00ff88;
+            box-shadow: 0 0 10px #00ff88;
+            animation: pulse 2s infinite;
+        }
+
+        .status-indicator.in-progress {
+            background: #ffaa00;
+            box-shadow: 0 0 10px #ffaa00;
+        }
+
+        .status-indicator.completed {
+            background: #00ff88;
+            box-shadow: 0 0 10px #00ff88;
+        }
+
+        .status-text {
+            font-size: 0.85rem;
+            color: var(--accent-dim);
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+
+        /* ====================================================================
+                                   COMING SOON CARD
+           ====================================================================
+           Spezielle Karte für kommende Projekte
+           ==================================================================== */
+
+        .coming-soon-card {
+            background: linear-gradient(135deg, rgba(155, 0, 255, 0.05), rgba(0, 240, 255, 0.05));
+            border: 1px solid rgba(155, 0, 255, 0.3);
+            border-radius: 15px;
+            padding: 40px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .coming-soon-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(155, 0, 255, 0.1), transparent);
+            animation: shimmer 3s infinite;
+        }
+
+        @keyframes shimmer {
+            0% { left: -100%; }
+            100% { left: 100%; }
+        }
+
+        .coming-soon-icon {
+            font-size: 3rem;
+            margin-bottom: 20px;
+            filter: drop-shadow(0 0 15px rgba(155, 0, 255, 0.5));
+        }
+
+        .coming-soon-title {
+            font-size: 1.5rem;
+            color: var(--neon-2);
+            margin-bottom: 15px;
+            font-weight: 500;
+        }
+
+        .coming-soon-text {
+            color: var(--accent-dim);
+            font-size: 0.95rem;
+            line-height: 1.6;
+        }
+
+        /* ====================================================================
+                                   RESPONSIVE DESIGN
+           ====================================================================
+           Mobile Optimierung
+           ==================================================================== */
+
+        @media (max-width: 768px) {
+            .main-content {
+                padding: 40px 20px;
+                margin-top: 80px;
+            }
+
+            .nav-menu {
+                gap: 30px;
+                padding: 15px 20px;
+            }
+
+            .hero-title {
+                font-size: 2.5rem;
+            }
+
+            .projects-grid {
+                grid-template-columns: 1fr;
+                gap: 20px;
+            }
+
+            .project-card {
+                padding: 25px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .nav-menu {
+                gap: 20px;
+                flex-wrap: wrap;
+            }
+
+            .project-header {
+                flex-direction: column;
+                text-align: center;
+            }
+
+            .project-icon {
+                margin-right: 0;
+                margin-bottom: 10px;
+            }
+        }
+
+        /* ====================================================================
+                                   FADE-IN ANIMATIONEN
+           ====================================================================
+           Smooth Entrance-Effekte
+           ==================================================================== */
+
+        .fade-in {
+            opacity: 0;
+            transform: translateY(20px);
+            animation: fadeInElement 0.8s ease-out forwards;
+        }
+
+        .fade-in-delay-1 { animation-delay: 0.2s; }
+        .fade-in-delay-2 { animation-delay: 0.4s; }
+        .fade-in-delay-3 { animation-delay: 0.6s; }
+
+        @keyframes fadeInElement {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header Navigation -->
+    <header class="header">
+        <div class="header-line"></div>
+        <nav class="nav-menu">
+            <a href="../index.html" class="nav-item">Portal</a>
+            <a href="about.html" class="nav-item">Über Mich</a>
+            <a href="#" class="nav-item active">Projekte</a>
+            <a href="contact.html" class="nav-item">Kontakt</a>
+            <a href="impressum.html" class="nav-item">Impressum</a>
+        </nav>
+    </header>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <!-- Hero Section -->
+        <section class="hero-section">
+            <h1 class="hero-title">Projekte</h1>
+            <p class="hero-subtitle">Meine aktuellen und vergangenen Arbeiten</p>
+        </section>
+
+        <!-- Projects Grid -->
+        <section class="projects-grid">
+            <!-- Project 1: 3D Portfolio Portal (Aktuelles Projekt) -->
+            <a href="../pages/play/01_index.html" class="project-card fade-in fade-in-delay-1">
+                <div class="project-header">
+                    <span class="project-icon">🌀</span>
+                    <div>
+                        <h3 class="project-title">3D Portfolio Portal</h3>
+                        <p class="project-subtitle">Interactive WebGL Experience</p>
+                    </div>
+                </div>
+                <p class="project-description">
+                    Ein interaktives 3D-Portal mit WebGL und Three.js. Features include shader-basierte 
+                    Effekte, Partikel-Systeme, responsive Design und ein radiales Navigationsmenü.
+                </p>
+                <div class="project-tech">
+                    <span class="tech-tag">Three.js</span>
+                    <span class="tech-tag">WebGL</span>
+                    <span class="tech-tag">GLSL Shaders</span>
+                    <span class="tech-tag">JavaScript ES6</span>
+                    <span class="tech-tag">CSS3</span>
+                </div>
+                <div class="project-status">
+                    <div class="status-indicator completed"></div>
+                    <span class="status-text">Live & Funktional</span>
+                </div>
+            </a>
+
+            <!-- Coming Soon Cards -->
+            <div class="coming-soon-card fade-in fade-in-delay-2">
+                <span class="coming-soon-icon">🚀</span>
+                <h3 class="coming-soon-title">Weitere Projekte</h3>
+                <p class="coming-soon-text">
+                    Neue spannende Projekte sind in Planung! Hier werden bald weitere 
+                    Web-Anwendungen, Tools und kreative Experimente zu sehen sein.
+                </p>
+            </div>
+
+            <!-- Placeholder for future projects -->
+            <div class="coming-soon-card fade-in fade-in-delay-3">
+                <span class="coming-soon-icon">💡</span>
+                <h3 class="coming-soon-title">In Entwicklung</h3>
+                <p class="coming-soon-text">
+                    Aktuell arbeite ich an neuen innovativen Lösungen in den Bereichen 
+                    Cybersecurity, Full-Stack Development und 3D-Visualisierung.
+                </p>
+            </div>
+        </section>
+    </main>
+
+    <script>
+        // Smooth scroll für Links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth'
+                    });
+                }
+            });
+        });
+
+        // Intersection Observer für Animationen
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+
+        const observer = new IntersectionObserver(function(entries) {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.animationPlayState = 'running';
+                }
+            });
+        }, observerOptions);
+
+        // Alle fade-in Elemente beobachten
+        document.querySelectorAll('.fade-in').forEach(el => {
+            el.style.animationPlayState = 'paused';
+            observer.observe(el);
+        });
+
+        // Projekt-Karten Click-Feedback
+        document.querySelectorAll('.project-card').forEach(card => {
+            card.addEventListener('click', function(e) {
+                // Kurze Animation beim Klick
+                this.style.transform = 'translateY(-8px) scale(0.98)';
+                setTimeout(() => {
+                    this.style.transform = 'translateY(-8px) scale(1)';
+                }, 150);
+            });
+        });
+    </script>
+</body>
+</html>

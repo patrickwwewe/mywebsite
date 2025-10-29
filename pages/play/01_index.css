@@ -98,6 +98,41 @@ background: radial-gradient(ellipse at bottom, #1b2735 0%, #090a0f 100%);
 /* 🖼️ 3D CANVAS - WO THREE.JS HINZEICHNET   */
 /* ========================================== */
 
+#gameCanvas {
+    /* ULTRA-SCHARF Canvas mit perfekter Skalierung */
+    position: fixed;
+    top: 0;
+    left: 0;
+    
+    /* PREMIUM Browser-Skalierung für Downsample */
+    image-rendering: -webkit-optimize-contrast; /* Safari - beste Qualität */
+    image-rendering: optimizeQuality; /* Legacy */
+    image-rendering: auto; /* Lasse Browser das Beste wählen */
+    
+    /* MULTI-Sample Anti-Aliasing auf CSS-Level */
+    -webkit-transform: translateZ(0); /* Force GPU */
+    transform: translateZ(0); /* Force GPU */
+    
+    /* WICHTIG: CSS Scaling deaktiviert - nur JS-Control */
+    transform: scale(1) !important;
+    transform-origin: 0 0 !important;
+    
+    /* GPU-Optimierung für Skalierung */
+    will-change: transform;
+    backface-visibility: hidden;
+    
+    /* ANTI-ALIASING für perfekte Kanten */
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    
+    /* Pixel-Perfect Display */
+    display: block;
+    margin: 0;
+    padding: 0;
+    border: 0;
+    outline: 0;
+}
+
 
 
 /* ========================================== */

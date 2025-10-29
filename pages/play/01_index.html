@@ -139,6 +139,34 @@
                 spaceAdventure.handleResize();
             }
         });
+
+        // DEBOUNCED Resize-Behandlung - verhindert zu viele Updates
+        let resizeTimeout;
+        let lastWindowSize = { width: window.innerWidth, height: window.innerHeight };
+        
+        function debouncedResize() {
+            clearTimeout(resizeTimeout);
+            resizeTimeout = setTimeout(() => {
+                const currentSize = { width: window.innerWidth, height: window.innerHeight };
+                
+                // Nur bei signifikanten Änderungen (>10px) reagieren
+                const widthDiff = Math.abs(currentSize.width - lastWindowSize.width);
+                const heightDiff = Math.abs(currentSize.height - lastWindowSize.height);
+                
+                if (widthDiff > 10 || heightDiff > 10) {
+                    console.log(`🔄 Größenänderung: ${lastWindowSize.width}x${lastWindowSize.height} → ${currentSize.width}x${currentSize.height}`);
+                    
+                    lastWindowSize = currentSize;
+                    
+                    if (spaceAdventure) {
+                        spaceAdventure.handleResize();
+                    }
+                }
+            }, 100); // 100ms Debounce
+        }
+
+        // Nur bei echten Window-Resize Events reagieren
+        window.addEventListener('resize', debouncedResize);
     </script>
 
     </body>
