@@ -213,20 +213,20 @@
 
         .timeline {
             position: relative;
-            max-width: 800px;
+            max-width: 900px;
             margin: 0 auto;
-            padding: 20px 0;
+            padding: 20px 0 20px 60px;
         }
 
         .timeline::before {
             content: '';
             position: absolute;
-            left: 50%;
+            left: 20px;
             top: 0;
             bottom: 0;
-            width: 1px;
-            background: linear-gradient(180deg, transparent, var(--neon-cyan), transparent);
-            transform: translateX(-50%);
+            width: 2px;
+            background: linear-gradient(180deg, rgba(0, 240, 255, 0.3), var(--neon-cyan), rgba(0, 240, 255, 0.8));
+            border-radius: 1px;
         }
 
         .timeline-item {
@@ -234,29 +234,31 @@
             margin: 40px 0;
             display: flex;
             align-items: flex-start;
-        }
-
-        .timeline-item:nth-child(odd) {
             flex-direction: row;
         }
 
-        .timeline-item:nth-child(even) {
-            flex-direction: row-reverse;
+        .timeline-item::before {
+            content: '';
+            position: absolute;
+            left: -43px;
+            top: 12px;
+            width: 8px;
+            height: 8px;
+            background: var(--neon-cyan);
+            border-radius: 50%;
+            box-shadow: 0 0 10px rgba(0, 240, 255, 0.6);
         }
 
         .timeline-date {
-            flex: 0 0 120px;
-            text-align: center;
+            flex: 0 0 140px;
+            text-align: left;
             color: var(--neon-cyan);
             font-size: 0.85rem;
             font-weight: 600;
-            background: var(--bg-dark);
-            padding: 8px 12px;
-            border-radius: 20px;
-            border: 1px solid rgba(0, 240, 255, 0.3);
-            margin: 0 20px;
+            background: transparent;
+            padding: 8px 0;
+            margin-right: 30px;
             position: relative;
-            z-index: 2;
         }
 
         .timeline-content {
@@ -265,9 +267,10 @@
             border: 1px solid var(--border-subtle);
             border-radius: 12px;
             padding: 25px;
-            backdrop-filter: blur(10px);
             -webkit-backdrop-filter: blur(10px);
+            backdrop-filter: blur(10px);
             transition: all 0.4s ease;
+            position: relative;
         }
 
         .timeline-content:hover {
@@ -522,25 +525,31 @@
             }
 
             /* Mobile Timeline */
+            .timeline {
+                padding-left: 40px;
+            }
+
             .timeline::before {
-                left: 20px;
+                left: 15px;
+            }
+
+            .timeline-item::before {
+                left: -47px;
+                top: 8px;
+                width: 6px;
+                height: 6px;
             }
 
             .timeline-item {
-                flex-direction: column !important;
-                padding-left: 50px;
-            }
-
-            .timeline-item:nth-child(even) {
-                flex-direction: column !important;
+                flex-direction: column;
+                margin: 30px 0;
             }
 
             .timeline-date {
                 flex: none;
                 margin: 0 0 15px 0;
-                align-self: flex-start;
                 font-size: 0.75rem;
-                padding: 6px 10px;
+                padding: 6px 0;
             }
 
             .timeline-content {
@@ -613,7 +622,7 @@
             <a href="#" class="nav-item active">Über mich</a>
             <a href="../pages/play/01_index.html" class="nav-item">Projekte</a>
             <a href="../pages/impressum.html" class="nav-item">Impressum</a>
-            <a href="#" class="nav-item">Kontakt</a>
+            <a href="contact.html" class="nav-item">Kontakt</a>
         </nav>
     </header>
 
@@ -635,16 +644,14 @@
             <h2 class="section-title fade-in">Berufserfahrung</h2>
             <div class="timeline">
                 <div class="timeline-item fade-in fade-in-delay-1">
-                    <div class="timeline-date">01/2024 - 02/2025</div>
+                    <div class="timeline-date">07/2020 - 08/2020</div>
                     <div class="timeline-content">
-                        <h3 class="timeline-title">🤖 PATHfindr gGmbH, Wien</h3>
-                        <p class="timeline-role">Lead Developer & Technical Project Manager</p>
+                        <h3 class="timeline-title">🏢 WAG Wohnungsanlagen, Linz</h3>
+                        <p class="timeline-role">Business Administration Intern</p>
                         <ul class="timeline-details">
-                            <li>Leitung und technische Umsetzung eines Discord-Chatbots zur automatisierten Wirkungsmessung</li>
-                            <li>Entwicklung modularer, skalierbarer Systeme mit Python, Discord API und Google Sheets</li>
-                            <li>Implementierung mehrstufigen Session-Trackings für komplexe Beratungsanalyse</li>
-                            <li>Instagram-Bot für plattformübergreifende Interaktionsanalyse</li>
-                            <li>Logo-Design und animierte Erklärvideos für Nutzerschulungen</li>
+                            <li>Kundendatenmanagement im Hausverwaltungsprogramm</li>
+                            <li>Arbeit mit .Net-Framework und Domizil+ Software</li>
+                            <li>Kundenkontakt und professionelle Kundenbetreuung</li>
                         </ul>
                     </div>
                 </div>
@@ -663,14 +670,16 @@
                 </div>
 
                 <div class="timeline-item fade-in fade-in-delay-3">
-                    <div class="timeline-date">07/2020 - 08/2020</div>
+                    <div class="timeline-date">01/2024 - 02/2025</div>
                     <div class="timeline-content">
-                        <h3 class="timeline-title">🏢 WAG Wohnungsanlagen, Linz</h3>
-                        <p class="timeline-role">Business Administration Intern</p>
+                        <h3 class="timeline-title">🤖 PATHfindr gGmbH, Wien</h3>
+                        <p class="timeline-role">Lead Developer & Technical Project Manager</p>
                         <ul class="timeline-details">
-                            <li>Kundendatenmanagement im Hausverwaltungsprogramm</li>
-                            <li>Arbeit mit .Net-Framework und Domizil+ Software</li>
-                            <li>Kundenkontakt und professionelle Kundenbetreuung</li>
+                            <li>Leitung und technische Umsetzung eines Discord-Chatbots zur automatisierten Wirkungsmessung</li>
+                            <li>Entwicklung modularer, skalierbarer Systeme mit Python, Discord API und Google Sheets</li>
+                            <li>Implementierung mehrstufigen Session-Trackings für komplexe Beratungsanalyse</li>
+                            <li>Instagram-Bot für plattformübergreifende Interaktionsanalyse</li>
+                            <li>Logo-Design und animierte Erklärvideos für Nutzerschulungen</li>
                         </ul>
                     </div>
                 </div>
