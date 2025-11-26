@@ -1,0 +1,909 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Instagram Feed - notaboutptrickedr</title>
+    <link rel="stylesheet" href="../../../styles.css">
+    <style>
+        /* Instagram Feed Specific Styles - Minimal Version */
+        .instagram-container {
+            min-height: 100vh;
+            background: linear-gradient(135deg, var(--bg) 0%, #0a0e1a 50%, var(--bg) 100%);
+            padding: 20px;
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+        }
+
+        .instagram-header {
+            text-align: center;
+            padding: 30px;
+        }
+
+        .instagram-title {
+            font-size: 3rem;
+            background: linear-gradient(45deg, var(--neon), var(--neon-2));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 40px;
+            text-shadow: 0 0 30px rgba(0, 240, 255, 0.3);
+        }
+
+        .back-button {
+            position: fixed;
+            top: 30px;
+            left: 30px;
+            background: rgba(255, 255, 255, 0.1);
+            -webkit-backdrop-filter: blur(10px);
+            backdrop-filter: blur(10px);
+            border: 1px solid var(--accent);
+            border-radius: 50px;
+            padding: 15px 25px;
+            color: white;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            z-index: 100;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .back-button:hover {
+            background: rgba(0, 240, 255, 0.2);
+            border-color: var(--neon);
+            box-shadow: 0 0 20px rgba(0, 240, 255, 0.3);
+            transform: translateX(-5px);
+        }
+
+        /* Search hint styling */
+        .search-hint {
+            text-align: center;
+            margin: 20px auto;
+            padding: 25px;
+            background: rgba(0, 240, 255, 0.1);
+            border: 1px solid rgba(0, 240, 255, 0.3);
+            border-radius: 20px;
+            max-width: 600px;
+            box-shadow: 0 10px 40px rgba(0, 240, 255, 0.15);
+        }
+
+        .search-hint-title {
+            color: var(--neon);
+            font-weight: 600;
+            font-size: 1.3rem;
+            margin-bottom: 15px;
+        }
+
+        .search-hint-text {
+            color: rgba(255, 255, 255, 0.8);
+            font-size: 1.1rem;
+            margin: 0;
+        }
+
+        .username-highlight {
+            color: var(--neon);
+            font-weight: 700;
+            text-shadow: 0 0 10px rgba(0, 240, 255, 0.4);
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .instagram-title {
+                font-size: 2rem;
+            }
+            
+            .back-button {
+                top: 15px;
+                left: 15px;
+                padding: 10px 20px;
+            }
+
+            .search-hint {
+                margin: 20px;
+                padding: 20px;
+            }
+
+            .search-hint-title {
+                font-size: 1.1rem;
+            }
+
+            .search-hint-text {
+                font-size: 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="instagram-container">
+        <!-- Back Navigation -->
+        <a href="../projekte.html" class="back-button">
+            <span>←</span>
+            <span>Zurück</span>
+        </a>
+
+        <!-- Header Section -->
+        <div class="instagram-header">
+            <h1 class="instagram-title">Instagram Feed</h1>
+            
+            <!-- Suchhinweis für Besucher -->
+            <div class="search-hint">
+                <p class="search-hint-title">📸 Folge mir auf Instagram!</p>
+                <p class="search-hint-text">Suche nach: <strong class="username-highlight">@notaboutptrickedr</strong></p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Einfaches Script nur für Keyboard Navigation
+        document.addEventListener('keydown', function(event) {
+            if (event.key === 'Escape') {
+                window.location.href = '../projekte.html';
+            }
+        });
+    </script>
+</body>
+</html>
+            border-radius: 50%;
+            border: 3px solid var(--neon);
+            box-shadow: 0 0 20px rgba(0, 240, 255, 0.4);
+        }
+
+        .profile-stats {
+            color: white;
+            text-align: left;
+        }
+
+        .profile-username {
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin-bottom: 5px;
+            color: var(--neon);
+        }
+
+        .profile-meta {
+            font-size: 0.9rem;
+            color: rgba(255, 255, 255, 0.6);
+        }
+
+        .loading-spinner {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 200px;
+            font-size: 1.2rem;
+            color: var(--neon);
+        }
+
+        .spinner {
+            width: 40px;
+            height: 40px;
+            border: 3px solid rgba(0, 240, 255, 0.3);
+            border-top: 3px solid var(--neon);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin-right: 15px;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .instagram-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 25px;
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .instagram-post {
+            background: rgba(255, 255, 255, 0.03);
+            -webkit-backdrop-filter: blur(15px);
+            backdrop-filter: blur(15px);
+            border-radius: 20px;
+            overflow: hidden;
+            border: 1px solid var(--accent);
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            position: relative;
+        }
+
+        .instagram-post:hover {
+            transform: translateY(-10px) scale(1.02);
+            box-shadow: 0 20px 50px rgba(0, 240, 255, 0.2);
+            border-color: rgba(0, 240, 255, 0.3);
+        }
+
+        .post-image {
+            width: 100%;
+            aspect-ratio: 1;
+            object-fit: cover;
+            transition: transform 0.4s ease;
+        }
+
+        .instagram-post:hover .post-image {
+            transform: scale(1.05);
+        }
+
+        .post-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(
+                135deg, 
+                rgba(0, 240, 255, 0.8) 0%, 
+                rgba(155, 0, 255, 0.8) 100%
+            );
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+        }
+
+        .instagram-post:hover .post-overlay {
+            opacity: 1;
+        }
+
+        .post-stats {
+            color: white;
+            text-align: center;
+            font-weight: 600;
+        }
+
+        .post-likes {
+            font-size: 1.2rem;
+            margin-bottom: 5px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .post-date {
+            font-size: 0.9rem;
+            opacity: 0.8;
+        }
+
+        .post-info {
+            padding: 15px;
+        }
+
+        .post-caption {
+            color: rgba(255, 255, 255, 0.8);
+            font-size: 0.9rem;
+            line-height: 1.4;
+            margin-bottom: 10px;
+            display: -webkit-box;
+            -webkit-line-clamp: 3;
+            line-clamp: 3;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+
+        .post-meta {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            color: rgba(255, 255, 255, 0.5);
+            font-size: 0.8rem;
+        }
+
+        .error-message {
+            text-align: center;
+            padding: 40px;
+            color: #ff6b6b;
+            background: rgba(255, 107, 107, 0.1);
+            border: 1px solid rgba(255, 107, 107, 0.3);
+            border-radius: 15px;
+            margin: 20px;
+        }
+
+        .back-button {
+            position: fixed;
+            top: 30px;
+            left: 30px;
+            background: rgba(255, 255, 255, 0.1);
+            -webkit-backdrop-filter: blur(10px);
+            backdrop-filter: blur(10px);
+            border: 1px solid var(--accent);
+            border-radius: 50px;
+            padding: 15px 25px;
+            color: white;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            z-index: 100;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .back-button:hover {
+            background: rgba(0, 240, 255, 0.2);
+            border-color: var(--neon);
+            box-shadow: 0 0 20px rgba(0, 240, 255, 0.3);
+            transform: translateX(-5px);
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .instagram-title {
+                font-size: 2rem;
+            }
+            
+            .instagram-grid {
+                grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+                gap: 15px;
+                padding: 10px;
+            }
+            
+            .profile-info {
+                flex-direction: column;
+                text-align: center;
+            }
+            
+            .back-button {
+                top: 15px;
+                left: 15px;
+                padding: 10px 20px;
+            }
+        }
+
+        /* Neon pulse animation for loading */
+        @keyframes neonPulse {
+            0%, 100% { 
+                box-shadow: 0 0 20px rgba(0, 240, 255, 0.4);
+            }
+            50% { 
+                box-shadow: 0 0 40px rgba(0, 240, 255, 0.8);
+            }
+        }
+
+        .loading .spinner {
+            animation: spin 1s linear infinite, neonPulse 2s ease-in-out infinite;
+        }
+
+        /* Dynamic visibility classes */
+        .hidden {
+            display: none !important;
+        }
+
+        /* Search hint styling */
+        .search-hint {
+            text-align: center;
+            margin: 20px auto;
+            padding: 15px;
+            background: rgba(0, 240, 255, 0.1);
+            border: 1px solid rgba(0, 240, 255, 0.3);
+            border-radius: 15px;
+            max-width: 500px;
+        }
+
+        .search-hint-title {
+            color: var(--neon);
+            font-weight: 600;
+            margin-bottom: 10px;
+        }
+
+        .search-hint-text {
+            color: rgba(255, 255, 255, 0.8);
+            margin: 0;
+        }
+
+        .username-highlight {
+            color: var(--neon);
+        }
+
+        .retry-button {
+            margin-top: 15px;
+            padding: 10px 20px;
+            background: var(--neon);
+            border: none;
+            border-radius: 25px;
+            color: white;
+            cursor: pointer;
+            font-family: inherit;
+            transition: all 0.3s ease;
+        }
+
+        .retry-button:hover {
+            background: var(--neon-2);
+            transform: scale(1.05);
+            box-shadow: 0 0 20px rgba(0, 240, 255, 0.4);
+        }
+    </style>
+</head>
+<body>
+    <div class="instagram-container">
+        <!-- Back Navigation -->
+        <a href="../projekte.html" class="back-button">
+            <span>←</span>
+            <span>Zurück</span>
+        </a>
+
+        <!-- Header Section -->
+        <div class="instagram-header">
+            <h1 class="instagram-title">Instagram Feed</h1>
+            
+            <!-- Suchhinweis für Besucher -->
+            <div class="search-hint">
+                <p class="search-hint-title">📸 Folge mir auf Instagram!</p>
+                <p class="search-hint-text">Suche nach: <strong class="username-highlight">@notaboutptrickedr</strong></p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Einfaches Script nur für Keyboard Navigation
+        document.addEventListener('keydown', function(event) {
+            if (event.key === 'Escape') {
+                window.location.href = '../projekte.html';
+            }
+        });
+        const API_ENDPOINTS = {
+            // Instagram Basic Display API (requires Facebook Developer App)
+            basicDisplay: 'https://graph.instagram.com/me/media',
+            
+            // Alternative: Instagram oEmbed API (limitiert aber funktional)
+            oembed: 'https://api.instagram.com/oembed/?url=',
+            
+            // Fallback: Web scraping approach (kann instabil sein)
+            webScrape: `https://www.instagram.com/${INSTAGRAM_USERNAME}/`
+        };
+
+        // Instagram Access Token - WICHTIG: Du musst diesen Token generieren
+        // Siehe Setup-Anleitung oben ☝️
+        const INSTAGRAM_ACCESS_TOKEN = null; // Hier deinen Access Token einfügen
+
+    </script>
+</body>
+</html>
+            if (!rawData || !rawData.data) return [];
+            
+            return rawData.data.map(post => ({
+                id: post.id,
+                image: post.media_type === 'IMAGE' ? post.media_url : post.thumbnail_url,
+                caption: post.caption || '',
+                likes: Math.floor(Math.random() * 5000) + 100, // API liefert keine Likes ohne Business Account
+                timestamp: post.timestamp,
+                url: post.permalink,
+                type: post.media_type
+            }));
+        }
+
+        // 📸 DEINE EIGENEN INSTAGRAM-BILDER 
+        const LOCAL_IMAGES_PATH = '../../../js/assets/instagram/';
+        const PROFILE_IMAGE = `${LOCAL_IMAGES_PATH}profile.jpg`;
+
+        // Deine eigenen Posts - hier kannst du deine Bilder und Captions einfügen
+        const YOUR_POSTS = [
+            {
+                id: '1',
+                image: `${LOCAL_IMAGES_PATH}post1.jpg`,
+                caption: 'Hier deine eigene Caption für das erste Bild ✨ #photography #yourhashtag',
+                likes: 1247,
+                timestamp: '2024-11-25T18:30:00Z',
+                url: `https://www.instagram.com/${INSTAGRAM_USERNAME}/`
+            },
+            {
+                id: '2', 
+                image: `${LOCAL_IMAGES_PATH}post2.jpg`,
+                caption: 'Deine zweite Caption 🌃 #lifestyle #creative',
+                likes: 892,
+                timestamp: '2024-11-22T20:45:00Z',
+                url: `https://www.instagram.com/${INSTAGRAM_USERNAME}/`
+            },
+            {
+                id: '3',
+                image: `${LOCAL_IMAGES_PATH}post3.jpg`, 
+                caption: 'Deine dritte Caption ☕️ #morning #inspiration',
+                likes: 567,
+                timestamp: '2024-11-20T09:15:00Z',
+                url: `https://www.instagram.com/${INSTAGRAM_USERNAME}/`
+            },
+            {
+                id: '4',
+                image: `${LOCAL_IMAGES_PATH}post4.jpg`,
+                caption: 'Vierte Caption 🌊 #nature #adventure',
+                likes: 2341,
+                timestamp: '2024-11-18T15:20:00Z',
+                url: `https://www.instagram.com/${INSTAGRAM_USERNAME}/`
+            },
+            {
+                id: '5',
+                image: `${LOCAL_IMAGES_PATH}post5.jpg`,
+                caption: 'Fünfte Caption ⛰️ #travel #explore',
+                likes: 1456,
+                timestamp: '2024-11-15T12:00:00Z',
+                url: `https://www.instagram.com/${INSTAGRAM_USERNAME}/`
+            },
+            {
+                id: '6',
+                image: `${LOCAL_IMAGES_PATH}post6.jpg`,
+                caption: 'Sechste Caption 🎨 #art #creativity',
+                likes: 789,
+                timestamp: '2024-11-12T16:30:00Z',
+                url: `https://www.instagram.com/${INSTAGRAM_USERNAME}/`
+            }
+        ];
+
+        // Fallback Demo-Bilder (falls deine lokalen Bilder nicht verfügbar sind)
+        const DEMO_POSTS = [
+            {
+                id: 'demo1',
+                image: 'https://via.placeholder.com/400x400/1a1a2e/00f0ff?text=📸+Dein+Bild+1',
+                caption: '📸 Hier kommt dein erstes Bild hin! Lade es als "post1.jpg" in den Instagram-Ordner.',
+                likes: 1247,
+                timestamp: '2024-11-25T18:30:00Z',
+                url: `https://www.instagram.com/${INSTAGRAM_USERNAME}/`
+            },
+            {
+                id: '2',
+                image: 'https://images.unsplash.com/photo-1581833971358-2c8b550f87b3?w=400&h=400&fit=crop&crop=center',
+                caption: 'Code by night, create by day 🌃 Building the future one line at a time #coding #webdeveloper #neon',
+                likes: 892,
+                timestamp: '2024-11-22T20:45:00Z',
+                url: `https://www.instagram.com/${INSTAGRAM_USERNAME}/`
+            },
+            {
+                id: '3',
+                image: 'https://images.unsplash.com/photo-1555066931-4365d14bab8c?w=400&h=400&fit=crop&crop=center',
+                caption: 'Coffee-driven development ☕️ New features incoming! #programming #javascript #creative',
+                likes: 567,
+                timestamp: '2024-11-20T09:15:00Z',
+                url: `https://www.instagram.com/${INSTAGRAM_USERNAME}/`
+            },
+            {
+                id: '4',
+                image: 'https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=400&h=400&fit=crop&crop=center',
+                caption: 'Portal effects are getting wild � #webgl #shaders #digitalart #immersive',
+                likes: 2341,
+                timestamp: '2024-11-18T15:20:00Z',
+                url: `https://www.instagram.com/${INSTAGRAM_USERNAME}/`
+            },
+            {
+                id: '5',
+                image: 'https://images.unsplash.com/photo-1516339901601-2e1b62dc0c45?w=400&h=400&fit=crop&crop=center',
+                caption: 'Backend adventures await ⛰️ New API endpoints deployed! #backend #nodejs #tech',
+                likes: 1456,
+                timestamp: '2024-11-15T12:00:00Z',
+                url: `https://www.instagram.com/${INSTAGRAM_USERNAME}/`
+            },
+            {
+                id: '6',
+                image: 'https://images.unsplash.com/photo-1558470598-a5dda9640f68?w=400&h=400&fit=crop&crop=center',
+                caption: 'Art meets technology 🎨 Every project is a canvas #creativity #design #digital',
+                likes: 789,
+                timestamp: '2024-11-12T16:30:00Z',
+                url: `https://www.instagram.com/${INSTAGRAM_USERNAME}/`
+            },
+            {
+                id: '7',
+                image: 'https://images.unsplash.com/photo-1518709268805-4e9042af2176?w=400&h=400&fit=crop&crop=center&sat=-100',
+                caption: 'Minimal design, maximum impact 🖤 Less is more in the digital realm #minimal #ux #blackandwhite',
+                likes: 1123,
+                timestamp: '2024-11-10T14:20:00Z',
+                url: `https://www.instagram.com/${INSTAGRAM_USERNAME}/`
+            },
+            {
+                id: '8',
+                image: 'https://images.unsplash.com/photo-1555066931-4365d14bab8c?w=400&h=400&fit=crop&crop=center&hue=240',
+                caption: 'Debugging sessions with style 💻 Find the bug, fix the world #debugging #developer #workflow',
+                likes: 645,
+                timestamp: '2024-11-08T11:45:00Z',
+                url: `https://www.instagram.com/${INSTAGRAM_USERNAME}/`
+            }
+        ];
+
+        // Utility Functions
+        function formatNumber(num) {
+            if (num >= 1000000) {
+                return (num / 1000000).toFixed(1) + 'M';
+            }
+            if (num >= 1000) {
+                return (num / 1000).toFixed(1) + 'K';
+            }
+            return num.toString();
+        }
+
+        function formatDate(dateString) {
+            const date = new Date(dateString);
+            const now = new Date();
+            const diffTime = Math.abs(now - date);
+            const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+            
+            if (diffDays === 0) return 'Heute';
+            if (diffDays === 1) return 'Gestern';
+            if (diffDays < 7) return `vor ${diffDays} Tagen`;
+            if (diffDays < 30) return `vor ${Math.ceil(diffDays / 7)} Wochen`;
+            return `vor ${Math.ceil(diffDays / 30)} Monaten`;
+        }
+
+        // Create Post Element
+        function createPostElement(post) {
+            return `
+                <div class="instagram-post" onclick="openInstagramPost('${post.url}')">
+                    <div style="position: relative;">
+                        <img src="${post.image}" alt="Instagram Post" class="post-image" 
+                             onerror="this.src='https://via.placeholder.com/400x400/1a1a2e/ffffff?text=Foto+nicht+verfügbar'">
+                        <div class="post-overlay">
+                            <div class="post-stats">
+                                <div class="post-likes">
+                                    <span>❤️</span>
+                                    <span>${formatNumber(post.likes)}</span>
+                                </div>
+                                <div class="post-date">${formatDate(post.timestamp)}</div>
+                            </div>
+                        </div>
+                    </div>
+                    ${post.caption ? `
+                        <div class="post-info">
+                            <div class="post-caption">${post.caption}</div>
+                            <div class="post-meta">
+                                <span>${formatDate(post.timestamp)}</span>
+                                <span>❤️ ${formatNumber(post.likes)}</span>
+                            </div>
+                        </div>
+                    ` : ''}
+                </div>
+            `;
+        }
+
+        // Open Instagram Post
+        function openInstagramPost(url) {
+            if (url && url !== '#') {
+                window.open(url, '_blank');
+            } else {
+                window.open(`https://www.instagram.com/${notaboutptrickedr}/`, '_blank');
+            }
+        }
+
+        // Experimental Web Scraping Approach (may not work due to CORS)
+        async function attemptWebScraping() {
+            try {
+                // This is experimental and may be blocked by Instagram's CORS policy
+                const proxyUrl = 'https://api.allorigins.win/get?url=';
+                const targetUrl = encodeURIComponent(API_ENDPOINTS.webScrape);
+                
+                const response = await fetch(`${proxyUrl}${targetUrl}`);
+                const data = await response.json();
+                
+                // Parse Instagram page content (sehr basic)
+                const content = data.contents;
+                const scriptMatches = content.match(/window\._sharedData\s*=\s*({.+?});/);
+                
+                if (scriptMatches && scriptMatches[1]) {
+                    const sharedData = JSON.parse(scriptMatches[1]);
+                    const user = sharedData.entry_data?.ProfilePage?.[0]?.graphql?.user;
+                    
+                    if (user && user.edge_owner_to_timeline_media?.edges) {
+                        return user.edge_owner_to_timeline_media.edges.map(edge => ({
+                            id: edge.node.id,
+                            image: edge.node.display_url,
+                            caption: edge.node.edge_media_to_caption?.edges?.[0]?.node?.text || '',
+                            likes: edge.node.edge_liked_by?.count || 0,
+                            timestamp: new Date(edge.node.taken_at_timestamp * 1000).toISOString(),
+                            url: `https://www.instagram.com/p/${edge.node.shortcode}/`
+                        }));
+                    }
+                }
+                
+                throw new Error('Kein gültiger Instagram-Inhalt gefunden');
+            } catch (error) {
+                console.warn('Web-Scraping nicht möglich:', error.message);
+                return [];
+            }
+        }
+
+        // Load local images first
+        async function loadLocalImages() {
+            console.log('🔍 Suche nach lokalen Bildern...');
+            const localPosts = [];
+            
+            // Versuche deine eigenen Bilder zu laden
+            for (let i = 0; i < YOUR_POSTS.length; i++) {
+                const post = YOUR_POSTS[i];
+                try {
+                    // Teste ob das Bild existiert
+                    const imageExists = await checkImageExists(post.image);
+                    if (imageExists) {
+                        localPosts.push(post);
+                        console.log(`✅ Lokales Bild gefunden: ${post.image}`);
+                    }
+                } catch (error) {
+                    console.log(`❌ Bild nicht gefunden: ${post.image}`);
+                }
+            }
+
+            if (localPosts.length > 0) {
+                console.log(`🎉 ${localPosts.length} lokale Bilder geladen!`);
+                return localPosts;
+            } else {
+                console.log('⚠️ Keine lokalen Bilder gefunden, verwende Platzhalter');
+                return DEMO_POSTS;
+            }
+        }
+
+        // Check if image exists
+        function checkImageExists(imageSrc) {
+            return new Promise((resolve) => {
+                const img = new Image();
+                img.onload = () => resolve(true);
+                img.onerror = () => resolve(false);
+                img.src = imageSrc;
+            });
+        }
+
+        // Auto-refresh Instagram data every 10 minutes
+        function setupAutoRefresh() {
+            setInterval(() => {
+                console.log('🔄 Auto-refresh Instagram feed...');
+                if (document.visibilityState === 'visible') {
+                    loadInstagramFeed();
+                }
+            }, 600000); // 10 Minuten
+        }
+
+        // Load Instagram Feed
+        async function loadInstagramFeed() {
+            const loadingSpinner = document.getElementById('loadingSpinner');
+            const errorMessage = document.getElementById('errorMessage');
+            const instagramGrid = document.getElementById('instagramGrid');
+            const profileInfo = document.getElementById('profileInfo');
+
+            // Reset UI
+            loadingSpinner.style.display = 'flex';
+            errorMessage.classList.add('hidden');
+            instagramGrid.classList.add('hidden');
+            profileInfo.classList.add('hidden');
+
+            try {
+                let posts = [];
+                
+                // Versuche zuerst echte Instagram-Daten zu laden
+                if (INSTAGRAM_ACCESS_TOKEN) {
+                    try {
+                        const response = await fetch(`${API_ENDPOINTS.basicDisplay}?fields=id,media_type,media_url,thumbnail_url,caption,timestamp,permalink&access_token=${INSTAGRAM_ACCESS_TOKEN}`);
+                        
+                        if (response.ok) {
+                            const data = await response.json();
+                            posts = processInstagramData(data);
+                            console.log('✅ Instagram API erfolgreich geladen:', posts.length, 'Posts');
+                        } else {
+                            throw new Error('API Response nicht erfolgreich');
+                        }
+                    } catch (apiError) {
+                        console.warn('⚠️ Instagram API Fehler:', apiError.message);
+                        // Fallback zu Demo-Daten
+                        posts = DEMO_POSTS;
+                    }
+                } else {
+                    console.log('ℹ️ Kein Access Token gefunden, lade lokale Bilder...');
+                    // Simuliere Ladezeit für realistische UX
+                    await new Promise(resolve => setTimeout(resolve, 1000));
+                    posts = await loadLocalImages();
+                }
+
+                // Alternative: Versuche Web-Scraping (experimentell)
+                if (posts.length === 0) {
+                    try {
+                        posts = await attemptWebScraping();
+                    } catch (scrapeError) {
+                        console.warn('⚠️ Web-Scraping fehlgeschlagen:', scrapeError.message);
+                        posts = DEMO_POSTS;
+                    }
+                }
+
+                if (posts && posts.length > 0) {
+                    displayPosts(posts);
+                    showProfileInfo();
+                } else {
+                    throw new Error('Keine Posts verfügbar');
+                }
+
+            } catch (error) {
+                console.error('❌ Fehler beim Laden des Instagram Feeds:', error);
+                showError();
+            }
+        }
+
+        // Display Posts
+        function displayPosts(posts) {
+            const instagramGrid = document.getElementById('instagramGrid');
+            const loadingSpinner = document.getElementById('loadingSpinner');
+
+            let postsHTML = '';
+            posts.forEach(post => {
+                postsHTML += createPostElement(post);
+            });
+
+            instagramGrid.innerHTML = postsHTML;
+            
+            // Fade in animation
+            setTimeout(() => {
+                loadingSpinner.style.display = 'none';
+                instagramGrid.classList.remove('hidden');
+                instagramGrid.style.opacity = '0';
+                instagramGrid.style.transform = 'translateY(20px)';
+                instagramGrid.style.transition = 'all 0.6s ease';
+                
+                setTimeout(() => {
+                    instagramGrid.style.opacity = '1';
+                    instagramGrid.style.transform = 'translateY(0)';
+                }, 50);
+            }, 300);
+        }
+
+        // Show Profile Info
+        async function showProfileInfo() {
+            const profileInfo = document.getElementById('profileInfo');
+            const profileAvatar = document.getElementById('profileAvatar');
+            const profileFollowers = document.getElementById('profileFollowers');
+            const profilePosts = document.getElementById('profilePosts');
+
+            // Versuche dein Profilbild zu laden
+            const profileExists = await checkImageExists(PROFILE_IMAGE);
+            if (profileExists) {
+                profileAvatar.src = PROFILE_IMAGE;
+                console.log('✅ Dein Profilbild geladen!');
+            } else {
+                // Fallback zu stilvollem Platzhalter
+                profileAvatar.src = 'https://via.placeholder.com/80x80/1a1a2e/00f0ff?text=@' + INSTAGRAM_USERNAME[0].toUpperCase();
+                console.log('⚠️ Profilbild nicht gefunden, verwende Platzhalter');
+            }
+            
+            // Demo-Profildaten (später durch echte API ersetzen)
+            profileFollowers.textContent = 'Follower: 12.5K';
+            profilePosts.textContent = 'Posts: 156';
+
+            profileInfo.classList.remove('hidden');
+            profileInfo.style.opacity = '0';
+            profileInfo.style.transform = 'scale(0.9)';
+            profileInfo.style.transition = 'all 0.4s ease';
+
+            setTimeout(() => {
+                profileInfo.style.opacity = '1';
+                profileInfo.style.transform = 'scale(1)';
+            }, 200);
+        }
+
+        // Show Error
+        function showError() {
+            const loadingSpinner = document.getElementById('loadingSpinner');
+            const errorMessage = document.getElementById('errorMessage');
+
+            loadingSpinner.style.display = 'none';
+            errorMessage.classList.remove('hidden');
+        }
+
+        // Initialize on page load
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('🚀 Instagram Feed wird initialisiert...');
+            
+            // Kurze Verzögerung für smooth Loading-Animation
+            setTimeout(() => {
+                loadInstagramFeed();
+                setupAutoRefresh();
+            }, 500);
+        });
+
+        // Keyboard Navigation
+        document.addEventListener('keydown', function(event) {
+            if (event.key === 'Escape') {
+                window.location.href = '../projekte.html';
+            }
+            if (event.key === 'F5' || (event.ctrlKey && event.key === 'r')) {
+                event.preventDefault();
+                loadInstagramFeed();
+            }
+        });
+    </script>
+</body>
+</html>

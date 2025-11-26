@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Instagram Feed - notaboutptrickedr</title>
+    <link rel="stylesheet" href="../../../styles.css">
+    <style>
+        .instagram-container {
+            min-height: 100vh;
+            background: linear-gradient(135deg, var(--bg) 0%, #0a0e1a 50%, var(--bg) 100%);
+            padding: 20px;
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+        }
+
+        .instagram-header {
+            text-align: center;
+            padding: 30px;
+        }
+
+        .instagram-title {
+            font-size: 3rem;
+            background: linear-gradient(45deg, var(--neon), var(--neon-2));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 40px;
+            text-shadow: 0 0 30px rgba(0, 240, 255, 0.3);
+        }
+
+        .back-button {
+            position: fixed;
+            top: 30px;
+            left: 30px;
+            background: rgba(255, 255, 255, 0.1);
+            -webkit-backdrop-filter: blur(10px);
+            backdrop-filter: blur(10px);
+            border: 1px solid var(--accent);
+            border-radius: 50px;
+            padding: 15px 25px;
+            color: white;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            z-index: 100;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .back-button:hover {
+            background: rgba(0, 240, 255, 0.2);
+            border-color: var(--neon);
+            box-shadow: 0 0 20px rgba(0, 240, 255, 0.3);
+            transform: translateX(-5px);
+        }
+
+        .search-hint {
+            text-align: center;
+            margin: 20px auto;
+            padding: 25px;
+            background: rgba(0, 240, 255, 0.1);
+            border: 1px solid rgba(0, 240, 255, 0.3);
+            border-radius: 20px;
+            max-width: 600px;
+            box-shadow: 0 10px 40px rgba(0, 240, 255, 0.15);
+        }
+
+        .search-hint-title {
+            color: var(--neon);
+            font-weight: 600;
+            font-size: 1.3rem;
+            margin-bottom: 15px;
+        }
+
+        .search-hint-text {
+            color: rgba(255, 255, 255, 0.8);
+            font-size: 1.1rem;
+            margin: 0;
+        }
+
+        .username-highlight {
+            color: var(--neon);
+            font-weight: 700;
+            text-shadow: 0 0 10px rgba(0, 240, 255, 0.4);
+        }
+
+        @media (max-width: 768px) {
+            .instagram-title {
+                font-size: 2rem;
+            }
+            
+            .back-button {
+                top: 15px;
+                left: 15px;
+                padding: 10px 20px;
+            }
+
+            .search-hint {
+                margin: 20px;
+                padding: 20px;
+            }
+
+            .search-hint-title {
+                font-size: 1.1rem;
+            }
+
+            .search-hint-text {
+                font-size: 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="instagram-container">
+        <a href="projekte.html" class="back-button">
+            <span>←</span>
+            <span>Zurück</span>
+        </a>
+
+        <div class="instagram-header">
+            <h1 class="instagram-title">Instagram Feed</h1>
+            
+            <div class="search-hint">
+                <p class="search-hint-title">📸 Folge mir auf Instagram!</p>
+                <p class="search-hint-text">Suche nach: <strong class="username-highlight">@notaboutptrickedr</strong></p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('keydown', function(event) {
+            if (event.key === 'Escape') {
+                window.location.href = 'projekte.html';
+            }
+        });
+    </script>
+</body>
+</html>

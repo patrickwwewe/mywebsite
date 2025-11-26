@@ -1,0 +1,32 @@
+📸 BEISPIEL-SETUP FÜR DEINE BILDER
+
+So lädst du deine eigenen Instagram-Bilder hoch:
+
+1. 📷 PROFILBILD:
+   - Benenne dein Profilbild um zu: "profile.jpg"  
+   - Kopiere es in diesen Ordner
+   - Empfohlene Größe: 400x400 Pixel
+
+2. 📸 INSTAGRAM POSTS:
+   - Benenne deine Posts um zu: "post1.jpg", "post2.jpg", "post3.jpg" usw.
+   - Kopiere sie in diesen Ordner
+   - Die Website lädt automatisch alle verfügbaren Bilder
+
+3. 📝 CAPTIONS ANPASSEN:
+   - Öffne die insta.html Datei
+   - Suche nach "YOUR_POSTS" 
+   - Ändere die Captions zu deinen eigenen Texten
+
+4. 💡 TIPP:
+   - Unterstützte Formate: JPG, JPEG, PNG, WebP
+   - Für beste Performance: Bilder unter 2MB
+   - Quadratische Bilder (1:1) sehen am besten aus
+
+Die Website erkennt automatisch welche Bilder verfügbar sind und lädt sie!
+
+Beispiel-Dateinamen:
+- profile.jpg      (dein Profilbild)
+- post1.jpg        (erstes Instagram-Bild)  
+- post2.jpg        (zweites Instagram-Bild)
+- post3.jpg        (drittes Instagram-Bild)
+- ... und so weiter
