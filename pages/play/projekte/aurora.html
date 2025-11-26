@@ -1,0 +1,582 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AURORA - Automatisierte Wirkungsmessung | Patrick Eder</title>
+    <style>
+        /* ====================================================================
+                               AURORA PROJECT - DETAILSEITE
+           ====================================================================
+           Professionelle Projektdarstellung für die Diplomarbeit
+           ==================================================================== */
+
+        :root {
+            --bg-dark: #03050a;
+            --bg-secondary: #0a0f1a;
+            --accent-white: rgba(255,255,255,0.9);
+            --accent-dim: rgba(255,255,255,0.6);
+            --accent-subtle: rgba(255,255,255,0.3);
+            --neon-cyan: #00f0ff;
+            --neon-purple: #9b00ff;
+            --glass: rgba(255,255,255,0.04);
+            --border-subtle: rgba(255,255,255,0.1);
+            --success-green: #00ff88;
+            --warning-orange: #ffaa00;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: var(--bg-dark);
+            font-family: 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto;
+            color: var(--accent-white);
+            overflow-x: hidden;
+            line-height: 1.6;
+        }
+
+        /* ====================================================================
+                                   HEADER NAVIGATION
+           ====================================================================
+           Konsistent mit anderen Seiten
+           ==================================================================== */
+
+        .header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+            background: rgba(3, 5, 10, 0.95);
+            -webkit-backdrop-filter: blur(10px);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid var(--border-subtle);
+        }
+
+        .header-line {
+            width: 100%;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, var(--accent-white), transparent);
+            margin-bottom: 20px;
+        }
+
+        .nav-menu {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px 40px;
+            gap: 60px;
+        }
+
+        .nav-item {
+            color: var(--accent-dim);
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: 400;
+            letter-spacing: 0.5px;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+        }
+
+        .nav-item:hover {
+            color: var(--accent-white);
+        }
+
+        .back-btn {
+            color: var(--neon-cyan) !important;
+        }
+
+        /* ====================================================================
+                                   MAIN CONTENT
+           ====================================================================
+           Projektdarstellung mit Hero-Bereich und Details
+           ==================================================================== */
+
+        .main-content {
+            margin-top: 100px;
+            padding: 60px 40px;
+            max-width: 1200px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        /* Hero Section */
+        .hero-section {
+            display: flex;
+            align-items: center;
+            gap: 40px;
+            margin-bottom: 80px;
+            padding: 40px 0;
+        }
+
+        .hero-logo {
+            width: 150px;
+            height: 150px;
+            border-radius: 25px;
+            filter: drop-shadow(0 0 30px rgba(0, 240, 255, 0.3));
+            transition: transform 0.3s ease;
+        }
+
+        .hero-logo:hover {
+            transform: scale(1.05);
+        }
+
+        .hero-content {
+            flex: 1;
+        }
+
+        .hero-title {
+            font-size: clamp(2.5rem, 4vw, 3.5rem);
+            font-weight: 600;
+            background: linear-gradient(135deg, var(--accent-white), var(--neon-cyan));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 15px;
+        }
+
+        .hero-subtitle {
+            font-size: 1.3rem;
+            color: var(--neon-purple);
+            font-weight: 400;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            margin-bottom: 25px;
+        }
+
+        .hero-description {
+            font-size: 1.1rem;
+            color: var(--accent-dim);
+            line-height: 1.7;
+            max-width: 600px;
+        }
+
+        /* Project Info Cards */
+        .project-info {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            margin-bottom: 60px;
+        }
+
+        .info-card {
+            background: linear-gradient(135deg, var(--glass), rgba(255,255,255,0.02));
+            border: 1px solid var(--border-subtle);
+            border-radius: 20px;
+            padding: 30px;
+            transition: all 0.3s ease;
+        }
+
+        .info-card:hover {
+            border-color: rgba(0, 240, 255, 0.4);
+            transform: translateY(-5px);
+        }
+
+        .info-card-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .info-icon {
+            font-size: 2rem;
+            margin-right: 15px;
+            filter: drop-shadow(0 0 10px rgba(0, 240, 255, 0.3));
+        }
+
+        .info-title {
+            font-size: 1.3rem;
+            font-weight: 500;
+            color: var(--accent-white);
+        }
+
+        .info-content {
+            color: var(--accent-dim);
+            line-height: 1.6;
+        }
+
+        .info-list {
+            list-style: none;
+            padding: 0;
+        }
+
+        .info-list li {
+            position: relative;
+            padding-left: 20px;
+            margin-bottom: 8px;
+        }
+
+        .info-list li::before {
+            content: '▸';
+            position: absolute;
+            left: 0;
+            color: var(--neon-cyan);
+        }
+
+        /* Technical Details Section */
+        .tech-section {
+            margin-bottom: 60px;
+        }
+
+        .section-title {
+            font-size: 2rem;
+            font-weight: 500;
+            color: var(--accent-white);
+            margin-bottom: 30px;
+            text-align: center;
+        }
+
+        .tech-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+        }
+
+        .tech-item {
+            background: linear-gradient(135deg, rgba(155, 0, 255, 0.1), rgba(0, 240, 255, 0.05));
+            border: 1px solid rgba(155, 0, 255, 0.3);
+            border-radius: 15px;
+            padding: 20px;
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+
+        .tech-item:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 30px rgba(155, 0, 255, 0.2);
+        }
+
+        .tech-name {
+            font-weight: 500;
+            color: var(--neon-purple);
+            margin-bottom: 8px;
+        }
+
+        .tech-description {
+            font-size: 0.9rem;
+            color: var(--accent-dim);
+        }
+
+        /* Results Section */
+        .results-section {
+            background: linear-gradient(135deg, var(--glass), rgba(0, 240, 255, 0.02));
+            border: 1px solid var(--border-subtle);
+            border-radius: 25px;
+            padding: 40px;
+            margin-bottom: 60px;
+        }
+
+        .results-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 30px;
+            margin-top: 30px;
+        }
+
+        .result-item {
+            text-align: center;
+            padding: 20px;
+        }
+
+        .result-number {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: var(--success-green);
+            margin-bottom: 10px;
+        }
+
+        .result-label {
+            font-size: 0.9rem;
+            color: var(--accent-dim);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        /* Status Badge */
+        .status-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            background: rgba(0, 255, 136, 0.1);
+            border: 1px solid rgba(0, 255, 136, 0.3);
+            color: var(--success-green);
+            padding: 10px 20px;
+            border-radius: 25px;
+            font-weight: 500;
+            margin-top: 20px;
+        }
+
+        .status-indicator {
+            width: 10px;
+            height: 10px;
+            background: var(--success-green);
+            border-radius: 50%;
+            box-shadow: 0 0 10px var(--success-green);
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.6; }
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .main-content {
+                padding: 40px 20px;
+                margin-top: 80px;
+            }
+
+            .hero-section {
+                flex-direction: column;
+                text-align: center;
+                gap: 30px;
+            }
+
+            .hero-logo {
+                width: 120px;
+                height: 120px;
+            }
+
+            .nav-menu {
+                gap: 20px;
+                flex-wrap: wrap;
+                padding: 15px 20px;
+            }
+
+            .project-info {
+                grid-template-columns: 1fr;
+                gap: 20px;
+            }
+        }
+
+        /* Fade-in Animation */
+        .fade-in {
+            opacity: 0;
+            transform: translateY(20px);
+            animation: fadeInElement 0.8s ease-out forwards;
+        }
+
+        .fade-in-delay-1 { animation-delay: 0.2s; }
+        .fade-in-delay-2 { animation-delay: 0.4s; }
+        .fade-in-delay-3 { animation-delay: 0.6s; }
+
+        @keyframes fadeInElement {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header Navigation -->
+    <header class="header">
+        <div class="header-line"></div>
+        <nav class="nav-menu">
+            <a href="../../../index.html" class="nav-item">Portal</a>
+            <a href="../../about.html" class="nav-item">Über Mich</a>
+            <a href="projekte.html" class="nav-item back-btn">← Zurück zu Projekte</a>
+            <a href="../../contact.html" class="nav-item">Kontakt</a>
+        </nav>
+    </header>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <!-- Hero Section -->
+        <section class="hero-section fade-in">
+            <img src="../../../js/assets/aurora_photo.png" class="hero-logo" alt="AURORA Logo">
+            <div class="hero-content">
+                <h1 class="hero-title">AURORA</h1>
+                <p class="hero-subtitle">Automatisierte Wirkungsmessung</p>
+                <p class="hero-description">
+                    Ein innovatives Tool zur Messung der Wirkung und des Erfolgs von Interaktionen 
+                    in der Bildungs- und Berufsberatung für Jugendliche. Das System erfasst Daten aus 
+                    Beratungsgesprächen automatisch und bereitet sie in Google Sheets für Analysen und 
+                    Berichte auf. Entwickelt als Diplomarbeit in Zusammenarbeit mit der PATHfindr gGmbH.
+                </p>
+                <div class="status-badge">
+                    <div class="status-indicator"></div>
+                    Projekt erfolgreich abgeschlossen
+                </div>
+            </div>
+        </section>
+
+        <!-- Project Information Cards -->
+        <section class="project-info fade-in fade-in-delay-1">
+            <div class="info-card">
+                <div class="info-card-header">
+                    <span class="info-icon">🎯</span>
+                    <h3 class="info-title">Projektziel</h3>
+                </div>
+                <div class="info-content">
+                    <p>Automatisierung der Erfolgsmessung in der Berufs- und Bildungsberatung durch 
+                    intelligente Datenerfassung und -analyse. Reduzierung des manuellen Aufwands 
+                    für Berater*innen und verbesserte Transparenz für Stakeholder.</p>
+                </div>
+            </div>
+
+            <div class="info-card">
+                <div class="info-card-header">
+                    <span class="info-icon">⚡</span>
+                    <h3 class="info-title">Kernfunktionen</h3>
+                </div>
+                <div class="info-content">
+                    <ul class="info-list">
+                        <li>Automatische Erfassung von Beratungsinteraktionen</li>
+                        <li>Echtzeit-Datenverarbeitung und -strukturierung</li>
+                        <li>Intelligente Kategorisierung von Gesprächen</li>
+                        <li>Automatisierte Datenübertragung in Google Sheets</li>
+                        <li>Plattformübergreifende Integration (Discord & Instagram)</li>
+                        <li>Benutzerfreundliche Datenvisualisierung für Stakeholder</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="info-card">
+                <div class="info-card-header">
+                    <span class="info-icon">👥</span>
+                    <h3 class="info-title">Zielgruppe</h3>
+                </div>
+                <div class="info-content">
+                    <p>Entwickelt für gemeinnützige Organisationen in der Jugendberatung, 
+                    Bildungseinrichtungen und Berufsberatungsstellen, die ihre Wirkungsmessung 
+                    professionalisieren und automatisieren möchten.</p>
+                </div>
+            </div>
+
+            <div class="info-card">
+                <div class="info-card-header">
+                    <span class="info-icon">�</span>
+                    <h3 class="info-title">Datenverarbeitung</h3>
+                </div>
+                <div class="info-content">
+                    <p>Automatisierte Übertragung und Strukturierung von Beratungsdaten in Google Sheets. 
+                    Ermöglicht Echtzeit-Analysen, professionelle Berichtserstellung und transparente 
+                    Erfolgsmessung für Investoren und Fördergeber.</p>
+                </div>
+            </div>
+
+            <div class="info-card">
+                <div class="info-card-header">
+                    <span class="info-icon">�🔬</span>
+                    <h3 class="info-title">Innovation</h3>
+                </div>
+                <div class="info-content">
+                    <p>Erste vollautomatisierte Lösung für Wirkungsmessung in der Jugendberatung, 
+                    die verschiedene Kommunikationskanäle intelligent verknüpft und dabei 
+                    Datenschutz und Benutzerfreundlichkeit in den Vordergrund stellt.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Technical Stack -->
+        <section class="tech-section fade-in fade-in-delay-2">
+            <h2 class="section-title">Verwendete Technologien</h2>
+            <div class="tech-grid">
+                <div class="tech-item">
+                    <div class="tech-name">Python</div>
+                    <div class="tech-description">Hauptprogrammiersprache für Bot-Entwicklung</div>
+                </div>
+                <div class="tech-item">
+                    <div class="tech-name">Discord API</div>
+                    <div class="tech-description">Integration in Discord-Plattform</div>
+                </div>
+                <div class="tech-item">
+                    <div class="tech-name">Google Sheets API</div>
+                    <div class="tech-description">Automatisierte Datenübertragung und -aufbereitung</div>
+                </div>
+                <div class="tech-item">
+                    <div class="tech-name">Selenium</div>
+                    <div class="tech-description">Webautomatisierung für Datenerfassung</div>
+                </div>
+                <div class="tech-item">
+                    <div class="tech-name">OAuth 2.0</div>
+                    <div class="tech-description">Sichere Authentifizierung</div>
+                </div>
+                <div class="tech-item">
+                    <div class="tech-name">Adobe Suite</div>
+                    <div class="tech-description">Design und Video-Produktion</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Project Results -->
+        <section class="results-section fade-in fade-in-delay-3">
+            <h2 class="section-title">Projektergebnisse</h2>
+            <p style="text-align: center; color: var(--accent-dim); margin-bottom: 20px;">
+                Entwickelt als Abschlussarbeit an der Handelsakademie Rohrbach im Ausbildungsschwerpunkt Digital Business
+            </p>
+            
+            <div class="results-grid">
+                <div class="result-item">
+                    <div class="result-number">100%</div>
+                    <div class="result-label">Automatisierung</div>
+                </div>
+                <div class="result-item">
+                    <div class="result-number">2</div>
+                    <div class="result-label">Plattformen</div>
+                </div>
+                <div class="result-item">
+                    <div class="result-number">24/7</div>
+                    <div class="result-label">Verfügbarkeit</div>
+                </div>
+                <div class="result-item">
+                    <div class="result-number">∞</div>
+                    <div class="result-label">Skalierbarkeit</div>
+                </div>
+            </div>
+
+            <div style="margin-top: 40px; text-align: center;">
+                <h3 style="color: var(--accent-white); margin-bottom: 20px;">Projektteam</h3>
+                <p style="color: var(--accent-dim);">
+                    <strong>Patrick Eder</strong> - Projektleitung, Bot-Entwicklung, Design<br>
+                    <strong>Emma Füreder</strong> - Projektmanagement, Erklärvideos<br>
+                    <br>
+                    <em>Betreuer: Mag. Ingo Lacheiner, Prof. DI Markus Meisinger</em><br>
+                    <em>Auftraggeber: PATHfindr gGmbH</em>
+                </p>
+            </div>
+        </section>
+    </main>
+
+    <script>
+        // Intersection Observer für Animationen
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+
+        const observer = new IntersectionObserver(function(entries) {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.animationPlayState = 'running';
+                }
+            });
+        }, observerOptions);
+
+        // Alle fade-in Elemente beobachten
+        document.querySelectorAll('.fade-in').forEach(el => {
+            el.style.animationPlayState = 'paused';
+            observer.observe(el);
+        });
+
+        // Smooth scroll für Navigation
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth'
+                    });
+                }
+            });
+        });
+    </script>
+</body>
+</html>

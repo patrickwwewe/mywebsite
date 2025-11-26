@@ -281,6 +281,21 @@
         }
 
         /* ====================================================================
+                                   PROJECT LOGO STYLE ALS BILD
+           ====================================================================
+           Stil für Projekt-Logo eines BILDES in Projektkarten
+           ==================================================================== */
+        .project-logo {
+    width: 2.5rem;  /* Gleiche Größe wie project-icon */
+    height: 2.5rem;
+    object-fit: cover;
+    border-radius: 12px; /* Für runde Ecken, bei Kreis: 50% */
+    margin-right: 15px; /* Gleicher Abstand wie project-icon */
+    filter: drop-shadow(0 0 10px rgba(0, 240, 255, 0.3)); /* Gleicher Effekt */
+}
+
+
+        /* ====================================================================
                                    COMING SOON CARD
            ====================================================================
            Spezielle Karte für kommende Projekte
@@ -408,11 +423,11 @@
     <header class="header">
         <div class="header-line"></div>
         <nav class="nav-menu">
-            <a href="../index.html" class="nav-item">Portal</a>
-            <a href="about.html" class="nav-item">Über Mich</a>
+            <a href="../../../index.html" class="nav-item">Portal</a>
+            <a href="../../about.html" class="nav-item">Über Mich</a>
             <a href="#" class="nav-item active">Projekte</a>
-            <a href="contact.html" class="nav-item">Kontakt</a>
-            <a href="impressum.html" class="nav-item">Impressum</a>
+            <a href="../../contact.html" class="nav-item">Kontakt</a>
+            <a href="../../impressum.html" class="nav-item">Impressum</a>
         </nav>
     </header>
 
@@ -451,6 +466,38 @@
                     <span class="status-text">Live & Funktional</span>
                 </div>
             </a>
+
+            <!-- Pojekt 2: Diplomarbeit Aurora-->
+ <a href="aurora.html" class="project-card fade-in fade-in-delay-2">
+    <div class="project-header">
+        <img src="../../../js/assets/aurora_photo.png" class="project-logo" alt="AURORA Logo">
+        
+        <div>
+            <h3 class="project-title">AURORA – Diplomarbeit</h3>
+            <p class="project-subtitle">Automatisierte Wirkungsmessung</p>
+        </div>
+    </div>
+
+    <p class="project-description">
+        Ein Discord-Chatbot zur automatisierten Wirkungsmessung in der Bildungs- 
+        und Berufsberatung. Erfasst Interaktionen in Echtzeit, analysiert die Daten 
+        und bereitet sie in Google Sheets für Berichte & Stakeholder auf. 
+        Erweiterung durch Instagram-Integration und begleitendes Erklärvideo.
+    </p>
+
+    <div class="project-tech">
+        <span class="tech-tag">Python</span>
+        <span class="tech-tag">Discord API</span>
+        <span class="tech-tag">Google Sheets API</span>
+        <span class="tech-tag">Instagram Graph API</span>
+        <span class="tech-tag">Automation</span>
+    </div>
+
+    <div class="project-status">
+        <div class="status-indicator completed"></div>
+        <span class="status-text">Abgeschlossen & Dokumentiert</span>
+    </div>
+</a>
 
             <!-- Coming Soon Cards -->
             <div class="coming-soon-card fade-in fade-in-delay-2">
