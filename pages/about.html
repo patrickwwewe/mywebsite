@@ -145,7 +145,7 @@
 
         .content-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            grid-template-columns: repeat(3, 1fr);
             gap: 30px;
             margin-bottom: 60px;
         }
@@ -521,6 +521,21 @@
                 grid-template-columns: 1fr;
                 gap: 20px;
             }
+        }
+
+        /* Tablet-Ansicht: 2 Spalten */
+        @media (max-width: 1024px) and (min-width: 769px) {
+            .content-grid {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 25px;
+            }
+        }
+
+        /* Desktop-Ansicht: Immer 3 Spalten */
+        @media (min-width: 1025px) {
+            .content-grid {
+                grid-template-columns: repeat(3, 1fr);
+            }
 
             .content-card, .personal-card {
                 padding: 25px 20px;
@@ -687,149 +702,96 @@
                 </div>
             </div>
         </section>
-
-        <!-- Content Grid -->
-        <section class="content-grid">
-
-        </section>
-
         <!-- Skills Section -->
-        <section class="skills-section">
-            <h2 class="section-title fade-in">Kenntnisse & Erfahrungen</h2>
-                        <div class="content-card fade-in fade-in-delay-1">
-                <span class="card-icon">🤖</span>
-                <h3 class="card-title">Lead Development & API Integration</h3>
-                <p class="card-text">
-                    Leitung und technische Umsetzung eines Discord-Chatbots zur automatisierten Wirkungsmessung 
-                    in der Jugendberatung. Entwicklung modularer, skalierbarer Systeme mit Python, Discord API 
-                    und Google Sheets für Echtzeit-Erfassung und Analyse von Beratungsinteraktionen.
-                </p>
-            </div>
+<section class="skills-section">
+    <h2 class="section-title fade-in">Kenntnisse & Erfahrungen</h2>
 
-            <div class="content-card fade-in fade-in-delay-2">
-                <span class="card-icon">🛡️</span>
-                <h3 class="card-title">Cybersecurity & Penetration Testing</h3>
-                <p class="card-text">
-                    Fundierte Kenntnisse in Penetration Testing-Methodologien (OSSTMM) inkl. Reconnaissance, 
-                    Schwachstellenanalyse und Exploitation. Praktische Erfahrung mit Nmap, Metasploit, 
-                    Wireshark, OpenVAS, BeEF und gängigen Web-Security Angriffstechniken (XSS, SQLi, CSRF).
-                </p>
-            </div>
+    <!-- Content Grid -->
+    <div class="content-grid">
 
-            <div class="content-card fade-in fade-in-delay-3">
-                <span class="card-icon">💼</span>
-                <h3 class="card-title">Kaufmännische Expertise</h3>
-                <p class="card-text">
-                    HAK-Absolvent mit Standardisierter Reife- & Diplomprüfung (BWL/UR). Expertise in 
-                    Rechnungswesen, Kostenrechnung, Personalverrechnung (AT), Steuer- & Unternehmensrecht 
-                    sowie DSGVO-konforme Datenverarbeitung und digitale Geschäftsprozesse.
-                </p>
-            </div>
+        <!-- Softwareentwicklung & API Integration -->
+        <div class="content-card fade-in fade-in-delay-1">
+            <span class="card-icon">🤖</span>
+            <h3 class="card-title">Softwareentwicklung & API-Integration</h3>
+            <p class="card-text">
+                Entwicklung modularer Tools und Bots mit Python, C# und JavaScript. 
+                Integrationen mit Discord API, Google Sheets API und Instagram Graph API. 
+                Echtzeit-Datenerfassung, Prozessautomatisierung und mehrstufiges Session-Tracking.
+            </p>
+        </div>
 
-            <div class="content-card fade-in fade-in-delay-1">
-                <span class="card-icon">🔄</span>
-                <h3 class="card-title">Session-Tracking & Datenanalyse</h3>
-                <p class="card-text">
-                    Implementierung mehrstufigen Session-Trackings zur Unterscheidung komplexer Beratungen. 
-                    Robuste Datenverwaltung mit automatischer Inaktivitätsprüfung, Bewertungsmechanismus 
-                    und plattformübergreifender Instagram-Bot Integration via Graph API.
-                </p>
-            </div>
+        <!-- Cybersecurity -->
+        <div class="content-card fade-in fade-in-delay-2">
+            <span class="card-icon">🛡️</span>
+            <h3 class="card-title">Cybersecurity & Penetration Testing</h3>
+            <p class="card-text">
+                Kenntnisse in OSSTMM-Methodologie, Reconnaissance, Schwachstellenanalyse und 
+                grundlegender Exploitation. Erfahrung mit Nmap, Metasploit, Wireshark, 
+                OpenVAS/Greenbone und BeEF sowie Web-Security (XSS, SQLi, CSRF, Directory Traversal).
+            </p>
+        </div>
 
-            <div class="content-card fade-in fade-in-delay-2">
-                <span class="card-icon">🌐</span>
-                <h3 class="card-title">Full-Stack Development</h3>
-                <p class="card-text">
-                    Vertiefte Kenntnisse in C# (inkl. XAML), Python und moderne Webentwicklung (HTML5/CSS3/JS). 
-                    3D-Visualisierung mit Three.js, Unity und Blender. Multimedia-Design mit Adobe Creative Suite 
-                    für professionelle Web- und Präsentationsprojekte.
-                </p>
-            </div>
+        <!-- Kaufmännische Kompetenzen -->
+        <div class="content-card fade-in fade-in-delay-3">
+            <span class="card-icon">💼</span>
+            <h3 class="card-title">Kaufmännische Kompetenzen</h3>
+            <p class="card-text">
+                HAK-Abschluss (BWL/UR): Rechnungswesen, Kostenrechnung, Personalverrechnung (AT), 
+                Unternehmens- & Wirtschaftsrecht sowie DSGVO-konforme Datenverarbeitung und 
+                workflowgestützte Geschäftsprozesse.
+            </p>
+        </div>
 
-            <div class="content-card fade-in fade-in-delay-3">
-                <span class="card-icon">🎨</span>
-                <h3 class="card-title">Design & Multimedia</h3>
-                <p class="card-text">
-                    Logo- und Icon-Design sowie Erstellung animierter Erklärvideos zur Nutzerschulung. 
-                    Erfahrung mit Adobe Photoshop, Premiere Pro und multimedialer Gestaltung von 
-                    Web-Projekten inklusive 3D-Elementen und responsivem E-Commerce-Design.
-                </p>
-            </div>
-            <div class="content-grid">
-                <div class="content-card fade-in fade-in-delay-1">
-                    <span class="card-icon">🤖</span>
-                    <h3 class="card-title">Lead Development & API Integration</h3>
-                    <p class="card-text">
-                        <strong>Discord-Bot:</strong> Automatisierte Wirkungsmessung in der Jugendberatung<br>
-                        <strong>Modulare Systeme:</strong> Python, Discord API, Google Sheets Integration<br>
-                        <strong>Session-Tracking:</strong> Mehrstufige Unterscheidung komplexer Beratungen<br>
-                        <strong>Instagram-Bot:</strong> Plattformübergreifende Interaktionsanalyse via Graph API<br>
-                        <strong>Datenanalyse:</strong> Echtzeit-Erfassung mit automatischer Inaktivitätsprüfung
-                    </p>
-                </div>
+        <!-- Full-Stack & Webentwicklung -->
+        <div class="content-card fade-in fade-in-delay-1">
+            <span class="card-icon">🌐</span>
+            <h3 class="card-title">Full-Stack & Webentwicklung</h3>
+            <p class="card-text">
+                C#/.NET (XAML), Python und moderne Webentwicklung (HTML5, CSS3, JavaScript). 
+                Erfahrung in Erstellung interaktiver Tools, dynamischer Webfeatures sowie 
+                3D-Visualisierung mit Three.js, Unity und Blender.
+            </p>
+        </div>
 
-                <div class="content-card fade-in fade-in-delay-2">
-                    <span class="card-icon">🛡️</span>
-                    <h3 class="card-title">Cybersecurity & Penetration Testing</h3>
-                    <p class="card-text">
-                        <strong>OSSTMM Methodology:</strong> Reconnaissance, Schwachstellenanalyse, Exploitation<br>
-                        <strong>Security Tools:</strong> Nmap, Metasploit, Wireshark, OpenVAS, Nessus, BeEF<br>
-                        <strong>Web-Security:</strong> XSS, SQLi, CSRF, RCE, Directory Traversal, Command Injection<br>
-                        <strong>SSL/TLS Analysis:</strong> Zertifikatsprüfung, Heartbleed, schwache Ciphers<br>
-                        <strong>Social Engineering:</strong> Phishing, Vishing, Smishing, Awareness-Tests
-                    </p>
-                </div>
+        <!-- Design & Multimedia -->
+        <div class="content-card fade-in fade-in-delay-2">
+            <span class="card-icon">🎨</span>
+            <h3 class="card-title">Design & Multimedia</h3>
+            <p class="card-text">
+                Logo- und Icon-Design, multimediale Webgestaltung, Bild- und Videobearbeitung 
+                mit Adobe Photoshop & Premiere. Erstellung animierter Erklärvideos und visueller 
+                Inhalte für Web und Präsentationen.
+            </p>
+        </div>
 
-                <div class="content-card fade-in fade-in-delay-3">
-                    <span class="card-icon">�</span>
-                    <h3 class="card-title">Kaufmännische Expertise</h3>
-                    <p class="card-text">
-                        <strong>HAK-Absolvent:</strong> Standardisierte Reife- & Diplomprüfung (BWL/UR)<br>
-                        <strong>Rechnungswesen:</strong> Doppelte Buchführung, Kontenrahmen, GuV/Bilanz, Jahresabschluss<br>
-                        <strong>Kostenrechnung:</strong> Deckungsbeitrag, Break-Even, Kalkulation, einfache KLR<br>
-                        <strong>Personalverrechnung:</strong> Brutto-Netto, 13./14., SV, Lohnsteuer, ELDA-Meldungen<br>
-                        <strong>Recht & DSGVO:</strong> Unternehmens-, Arbeits-, E-Business-Recht, Datenschutz
-                    </p>
-                </div>
+        <!-- Systemintegration & IT-Infrastruktur -->
+        <div class="content-card fade-in fade-in-delay-3">
+            <span class="card-icon">🔧</span>
+            <h3 class="card-title">Systemintegration & IT-Infrastruktur</h3>
+            <p class="card-text">
+                Linux Essentials (Cisco), Shell-Scripting, Windows/Linux-Administration, 
+                Netzwerkgrundlagen inklusive Glasfaserinfrastruktur. SQL-Abfragen, 
+                Microsoft Access und Content-Management-Systeme.
+            </p>
+        </div>
 
-                <div class="content-card fade-in fade-in-delay-1">
-                    <span class="card-icon">🌐</span>
-                    <h3 class="card-title">Full-Stack Development</h3>
-                    <p class="card-text">
-                        <strong>C# & .NET:</strong> Vertiefte Kenntnisse inkl. XAML, interaktive Anwendungen und Spiele<br>
-                        <strong>Python:</strong> Praxisnahe Tools, API-Integration (Discord, Instagram, Google Sheets)<br>
-                        <strong>Web-Entwicklung:</strong> HTML5/CSS3/JavaScript, Responsive Design, E-Commerce-Anwendungen<br>
-                        <strong>3D & Multimedia:</strong> Three.js, Unity, Blender - multimediale Web-/Präsentationsprojekte<br>
-                        <strong>Office & Prozesse:</strong> IT-gestützte Geschäftsprozesse, Dokumentenmanagement, Schriftverkehr
-                    </p>
-                </div>
+        <!-- Projektmanagement & Soft Skills -->
+        <div class="content-card fade-in fade-in-delay-1">
+            <span class="card-icon">📊</span>
+            <h3 class="card-title">Projektmanagement & Soft Skills</h3>
+            <p class="card-text">
+                Erfahrung mit Scrum/Kanban, Dokumentation, Teamarbeit und analytischer 
+                Problemlösung. Hohe technische Neugier, selbstständige Arbeitsweise und 
+                strukturierter Projektzugang.
+            </p>
+        </div>
 
-                <div class="content-card fade-in fade-in-delay-2">
-                    <span class="card-icon">🎨</span>
-                    <h3 class="card-title">Design & Multimedia</h3>
-                    <p class="card-text">
-                        <strong>Logo & Icon Design:</strong> Professionelle Corporate Identity Entwicklung<br>
-                        <strong>Animierte Videos:</strong> Erklärvideos zur Nutzerschulung und Onboarding<br>
-                        <strong>Adobe Creative Suite:</strong> Photoshop, Premiere Pro für multimediale Gestaltung<br>
-                        <strong>3D-Projekte:</strong> Blender-Modelle für interaktive Web-Anwendungen<br>
-                        <strong>Responsive Design:</strong> E-Commerce-taugliche, plattformübergreifende Layouts
-                    </p>
-                </div>
+    </div>
+</section>
 
-                <div class="content-card fade-in fade-in-delay-3">
-                    <span class="card-icon">🔄</span>
-                    <h3 class="card-title">System-Integration & Projektmanagement</h3>
-                    <p class="card-text">
-                        <strong>Agile Methoden:</strong> Scrum/Kanban in Teamprojekten von Planung bis Dokumentation<br>
-                        <strong>Linux & Netzwerk:</strong> NDG Linux Essentials (Cisco), Shell-Scripting, Windows/Linux-Grundlagen<br>
-                        <strong>Infrastruktur:</strong> Glasfaseranschlüsse (Praktikum Ploier+Hörmann), Netzwerk-Konfiguration<br>
-                        <strong>Datenbanken & CMS:</strong> SQL-Abfragen, Microsoft Access, Content-Management-Systeme<br>
-                        <strong>Workflow-Integration:</strong> Schnittstelle Kaufmännisch ↔ IT, workflowgestütztes Arbeiten
-                    </p>
-                </div>
-            </div>
-        </section>
 
+      
+ <h2 class="section-title fade-in">Persönliche Fähigkeiten & Sprachen</h2>
         <!-- Personal Skills & Languages -->
         <section class="personal-section">
             <div class="personal-grid">
