@@ -882,8 +882,9 @@ function handleMenuClick(itemId, itemText) {
       
     case 'andmelden':
       console.log('� Navigiere zu Anmelden-Sektion...');
-      // TODO: Navigation zu Anmelden implementieren
-      break;
+     showCustomPopup('🔒', 
+  'Anmeldung nicht verfügbar',
+  'Anmelden wird verfügbar sein, wenn die Website auf einem eigenen sicheren Server ist, wo niemand Zugriff auf den Code hat.');
       
     default:
       console.log('❓ Unbekannter Menüpunkt:', itemId);
@@ -1058,3 +1059,42 @@ window.diagnosPortal = diagnosPortalProblems;
 
 // Export für Resize-Funktionalität
 export { refreshPortalMenuOnResize };
+
+
+   /* ====================================================================
+                        ELEGANTES ANMELDEN-POPUP
+   ==================================================================== */
+
+   function showCustomPopup(icon, title, message)
+   {
+    const popupHTML =`
+    <div class="custom-popup" id="customPopup">
+      <div class="popup-content">
+        <div class="popup-icon">${icon}</div>
+        <div class="popup-title">${title}</div>
+        <div class="popup-message">${message}</div>
+        <button class="popup-button" onclick="closeCustomPopup()">OK</button>
+      </div>
+    </div>
+    `;
+    document.body.insertAdjacentHTML('beforeend', popupHTML);
+    
+
+    setTimeout(()=>{
+      document.getElementById('customPopup').classList.add('show');
+
+    }, 10)
+   }
+
+   function closeCustomPopup(){
+    const popup = document.getElementById('customPopup');
+    if (popup) {
+      popup.classList.remove('show');
+      setTimeout(() => {
+        popup.remove();
+      }, 300); // Warte auf die Ausblend-Animation
+    }
+   }
+
+   // Globale Verfügbarkeit für onclick-Handler
+   window.closeCustomPopup = closeCustomPopup;

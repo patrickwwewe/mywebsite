@@ -432,6 +432,7 @@ canvas {
   box-shadow: 0 0 18px var(--neon), 0 0 40px rgba(155,0,255,0.08) inset;
 }
 
+
 /* ====================================================================
                           ENTWICKLER-NOTIZEN
    ====================================================================
@@ -451,3 +452,111 @@ canvas {
    • Kommentierte Sektionen für einfache Navigation
    
    ==================================================================== */
+
+/* ====================================================================
+                           CUSTOM POPUP STYLES
+   ====================================================================
+   Styles für das Anmelde-Popup und andere Benachrichtigungen
+   ==================================================================== */
+
+.custom-popup {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.8);
+  backdrop-filter: blur(10px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 10000;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  pointer-events: none;
+}
+
+.custom-popup.show {
+  opacity: 1;
+  pointer-events: all;
+}
+
+.popup-content {
+  background: linear-gradient(135deg, rgba(0, 240, 255, 0.1) 0%, rgba(155, 0, 255, 0.1) 100%);
+  border: 2px solid var(--neon);
+  border-radius: 15px;
+  padding: 30px;
+  max-width: 400px;
+  width: 90%;
+  text-align: center;
+  backdrop-filter: blur(15px);
+  box-shadow: 
+    0 0 30px rgba(0, 240, 255, 0.3),
+    0 0 60px rgba(155, 0, 255, 0.2),
+    inset 0 0 20px rgba(255, 255, 255, 0.1);
+  animation: popupEnter 0.3s ease;
+}
+
+@keyframes popupEnter {
+  0% {
+    transform: scale(0.8) translateY(20px);
+    opacity: 0;
+  }
+  100% {
+    transform: scale(1) translateY(0);
+    opacity: 1;
+  }
+}
+
+.popup-icon {
+  font-size: 3rem;
+  margin-bottom: 20px;
+  filter: drop-shadow(0 0 10px var(--neon));
+}
+
+.popup-title {
+  color: var(--neon);
+  font-size: 1.5rem;
+  font-weight: bold;
+  margin-bottom: 15px;
+  font-family: 'Orbitron', monospace;
+  text-shadow: 0 0 10px var(--neon);
+}
+
+.popup-message {
+  color: rgba(255, 255, 255, 0.9);
+  font-size: 1rem;
+  line-height: 1.5;
+  margin-bottom: 25px;
+  font-family: 'Orbitron', monospace;
+}
+
+.popup-button {
+  background: linear-gradient(135deg, var(--neon) 0%, var(--neon-2) 100%);
+  border: none;
+  border-radius: 8px;
+  color: white;
+  font-size: 1rem;
+  font-weight: bold;
+  padding: 12px 30px;
+  cursor: pointer;
+  font-family: 'Orbitron', monospace;
+  transition: all 0.3s ease;
+  box-shadow: 
+    0 0 20px rgba(0, 240, 255, 0.3),
+    0 4px 15px rgba(0, 0, 0, 0.2);
+}
+
+.popup-button:hover {
+  transform: translateY(-2px);
+  box-shadow: 
+    0 0 30px rgba(0, 240, 255, 0.5),
+    0 6px 20px rgba(0, 0, 0, 0.3);
+}
+
+.popup-button:active {
+  transform: translateY(0);
+}
+
+
+
