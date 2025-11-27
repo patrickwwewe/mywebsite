@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Schwarzes Loch Spiel - Patrick</title>
+    
+    <!-- Zentrale styles.css mit allen Game-Styles -->
+    <link rel="stylesheet" href="../../../styles.css">
+    
+    <!-- Fallback Styles falls CSS nicht lädt -->
+    <style>
+        /* Fallback falls styles.css nicht lädt */
+        :root {
+            --bg: #03050a;
+            --neon: #00f0ff;
+            --neon-2: #9b00ff;
+            --accent: rgba(255,255,255,0.06);
+            --glass: rgba(255,255,255,0.04);
+        }
+        
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        body {
+            background: var(--bg);
+            color: white;
+            font-family: 'Inter', system-ui, sans-serif;
+            min-height: 100vh;
+        }
+        
+        .back-link {
+            position: fixed; top: 20px; left: 20px; z-index: 1000;
+            color: var(--neon); text-decoration: none;
+            font-size: 0.9rem; transition: all 0.3s ease;
+        }
+        
+        .back-link:hover { 
+            color: var(--neon-2); 
+            text-shadow: 0 0 10px var(--neon-2); 
+        }
+        
+        .game-container { 
+            max-width: 1200px; margin: 0 auto; padding: 0 40px; 
+        }
+        
+        .game-header { 
+            text-align: center; margin: 120px 0 40px 0; 
+        }
+        
+        .game-title {
+            font-size: 3rem; font-weight: 300; margin-bottom: 20px;
+            background: linear-gradient(135deg, #fff, var(--neon));
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+        }
+        
+        .status-badge {
+            display: inline-flex; align-items: center; gap: 10px;
+            background: rgba(255, 170, 0, 0.1); border: 1px solid rgba(255, 170, 0, 0.3);
+            color: #ffaa00; padding: 8px 16px; border-radius: 20px;
+            font-size: 0.9rem; font-weight: 500;
+        }
+        
+        .status-dot {
+            width: 8px; height: 8px; border-radius: 50%;
+            background: #ffaa00; box-shadow: 0 0 10px #ffaa00;
+            animation: pulse 2s infinite;
+        }
+        
+        @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.5; } }
+        
+        .game-preview {
+            background: linear-gradient(135deg, var(--glass), rgba(255,255,255,0.02));
+            border: 1px solid var(--accent); border-radius: 15px;
+            padding: 40px; margin: 40px 0; text-align: center;
+        }
+        
+        .preview-placeholder {
+            width: 100%; height: 400px;
+            background: radial-gradient(circle, rgba(155,0,255,0.1) 0%, transparent 70%);
+            border: 2px dashed var(--accent); border-radius: 10px;
+            display: flex; flex-direction: column; align-items: center; justify-content: center;
+            margin-bottom: 20px;
+        }
+        
+        .placeholder-icon { 
+            font-size: 4rem; margin-bottom: 20px;
+            filter: drop-shadow(0 0 20px rgba(155,0,255,0.5)); 
+        }
+        
+        .game-description { 
+            color: rgba(255,255,255,0.8); line-height: 1.6; 
+            margin-bottom: 30px; font-size: 1.1rem; 
+        }
+        
+        .tech-list { 
+            display: flex; flex-wrap: wrap; gap: 10px; justify-content: center; 
+        }
+        
+        .tech-tag {
+            background: rgba(0, 240, 255, 0.1); border: 1px solid rgba(0, 240, 255, 0.3);
+            color: var(--neon); padding: 6px 16px; border-radius: 15px;
+            font-size: 0.85rem; font-weight: 500;
+        }
+        
+        @media (max-width: 768px) {
+            .game-container { padding: 0 20px; }
+            .game-preview { padding: 20px; }
+            .preview-placeholder { height: 300px; }
+            .game-header { margin: 100px 0 30px 0; }
+            .game-title { font-size: 2rem; }
+        }
+    </style>
+</head>
+<body>
+    <!-- Back Link -->
+    <a href="projekte.html" class="back-link">← Zurück zu Projekten</a>
+
+    <!-- Main Content -->
+    <div class="game-container">
+        <div class="game-header">
+            <h1 class="game-title">🌌 Need Some Space?</h1>
+            <div class="status-badge">
+                <div class="status-dot"></div>
+                In Entwicklung
+            </div>
+        </div>
+
+        <div class="game-preview">
+            <div class="preview-placeholder">
+                <div class="placeholder-icon">🕳️</div>
+                <h3 style="color: var(--neon-2); margin-bottom: 10px;">Schwarzes Loch Spiel</h3>
+                <p style="color: rgba(255,255,255,0.6);">Gameplay-Preview kommt bald...</p>
+            </div>
+
+            <div class="game-description">
+                <p>Ein fesselndes Weltraum-Spiel, in dem du Objekte in einem schwarzen Loch navigierst. 
+                Basierend auf realistischer Physik und beeindruckenden 3D-Grafiken. Das Spiel verwendet 
+                das "Need Some Space" Asset von Loïc Norgeot für authentische schwarze Loch Visualisierung.</p>
+            </div>
+
+            <div class="tech-list">
+                <span class="tech-tag">Three.js</span>
+                <span class="tech-tag">WebGL</span>
+                <span class="tech-tag">Physics Engine</span>
+                <span class="tech-tag">Blender Assets</span>
+                <span class="tech-tag">GLSL Shaders</span>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
