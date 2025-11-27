@@ -270,6 +270,11 @@
             box-shadow: 0 0 10px #00ff88;
         }
 
+        .status-indicator.purple {
+            background: var(--neon-2);
+            box-shadow: 0 0 10px var(--neon-2);
+        }
+
         .status-text {
             font-size: 0.85rem;
             color: var(--accent-dim);
@@ -278,6 +283,34 @@
         @keyframes pulse {
             0%, 100% { opacity: 1; }
             50% { opacity: 0.5; }
+        }
+
+        /* ====================================================================
+                                   PURPLE PROJECT CARD VARIANT
+           ====================================================================
+           Lila Variante für spezielle Projekte
+           ==================================================================== */
+
+        .project-card-purple {
+            background: linear-gradient(135deg, rgba(155, 0, 255, 0.08), rgba(255,255,255,0.02));
+            border: 1px solid rgba(155, 0, 255, 0.2);
+        }
+
+        .project-card-purple::before {
+            background: linear-gradient(90deg, transparent, rgba(155, 0, 255, 0.1), transparent);
+        }
+
+        .project-card-purple:hover {
+            border-color: rgba(155, 0, 255, 0.5);
+            box-shadow: 
+                0 20px 40px rgba(0, 0, 0, 0.3),
+                0 0 30px rgba(155, 0, 255, 0.2);
+        }
+
+        .tech-tag-purple {
+            background: rgba(155, 0, 255, 0.1);
+            border: 1px solid rgba(155, 0, 255, 0.3);
+            color: var(--neon-2);
         }
 
         /* ====================================================================
@@ -533,7 +566,7 @@
                 </div>
             </a>
             <!-- Projekt 4: Schwarzes Loch Spiel -->
-            <a href="schwarzes_loch_spiel.html" class="project-card fade-in fade-in-delay-2">
+            <a href="schwarzes_loch_spiel.html" class="project-card project-card-purple fade-in fade-in-delay-2">
                 <div class="project-header">
                     <span class="project-icon">🕳️</span>
                     <div>
@@ -547,16 +580,45 @@
                     Blender-Assets von Loïc Norgeot.
                 </p>
                 <div class="project-tech">
-                    <span class="tech-tag">Three.js</span>
-                    <span class="tech-tag">WebGL</span>
-                    <span class="tech-tag">Physics Engine</span>
-                    <span class="tech-tag">Blender Assets</span>
+                    <span class="tech-tag tech-tag-purple">Three.js</span>
+                    <span class="tech-tag tech-tag-purple">WebGL</span>
+                    <span class="tech-tag tech-tag-purple">Physics Engine</span>
+                    <span class="tech-tag tech-tag-purple">Blender Assets</span>
                 </div>
                 <div class="project-status">
-                    <div class="status-indicator in-progress"></div>
+                    <div class="status-indicator in-progress purple"></div>
                     <span class="status-text">In Entwicklung</span>
                 </div>
             </a>
+
+            <!-- Projekt 5: Pascal/Lazarus Lernprojekt -->
+            <a href="https://github.com/patrickwwewe/lazarus-konfigurator" target="_blank" class="project-card project-card-purple fade-in fade-in-delay-3">
+                <div class="project-header">
+                    <span class="project-icon">🏗️</span>
+                    <div>
+                        <h3 class="project-title">Pascal/Lazarus Training</h3>
+                        <p class="project-subtitle">OOP & Konfigurationslogik</p>
+                    </div>
+                </div>
+                <p class="project-description">
+                    Lern- und Übungsprojekte für FreePascal/Lazarus mit Fokus auf OOP-Strukturen,
+                    Regellogiken für Produktkonfigurationen und Vorbereitung auf professionelle 
+                    Stammdatenentwicklung im Wippro-Umfeld.
+                </p>
+                <div class="project-tech">
+                    <span class="tech-tag tech-tag-purple">FreePascal</span>
+                    <span class="tech-tag tech-tag-purple">Lazarus IDE</span>
+                    <span class="tech-tag tech-tag-purple">OOP</span>
+                    <span class="tech-tag tech-tag-purple">Git</span>
+                    <span class="tech-tag tech-tag-purple">Regellogik</span>
+                </div>
+                <div class="project-status">
+                    <div class="status-indicator in-progress purple"></div>
+                    <span class="status-text">Aktives Training</span>
+                </div>
+            </a>
+
+            
 
             <!-- Placeholder for future projects -->
             <div class="coming-soon-card fade-in fade-in-delay-3">
