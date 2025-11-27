@@ -198,20 +198,37 @@ class GameEngine {
 
     // FALLBACK-PFADE wenn Hauptpfad fehlschlägt
     async tryFallbackPaths() {
-        const fallbackPaths = [
-            // Cache-Busting URL (Timestamp um Cache zu umgehen)
-            `https://patrickwwewe.github.io/mywebsite/blender/need_some_space/need_some_space.glb?v=${Date.now()}`,
-            // GitHub Pages spezifische Pfade
-            '../../blender/need_some_space/need_some_space.glb',        // Standard relativ
-            '/mywebsite/blender/need_some_space/need_some_space.glb',   // GitHub Pages absolut
-            './../../blender/need_some_space/need_some_space.glb',      // Mit ./
-            '../../../blender/need_some_space/need_some_space.glb',     // Eine Ebene höher
-            'blender/need_some_space/need_some_space.glb',              // Vom aktuellen Ordner
-            '/blender/need_some_space/need_some_space.glb',             // Root absolut
-            'https://patrickwwewe.github.io/mywebsite/blender/need_some_space/need_some_space.glb', // Vollständige URL
-            // Zusätzliche GitHub Pages Varianten
-            window.location.origin + window.location.pathname.replace('/pages/play/01_index.html', '') + '/blender/need_some_space/need_some_space.glb'
-        ];
+        const isLocal = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
+        
+        let fallbackPaths;
+        
+        if (isLocal) {
+            // Lokale Fallback-Pfade
+            fallbackPaths = [
+                '../../blender/need_some_space/need_some_space.glb',        // Standard relativ
+                '../../../blender/need_some_space/need_some_space.glb',     // Eine Ebene höher
+                '/blender/need_some_space/need_some_space.glb',             // Root absolut
+                'http://localhost:8000/blender/need_some_space/need_some_space.glb', // Vollständige lokale URL
+                './../../blender/need_some_space/need_some_space.glb',      // Mit ./
+                'blender/need_some_space/need_some_space.glb'               // Vom aktuellen Ordner
+            ];
+        } else {
+            // GitHub Pages Fallback-Pfade
+            fallbackPaths = [
+                // Cache-Busting URL (Timestamp um Cache zu umgehen)
+                `https://patrickwwewe.github.io/mywebsite/blender/need_some_space/need_some_space.glb?v=${Date.now()}`,
+                // GitHub Pages spezifische Pfade
+                '../../blender/need_some_space/need_some_space.glb',        // Standard relativ
+                '/mywebsite/blender/need_some_space/need_some_space.glb',   // GitHub Pages absolut
+                './../../blender/need_some_space/need_some_space.glb',      // Mit ./
+                '../../../blender/need_some_space/need_some_space.glb',     // Eine Ebene höher
+                'blender/need_some_space/need_some_space.glb',              // Vom aktuellen Ordner
+                '/blender/need_some_space/need_some_space.glb',             // Root absolut
+                'https://patrickwwewe.github.io/mywebsite/blender/need_some_space/need_some_space.glb', // Vollständige URL
+                // Zusätzliche GitHub Pages Varianten
+                window.location.origin + window.location.pathname.replace('/pages/play/01_index.html', '') + '/blender/need_some_space/need_some_space.glb'
+            ];
+        }
         
         for (const path of fallbackPaths) {
             try {
@@ -274,8 +291,10 @@ class GameEngine {
             // Ziel:    /mywebsite/blender/need_some_space/need_some_space.glb
             return '../../blender/need_some_space/need_some_space.glb';
         } else if (isLocal) {
-            // Lokaler Pfad (relativ)
-            return '../../blender/need_some_space/need_some_space.glb';
+            // Lokaler Pfad - teste mehrere Varianten für lokalen Server
+            const localPath = '../../blender/need_some_space/need_some_space.glb';
+            console.log("🏠 Lokaler Modus - verwende Pfad:", localPath);
+            return localPath;
         } else {
             // Fallback für andere Server
             return '../../blender/need_some_space/need_some_space.glb';
