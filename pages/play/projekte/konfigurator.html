@@ -182,6 +182,32 @@
             background: linear-gradient(90deg, transparent, rgba(255, 107, 53, 0.1), transparent);
         }
 
+        .js-card {
+            border-color: rgba(255, 165, 0, 0.3);
+        }
+
+        .js-card:hover {
+            border-color: #ffa500;
+            background: linear-gradient(135deg, rgba(255, 165, 0, 0.15), rgba(0, 0, 0, 0.9));
+            box-shadow: 0 15px 40px rgba(255, 165, 0, 0.3);
+        }
+
+        .js-card::before {
+            background: linear-gradient(90deg, transparent, rgba(255, 165, 0, 0.1), transparent);
+        }
+
+        .js-card .version-icon {
+            filter: drop-shadow(0 0 15px rgba(255, 165, 0, 0.5));
+        }
+
+        .js-card .version-subtitle {
+            color: #ffa500;
+        }
+
+        .js-card .version-features li::before {
+            color: #ffa500;
+        }
+
         .version-icon {
             font-size: 3rem;
             margin-bottom: 20px;
@@ -281,15 +307,7 @@
             font-weight: 500;
         }
 
-        .js-card {
-            opacity: 0.8;
-            cursor: not-allowed;
-        }
 
-        .js-card:hover {
-            transform: translateY(-5px);
-            opacity: 1;
-        }
 
         @keyframes pulse {
             0%, 100% { opacity: 1; }
@@ -372,13 +390,14 @@
     <main class="main-content">
         <!-- Hero Section -->
         <section class="hero-section">
-            <div class="hero-icon">⚙️</div>
-            <h1 class="hero-title">Konfigurator</h1>
-            <p class="hero-subtitle">Objekte & Regellogik</p>
+            <div class="hero-icon">🚪</div>
+            <h1 class="hero-title">Türkonfigurator</h1>
+            <p class="hero-subtitle">Interaktiver 3D-Konfigurator</p>
             <p class="hero-description">
-                Ein intelligentes System zur Konfiguration komplexer Objekte mit 
-                regelbasierter Logik. Implementierung von OOP-Strukturen und 
-                automatisierten Validierungsprozessen für Produktkonfigurationen.
+                Ein intelligenter 3D-Türkonfigurator mit 8 verschiedenen Türmodellen, 
+                50+ Ausstattungsoptionen und Echtzeit-Preisberechnung. Features: 
+                3D-Visualisierung mit Three.js, intelligente Kompatibilitätsprüfung 
+                und responsive Design für alle Geräte.
             </p>
         </section>
 
@@ -387,66 +406,53 @@
             <!-- Pascal Version -->
             <a href="https://github.com/patrickwwewe/lazarus-konfigurator" target="_blank" class="version-card pascal-card">
                 <div class="version-icon">🔧</div>
-                <h3 class="version-title">Pascal Version</h3>
-                <p class="version-subtitle">FreePascal/Lazarus</p>
+                <h3 class="version-title">Pascal Backend</h3>
+                <p class="version-subtitle">Alternative Backend-Implementierung</p>
                 <p class="version-description">
-                    Vollständig funktionsfähige Implementation mit nativer Performance.
-                    Objektorientierte Programmierung mit Lazarus IDE.
+                    Backend-Alternative in Pascal/Delphi für lokale Server. 
+                    Grundlegende Funktionen zum Erlernen von OOP-Strukturen 
+                    und REST-API Entwicklung mit Pascal.
                 </p>
                 <div class="version-status">
                     <div class="status-indicator"></div>
                     <span class="status-text">Verfügbar auf GitHub</span>
                 </div>
                 <ul class="version-features">
-                    <li>Native Performance</li>
-                    <li>OOP-Strukturen</li>
-                    <li>Regellogik-Engine</li>
-                    <li>Konfigurationsvalidierung</li>
+                    <li>REST-API mit Pascal</li>
+                    <li>Grundlegende OOP-Strukturen</li>
+                    <li>Lernprojekt für Pascal</li>
+                    <li>Datenbank-Integration</li>
                     <li>Source Code verfügbar</li>
                 </ul>
             </a>
 
             <!-- JavaScript Version -->
-            <div class="version-card js-card" onclick="showComingSoon()">
-                <div class="coming-soon-badge">Coming Soon</div>
+            <a href="https://patrickwwewe.github.io/demoKonfigurator/" target="_blank" class="version-card js-card">
                 <div class="version-icon">⚡</div>
                 <h3 class="version-title">JavaScript Version</h3>
-                <p class="version-subtitle">Modern Web Implementation</p>
+                <p class="version-subtitle">React + Three.js Implementation</p>
                 <p class="version-description">
-                    Moderne Web-basierte Lösung mit interaktiver Benutzeroberfläche.
-                    Aktuell in Entwicklung für maximale Plattform-Kompatibilität.
+                    Vollständig funktionsfähiger 3D-Türkonfigurator mit React, Three.js 
+                    und Node.js Backend. 8 Türmodelle, 50+ Optionen mit intelligenter 
+                    Kompatibilitätsprüfung und Echtzeit-Preisberechnung.
                 </p>
                 <div class="version-status">
-                    <div class="status-indicator coming-soon"></div>
-                    <span class="status-text">In Entwicklung</span>
+                    <div class="status-indicator"></div>
+                    <span class="status-text">Live Demo verfügbar</span>
                 </div>
                 <ul class="version-features">
-                    <li>Cross-Platform Web App</li>
-                    <li>Interactive UI/UX</li>
-                    <li>Real-time Validation</li>
-                    <li>Export-Funktionen</li>
-                    <li>Cloud-Integration</li>
+                    <li>3D-Visualisierung (Three.js)</li>
+                    <li>8 Türmodelle + 50+ Optionen</li>
+                    <li>Echtzeit-Preisberechnung</li>
+                    <li>Intelligente Validierung</li>
+                    <li>Responsive Design</li>
                 </ul>
             </div>
         </section>
     </main>
 
     <script>
-        // Coming Soon Notification
-        function showComingSoon() {
-            const card = event.currentTarget;
-            const originalOpacity = card.style.opacity;
-            
-            // Temporäre visuelle Änderung
-            card.style.background = 'linear-gradient(135deg, rgba(155, 0, 255, 0.25), rgba(0, 0, 0, 0.9))';
-            card.style.transform = 'translateY(-5px) scale(0.98)';
-            
-            // Zurücksetzen nach kurzer Zeit
-            setTimeout(() => {
-                card.style.background = '';
-                card.style.transform = 'translateY(-5px)';
-            }, 300);
-        }
+
 
         // Smooth entrance animations
         document.addEventListener('DOMContentLoaded', function() {
